@@ -85,3 +85,34 @@ In particular, the test case `patsql.synth.RASynthesizerTest.ExampleForSQLSynthe
 
 ## Paper
 "PATSQL: Efficient Synthesis of SQL Queries from Example Tables with Quick Inference of Projected Columns", submitted to [arXiv](https://arxiv.org/abs/2010.05807).
+
+## Third-party libraries included in this project
+### JUnit Jupiter API
+Module "junit-jupiter-api" of JUnit 5.  
+License: EPL 2.0  
+Version: 5.5.1  
+https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api/5.5.1  
+
+### JUnit Jupiter Engine
+Module "junit-jupiter-engine" of JUnit 5.  
+License: EPL 2.0  
+Version: 5.5.1  
+https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine/5.5.1  
+
+### H2 Database Engine
+Used to validate the syntax of synthesized queries in test.  
+License: EPL 1.0, MPL 2.0  
+Version: 1.4.200  
+https://mvnrepository.com/artifact/com.h2database/h2/1.4.200  
+
+### Gson
+Used to serialize and deserialize Java objects to JSON.  
+License: Apache 2.0  
+Version: 2.8.6  
+https://mvnrepository.com/artifact/com.google.code.gson/gson/2.8.6
+
+### Hibernate Core Relocation
+Used to format SQL queries.  
+License: LGPL 2.1  
+Version: 5.4.11.Final  
+https://mvnrepository.com/artifact/org.hibernate/hibernate-core/5.4.11.Final  
