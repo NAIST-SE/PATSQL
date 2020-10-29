@@ -1,0 +1,5 @@
+date:Date,item:Str,amount:Int
+20190719,pen,12
+20190720,pineapple,3
+20190721,apple,29
+20190722,pen,12

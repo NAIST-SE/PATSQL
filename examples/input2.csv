@@ -1,0 +1,8 @@
+id:Str, name:Str, age:Int, country:Str, col4:Str, col5:Str
+1001, AAA,  20,  Japan, XX, XX
+1002, BBB,  45,  China, XX, XX
+1004, CCC,  23,  Japan, XX, XX
+1005, DDD,  13,  USA, XX, XX
+1100, EEE,  76,  Japan, XX, XX
+1101, FFF,  33,  USA, XX, XX
+1102, GGG,  53,  Taiwan, XX, XX

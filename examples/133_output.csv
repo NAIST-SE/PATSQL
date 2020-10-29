@@ -1,0 +1,3 @@
+a:Str,maxb:Str,minb:Str,countb:Int,countdb:Int,avgc:Dbl,maxc:Int,minc:Int,sumc:Int
+a1,NULL,NULL,0,0,NULL,NULL,NULL,NULL
+NULL,b2,b1,3,2,2,3,1,6

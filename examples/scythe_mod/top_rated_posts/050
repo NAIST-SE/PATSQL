@@ -1,0 +1,46 @@
+// http://stackoverflow.com/questions/368351/whats-the-best-way-to-select-the-minimum-value-from-several-columns
+//What's the best way to select the minimum value from several columns?
+// Synthesis failed: retrieving the minimum value for each group is not supported.
+
+#input
+
+ID,   Col1,   Col2,   Col3
+1,       3,     34,     76  
+2,      32,    976,     24
+3,       7,    235,      3
+4,     245,      1,    792
+
+#output
+
+ID,   Col1,   Col2,   Col3,  TheMin
+1,       3,     34,     76,       3
+2,      32,    976,     24,      24
+3,       7,    235,      3,       3
+4,     245,      1,    792,       1
+
+#constraint
+
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+#solution
+
+with cte (ID, Col1, Col2, Col3)
+as
+(
+    select ID, Col1, Col2, Col3
+    from TestTable
+)
+select cte.ID, Col1, Col2, Col3, TheMin from cte
+join
+(
+    select
+        ID, min(Amount) as TheMin
+    from 
+        cte 
+        UNPIVOT (Amount for AmountCol in (Col1, Col2, Col3)) as unpvt
+    group by ID
+) as minValues
+on cte.ID = minValues.ID

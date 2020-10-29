@@ -1,0 +1,32 @@
+// http://stackoverflow.com/questions/1291152/simple-way-to-calculate-median-with-mysql
+// Simple way to calculate median with MySQL
+// Synthesis failed: median is not supported.
+
+#input
+
+id:Str,  val
+ 1,   114
+ 1,   117
+ 1,   112
+ 1,   112
+ 1,   119
+ 1,   119
+ 1,   113
+
+#output
+
+medval
+114
+
+#constraint
+
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+#solution
+
+SELECT x.val from data x, data y
+GROUP BY x.val
+HAVING SUM(SIGN(1-SIGN(y.val-x.val))) = (COUNT(*)+1)/2

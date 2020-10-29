@@ -1,0 +1,4 @@
+a:Int,b:Int,c:Int
+1,10,NULL
+2,20,200
+3,30,NULL

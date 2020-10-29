@@ -1,0 +1,9 @@
+a:Int,b:Int
+1,2
+3,NULL
+NULL,4
+NULL,NULL
+5,6
+7,NULL
+NULL,8
+NULL,NULL

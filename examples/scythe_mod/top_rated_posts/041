@@ -1,0 +1,42 @@
+//http://stackoverflow.com/questions/16513418/how-to-do-the-recursive-select-query-in-mysql
+//How to do the Recursive SELECT query in MySQL?
+//Synthesis failed: recursive query is not supported.
+
+#input
+
+| col1:Str | col2 | col3:Str |
+|------|------|------|
+| 1    | a    | 5    |
+| 5    | d    | 3    |
+| 3    | k    | 2    |
+| 2    | x    | 8    |
+| 8    | y    | 7    |
+| 6    | o    | 10   |
+| 10   | 0    | 0    |
+| 0    | x    | 12   |
+| 12   | s    | 11   |
+| 11   | t    | 17   |
+
+#output
+
+| col1:Str | col2 | col3:Str |
+|------|------|------|
+| 1    | a    | 5    |
+| 5    | d    | 3    |
+| 3    | k    | 2    |
+| 2    | x    | 8    |
+| 8    | y    | 7    |
+
+#constraint
+{
+	"constants": ["1:Str"],
+	"aggregation_functions": []
+}
+
+#solution
+WITH RECURSIVE tbl AS (
+  SELECT * FROM t WHERE col1 = 1
+  UNION ALL
+  SELECT t.* FROM t, tbl WHERE t.col1 = tbl.col3
+)
+SELECT * FROM tbl;

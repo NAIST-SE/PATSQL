@@ -1,0 +1,43 @@
+//http://stackoverflow.com/questions/12650875/case-when-expression-in-oracle-sql
+//CASE .. WHEN expression in Oracle SQL
+// Synthesis failed: CASE expression is not supported.
+
+#input
+
+Status
+a1
+i
+t
+a2
+a3
+
+#output
+
+Status, STATUSTEXT
+a1,     Active
+i,      Inactive
+t,      Terminated
+a2,     Active
+a3,     Active
+
+#constraint
+
+{
+	"constants": ["a1", "a2", "a3", "Active", "Inactive", "Terminated"],
+	"aggregation_functions": []
+}
+
+#solution
+
+SELECT
+  status,
+  CASE
+    WHEN STATUS IN('a1','a2','a3')
+    THEN 'Active'
+    WHEN STATUS = 'i'
+    THEN 'Inactive'
+    WHEN STATUS = 't'
+    THEN 'Terminated'
+  END AS STATUSTEXT
+FROM
+  STATUS

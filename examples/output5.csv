@@ -1,0 +1,6 @@
+id:Str, name:Str, age:Int, country:Str, trnid:Str, quantity:Int
+1001, AAA,  20,  Japan, p1, 1000
+1001, AAA,  20,  Japan, p2, 500
+1005, DDD,  13,  USA, p1, 1200
+1100, EEE,  76,  Japan, p2, 300
+1101, FFF,  33,  USA, p2, 200

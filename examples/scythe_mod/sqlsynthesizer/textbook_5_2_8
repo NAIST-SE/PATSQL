@@ -1,0 +1,45 @@
+//Find the sids of suppliers who supply a red part and a green part.
+
+#input
+
+supplier_key,part_id
+S1,P1
+S1,P2
+S1,P3
+S2,P2
+S2,P3
+S3,P5
+S4,P3
+S4,P6
+S5,P2
+S5,P4
+S6,P4
+S7,P6
+S8,P5
+S8,P2
+S9,P1
+S9,P2
+S10,P6
+
+#input
+
+part_id,color
+P1,red
+P2,green
+P3,yellow
+P4,red
+P5,green
+P6,blue
+
+# output
+
+sname
+S1
+S5
+S9
+
+#constraint
+{
+	"constants": ["red", "green"],
+	"aggregation_functions": [ ]
+}

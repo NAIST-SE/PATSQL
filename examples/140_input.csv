@@ -1,0 +1,12 @@
+col1:Str,col2:Int,col3:Str
+B,12,AAA
+A,1,BBB
+A,12,CCC
+B,18,DDD
+C,4,EEE
+D,12,FFF
+A,32,GGG
+C,1,HHH
+C,3,III
+D,8,JJJ
+D,20,KKK

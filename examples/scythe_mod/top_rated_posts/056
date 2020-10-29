@@ -1,0 +1,57 @@
+//http://stackoverflow.com/questions/5126592/how-to-rotate-a-table-45-degrees-and-save-the-result-into-another-table
+//How to rotate a table 45 degrees and save the result into another table?
+//Synthesis failed: pivot and CASE are not supported.
+
+#input
+
+|c1 |c2 |c3 |
+|---|---|---|
+| a | b | c |
+| d | e | f |
+| g | h | i |
+
+#output
+
+|c1 |c2 |c3 |c4 |c5 |
+|---|---|---|---|---|
+| c |   |   |   |   |
+| b | f |   |   |   |
+| a | e | i |   |   |
+| d | h |   |   |   |
+| g |   |   |   |   |
+
+#constraint
+
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+#solution
+
+create table t45 (id int identity, colA char(1), colX char(1), colZ char(1))
+insert t45 select 'a','b','c'
+insert t45 select 'd','e','f'
+insert t45 select 'g','h','i'
+GO
+
+select [1],[2],[3],[4],[5] -- for N columns, this goes to N*2-1
+from
+(
+    select value,
+        targetRow = row+col-1,
+        targetCol = ROW_NUMBER() over (partition by row+col-1 order by row)
+    from
+    (
+        select *,
+            row = DENSE_RANK() over (order by id),
+            col = ROW_NUMBER() over (partition by id order by
+                CASE source when 'colA' then 3 -- number in reverse
+                            when 'colX' then 2
+                            when 'colZ' then 1 end)
+        from t45
+        unpivot (value for source in (colA,colX,colZ)) upv
+    ) x
+) p                                -- for N columns, this goes to N*2-1
+pivot (max(value) for targetCol in ([1],[2],[3],[4],[5])) pv
+order by targetRow

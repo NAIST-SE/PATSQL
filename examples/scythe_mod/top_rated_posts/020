@@ -1,0 +1,39 @@
+//http://stackoverflow.com/questions/12344795/count-the-number-of-occurences-of-a-string-in-a-varchar-field
+//Count the number of occurrences of a string in a VARCHAR field?
+// Synthesis failed: counting words is not supported
+
+#input
+
+| TITLE          |   DESCRIPTION                 |
+|----------------|-------------------------------|
+| test1          |   value blah blah value       |
+| test2          |   value test                  |
+| test3          |   test test test              |
+| test4          |   valuevaluevaluevaluevalue   |
+
+#output
+
+| TITLE          |   DESCRIPTION                  |   COUNT   |
+|----------------|--------------------------------|-----------|
+| test1          |   value blah blah value        |   2       |
+| test2          |   value test                   |   1       |
+| test3          |   test test test               |   0       |
+| test4          |   valuevaluevaluevaluevalue    |   5       |
+
+#constraint
+
+{
+	"constants": ["value"],
+	"aggregation_functions": []
+}
+
+#solution
+
+SELECT 
+    title,
+    description,
+    (
+        LENGTH(description)
+        - LENGTH( REPLACE ( description, "value", "") )
+    ) / LENGTH("value") AS count
+FROM <table>

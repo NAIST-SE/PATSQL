@@ -1,0 +1,46 @@
+//For each age value that appears in Students, find the level value that appears most often.
+//For example, if there are more FR level students aged 18 than SR, JR, or SO students
+//aged 18, you should print the pair (18, FR).
+
+#input
+
+S_key,age:Str,level
+S0,19,JR
+S0,19,JR
+S0,20,SO
+S0,20,SO
+S0,20,JR
+S0,21,SO
+S0,21,SO
+S0,21,JR
+S0,21,JR
+S0,21,JR
+
+# output
+
+age:Str,level
+19,JR
+20,SO
+21,JR
+
+#constraint
+{
+	"constants": [],
+	"aggregation_functions": [ "max", "count" ]
+}
+
+#solution
+
+S.level IN (SELECT FROM
+S.age, S.level Student S
+SELECT
+FROM
+GROUP BY S.age, S.level,
+HAVING
+WHERE
+GROUP BY S1.level, S1.age
+HAVING COUNT (*) >= ALL (SELECT
+COUNT (*)
+Student S2
+FROM
+WHERE s1.age = S2.age GROUP BY S2.level, S2.age))

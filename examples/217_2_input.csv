@@ -1,0 +1,4 @@
+id:Str,name:Str,category:Str,available:Str
+001,item1,C1,T
+003,item3,C2,T
+004,item4,C2,T

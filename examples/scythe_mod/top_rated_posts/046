@@ -1,0 +1,48 @@
+//http://stackoverflow.com/questions/6332043/sql-order-by-multiple-values-in-specific-order
+//sql ORDER BY multiple values in specific order?
+// Synthesis failed: original ordering "f" -> "p" -> "i" -> "a" is not supported.
+// The output of our solution are records without a specific order.
+ 
+#input
+
+id,     x_field
+123,    a
+124,    a
+125,    a
+126,    b
+127,    f
+128,    b
+129,    a
+130,    x
+131,    x
+132,    b
+133,    p
+134,    p
+135,    i
+
+#output
+
+id,     x_field
+127,    f
+133,    p
+134,    p
+135,    i
+123,    a
+124,    a
+125,    a
+129,    a
+
+#constraint
+
+{
+	"constants": ["f", "p", "i", "a"],
+	"aggregation_functions": []
+}
+
+#solution
+
+select id, x_field
+from t
+  join (values ('f',1),('p',2),('a',3),('i',4)) t2(x_field, p)
+    USING(x_field)
+ORDER BY p

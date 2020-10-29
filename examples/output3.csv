@@ -1,0 +1,4 @@
+id:Str, name:Str, age:Int, country:Str
+1001, AAA,  20,  Japan
+1004, CCC,  23,  Japan
+1100, EEE,  76,  Japan

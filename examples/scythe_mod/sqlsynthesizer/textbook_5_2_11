@@ -1,0 +1,44 @@
+//For every supplier that supplies a green part and a red part, print the name and price of the most expensive part that she supplies
+
+#input
+
+supplier_key,part_id,cost
+S1,P1, 10
+S1,P2, 20
+S2,P1, 14
+S2,P3, 12
+S3,P1, 4
+S3,P2, 15
+S3,P3, 30
+S4,P2, 21
+S4,P3, 13
+
+#input
+
+part_id,color
+P1,red
+P2,green
+P3,yellow
+
+#input
+
+supplier_key,sname
+S1,SN1
+S2,SN2
+S3,SN3
+S4,SN4
+
+# output
+
+sname,max_cost
+SN1, 20
+SN3, 30
+
+#constraint
+{
+	"max_depth": 1,
+	"constants": ["green", "red"],
+	"aggregation_functions": [ "count" ],
+	"parameter_number": 0,
+	"max_filter_length": 2
+}

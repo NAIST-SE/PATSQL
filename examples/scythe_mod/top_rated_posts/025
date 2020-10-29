@@ -1,0 +1,33 @@
+//http://stackoverflow.com/questions/758186/how-to-get-n-rows-starting-from-row-m-from-sorted-table-in-t-sql
+// How to get N rows starting from row M from sorted table in T-SQL
+
+#input
+
+Id:Str, Value
+1,    a
+2,    b
+3,    c
+4,    d
+5,    e
+6,    f
+
+#output
+
+Id:Str, Value
+3,    c
+4,    d
+
+#constraint
+
+{
+	"constants": ["3", "5"],
+	"aggregation_functions": []
+}
+
+#solution
+
+SELECT *
+FROM MyTable
+ORDER BY Id
+OFFSET 2 ROWS
+FETCH NEXT 2 ROWS ONLY

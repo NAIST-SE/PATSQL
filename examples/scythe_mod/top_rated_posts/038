@@ -1,0 +1,41 @@
+//http://stackoverflow.com/questions/8149210/how-do-i-find-duplicates-across-multiple-columns
+// How do I find duplicates across multiple columns?
+
+#input
+
+id,      name,  city   
+904822,  pete,  Berlin
+904825,  pete,  London
+904829,  jim,   London
+904834,  jime,  London  
+904835,  jime,  London  
+904835,  jime,  Paris 
+90145,   Fred,  Paris   
+90132,   Fred,  Paris
+90133,   Fred,  Paris
+
+#output
+
+id,      name,  city   
+904834,  jime,  London  
+904835,  jime,  London  
+90145,   Fred,  Paris   
+90132,   Fred,  Paris
+90133,   Fred,  Paris
+
+#constraint
+{
+	"constants": ["1"],
+	"aggregation_functions": ["count"]
+}
+
+#solution
+
+select s.id, t.* 
+from [stuff] s
+join (
+    select name, city, count(*) as qty
+    from [stuff]
+    group by name, city
+    having count(*) > 1
+) t on s.name = t.name and s.city = t.city

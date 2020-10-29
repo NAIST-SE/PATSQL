@@ -1,0 +1,8 @@
+a:Int,b:Int,c:Int
+1,1,1
+1,1,1
+1,2,1
+NULL,2,1
+NULL,1,1
+NULL,1,2
+1,NULL,2

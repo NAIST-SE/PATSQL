@@ -1,0 +1,33 @@
+//http://stackoverflow.com/questions/17492167/group-query-results-by-month-and-year-in-postgresql
+// Group query results by month and year
+// Synthesis failed: conversion from date to string like "2013-04-01" -> "Apr" is not supported. 
+
+#input
+
+id,      date,          Product, Sales
+1245,    01/04/2013,    Toys,    1000     
+1245,    01/04/2013,    Toys,    2000
+1231,    01/02/2013,    Bicycle, 50000
+456461,  01/01/2014,    Bananas, 4546
+
+#output
+
+mon,    yyyy,    sales,    product
+Apr,    2013,    3000,     Toys
+Feb,    2013,    50000,    Bicycle
+Jan,    2014,    4546,     Bananas
+
+#constraint
+
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+#solution
+
+select to_char(date,'Mon') as mon,
+       extract(year from date) as yyyy,
+       sum("Sales") as "Sales"
+from yourtable
+group by 1,2
