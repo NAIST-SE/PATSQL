@@ -15,7 +15,7 @@ The code is written in Java as an Eclipse project. Maven is also required to man
 - `evaluation` - the details of the evaluation result in [the arXiv paper](#paper).
 
 ## How to execute the synthesis?
-There are test cases under the `test` directory. The test cases would be helpful to understand the usage of each methods.
+There are test cases under the `test` directory. The test cases would be helpful to understand the usage of each method in the project.
 
 In particular, the test case `patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis` shows a basic example of SQL synthesis as follows. 
 
