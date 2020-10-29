@@ -86,7 +86,9 @@ In particular, the test case `patsql.synth.RASynthesizerTest.ExampleForSQLSynthe
 ## Paper
 "PATSQL: Efficient Synthesis of SQL Queries from Example Tables with Quick Inference of Projected Columns", submitted to [arXiv](https://arxiv.org/abs/2010.05807).
 
-## Third-party libraries included in this project
+## Third-party libraries used in this project
+See the transitive dependencies from each link below.  
+
 ### JUnit Jupiter API
 Module "junit-jupiter-api" of JUnit 5.  
 License: EPL 2.0  
