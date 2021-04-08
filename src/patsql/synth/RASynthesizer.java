@@ -103,6 +103,70 @@ public class RASynthesizer implements Callable<RAOperator> {
 		return null;
 	}
 
+	/**
+	 * added in the topk branch
+	 */
+	public List<RAOperator> synthesizeTop5() {
+		long startDebug = System.nanoTime();
+
+		boolean isOutputSorted = Arrays.stream(example.output.columns) //
+				.map(col -> col.schema) //
+				.anyMatch(schema -> example.output.isIncreasing(schema) || example.output.isDecreasing(schema));
+
+		Sketcher sketcher = new Sketcher(example.inputs.length, isOutputSorted);
+
+		// find candidates among sketches whose sizes are the same.
+		List<RAOperator> candidates = new ArrayList<>();
+		int sizeOfSolutionSketch = -1;
+		synth: for (RAOperator s : sketcher) {
+			// check termination
+			int sizeOfSketch = Sketcher.sizeOf(s);
+			if (sizeOfSolutionSketch > 0 && sizeOfSketch > sizeOfSolutionSketch)
+				break;
+
+			sketch: for (RAOperator sketch : assignNamesOnBaseTables(s)) {
+				// check the timeout of itself.
+				if (Thread.currentThread().isInterrupted()) {
+					break synth;
+				}
+
+				if (!isValidSketch(sketch)) {
+					continue;
+				}
+				if (Debug.isDebugMode) {
+					RAUtils.printSketch(sketch);
+				}
+				SketchFiller filler = new SketchFiller(sketch, example, option);
+				for (RAOperator program : filler.fillSketch()) {
+					if (!check(program))
+						continue;
+
+					// optimize the program returned.
+					program = RAOptimizer.optimize(program);
+					if (Debug.isDebugMode) {
+						long dur = (System.nanoTime() - startDebug) / 1000000;
+						Debug.Time.doneSynth(dur);
+					}
+
+					// collect the found program as a candidate
+					candidates.add(program);
+					sizeOfSolutionSketch = sizeOfSketch;
+					break sketch;
+				}
+			}
+		}
+
+		if (candidates.isEmpty()) // if no solution is found
+			return null;
+		
+		return resolveTop5(candidates);
+	}
+
+	private List<RAOperator> resolveTop5(List<RAOperator> candidates) {
+		// TODO: implementation
+		return candidates;
+	}
+
 	private boolean check(RAOperator program) {
 		Table result = program.eval(example.tableEnv());
 		return result.hasSameRows(example.output);
