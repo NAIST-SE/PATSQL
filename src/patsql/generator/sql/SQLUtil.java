@@ -26,19 +26,20 @@ import patsql.generator.sql.query.QColumn;
 import patsql.generator.sql.query.QColumnConstant;
 import patsql.generator.sql.query.QCondition;
 import patsql.generator.sql.query.QConditionBinaryOperator;
+import patsql.generator.sql.query.QConditionTrue;
 import patsql.generator.sql.query.QDateFuncColumn;
 import patsql.generator.sql.query.QJoinSpec;
+import patsql.generator.sql.query.QJoinSpec.JoinType;
 import patsql.generator.sql.query.QQuery;
 import patsql.generator.sql.query.QRelationBinaryOperator;
+import patsql.generator.sql.query.QRelationBinaryOperator.Operator;
 import patsql.generator.sql.query.QRelationUnaryOperator;
 import patsql.generator.sql.query.QSingleColumn;
 import patsql.generator.sql.query.QSingleColumnCondition;
 import patsql.generator.sql.query.QSingleRelation;
 import patsql.generator.sql.query.QSortSpec;
-import patsql.generator.sql.query.QWindowFuncColumn;
-import patsql.generator.sql.query.QJoinSpec.JoinType;
-import patsql.generator.sql.query.QRelationBinaryOperator.Operator;
 import patsql.generator.sql.query.QSortSpec.Ordering;
+import patsql.generator.sql.query.QWindowFuncColumn;
 import patsql.ra.operator.BaseTable;
 import patsql.ra.operator.Distinct;
 import patsql.ra.operator.GroupBy;
@@ -57,6 +58,7 @@ import patsql.ra.predicate.Disjunction;
 import patsql.ra.predicate.JoinCond;
 import patsql.ra.predicate.JoinKeyPair;
 import patsql.ra.predicate.Predicate;
+import patsql.ra.predicate.TruePred;
 import patsql.ra.predicate.UnaryOp;
 import patsql.ra.predicate.UnaryPred;
 
@@ -497,6 +499,8 @@ public class SQLUtil {
 
 			return new QRelationUnaryOperator(operator, condL);
 
+		} else if (pred instanceof TruePred) {
+			return new QConditionTrue();
 		} else {
 			throw new RuntimeException("unexpected predicate: " + pred.getClass());
 		}
