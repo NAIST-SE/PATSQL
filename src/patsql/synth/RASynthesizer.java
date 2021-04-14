@@ -3,6 +3,7 @@ package patsql.synth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -34,14 +35,12 @@ import patsql.ra.predicate.BinaryOp;
 import patsql.ra.predicate.BinaryPred;
 import patsql.ra.predicate.Conjunction;
 import patsql.ra.predicate.Predicate;
-import patsql.ra.predicate.TruePred;
 import patsql.ra.predicate.UnaryOp;
 import patsql.ra.predicate.UnaryPred;
 import patsql.ra.util.RAOptimizer;
 import patsql.ra.util.RAUtils;
 import patsql.ra.util.RAVisitor;
 import patsql.ra.util.Utils;
-import patsql.synth.filler.RowSearch.Op;
 import patsql.synth.filler.RowSearchCollectingPredicates;
 import patsql.synth.filler.SketchFiller;
 import patsql.synth.sketcher.Sketcher;
@@ -221,9 +220,8 @@ public class RASynthesizer implements Callable<RAOperator> {
 		BitTable solutionTable = tmpTable.selection(targetPred);
 
 		// The following operations are similar to SelectionPrune class.
-		RowSearchCollectingPredicates search = new RowSearchCollectingPredicates(solutionTable.rowBits);
-
-		search.addPred(new TruePred(), tmpTable.rowBits);
+		RowSearchCollectingPredicates search = new RowSearchCollectingPredicates(//
+				tmpTable.height(), solutionTable.rowBits, option.extCells);
 
 		for (ColSchema col : tmpTable.schema()) {
 			for (BinaryOp binop : BinaryOp.values()) {
@@ -245,8 +243,7 @@ public class RASynthesizer implements Callable<RAOperator> {
 			}
 		}
 
-		search.generate(Op.OR);
-		search.generate(Op.AND);
+		search.generateKernel();
 
 		List<Selection> ret = new ArrayList<>();
 		for (Predicate pred : search.getPredicatesCollected()) {
@@ -286,8 +283,32 @@ public class RASynthesizer implements Callable<RAOperator> {
 	}
 
 	private List<RAOperator> resolveTop5(List<RAOperator> candidates) {
-		// TODO: implementation
-		return candidates;
+		// sort candidates based on ranking heuristics
+		Collections.sort(candidates, new Comparator<RAOperator>() {
+			@Override
+			public int compare(RAOperator a, RAOperator b) {
+				return heuristic(b) - heuristic(a); // decreasing order
+			}
+		});
+
+		// slice the first five candidates
+		List<RAOperator> ret = new ArrayList<>();
+		for (int i = 0; i < 5 && i < candidates.size(); i++) {
+			ret.add(candidates.get(i));
+		}
+		return ret;
+	}
+
+	private int heuristic(RAOperator op) {
+		int weight1 = 30;
+		int weight2 = 1;
+
+		int score = 0;
+		// constant coverage
+		score = score + weight1 * RAUtils.usedConstants(op).size();
+		// predicate naturalness
+		score = score - weight2 * RAUtils.buildTree(op).length();
+		return score;
 	}
 
 	private boolean check(RAOperator program) {
