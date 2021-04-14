@@ -9,6 +9,11 @@ public class Disjunction implements Predicate {
 	public Disjunction(Predicate... predicates) {
 		List<Predicate> preds = new ArrayList<>();
 		for (Predicate p : predicates) {
+			if (p instanceof TruePred) {
+				preds.clear();
+				preds.add(p);
+				break;
+			}
 			preds.add(p);
 		}
 		this.predicates = preds.toArray(new Predicate[0]);
