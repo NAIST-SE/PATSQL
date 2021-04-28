@@ -47,7 +47,7 @@ class SQLPostprocessorTest {
 		System.out.println(example);
 
 		RASynthesizer synth = new RASynthesizer(example, new SynthOption());
-		RAOperator result = synth.synthesize();
+		RAOperator result = synth.synthesizeTop5().get(0);
 		assertNotNull(result);
 
 		RAUtils.printTree(result);
@@ -91,7 +91,7 @@ class SQLPostprocessorTest {
 		System.out.println(example);
 
 		RASynthesizer synth = new RASynthesizer(example, new SynthOption());
-		RAOperator result = synth.synthesize();
+		RAOperator result = synth.synthesizeTop5().get(0);
 		assertNotNull(result);
 
 		RAUtils.printTree(result);

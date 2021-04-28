@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -27,6 +29,7 @@ import patsql.entity.table.Column;
 import patsql.entity.table.Table;
 import patsql.entity.table.Type;
 import patsql.entity.table.agg.Agg;
+import patsql.generator.sql.SQLUtil;
 import patsql.ra.operator.BaseTable;
 import patsql.ra.operator.RA;
 import patsql.ra.operator.RAOperator;
@@ -45,7 +48,7 @@ import patsql.synth.filler.RowSearchCollectingPredicates;
 import patsql.synth.filler.SketchFiller;
 import patsql.synth.sketcher.Sketcher;
 
-public class RASynthesizer implements Callable<RAOperator> {
+public class RASynthesizer implements Callable<List<RAOperator>> {
 	final Example example;
 	final SynthOption option;
 
@@ -55,16 +58,16 @@ public class RASynthesizer implements Callable<RAOperator> {
 	}
 
 	@Override
-	public RAOperator call() throws Exception {
-		return synthesize();
+	public List<RAOperator> call() throws Exception {
+		return synthesizeTop5();
 	}
 
 	/**
 	 * @return null if timeout happens.
 	 */
-	public RAOperator synthesize(int timeoutMs) {
+	public List<RAOperator> synthesize(int timeoutMs) {
 		ExecutorService service = Executors.newSingleThreadExecutor();
-		Future<RAOperator> future = service.submit(new RASynthesizer(example, option));
+		Future<List<RAOperator>> future = service.submit(new RASynthesizer(example, option));
 		try {
 			return future.get(timeoutMs, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException | ExecutionException | TimeoutException e) {
@@ -74,46 +77,6 @@ public class RASynthesizer implements Callable<RAOperator> {
 			future.cancel(true); // stops the running synthesis
 			return null;
 		}
-	}
-
-	public RAOperator synthesize() {
-		long startDebug = System.nanoTime();
-
-		boolean isOutputSorted = Arrays.stream(example.output.columns) //
-				.map(col -> col.schema) //
-				.anyMatch(schema -> example.output.isIncreasing(schema) || example.output.isDecreasing(schema));
-
-		Sketcher sketcher = new Sketcher(example.inputs.length, isOutputSorted);
-
-		for (RAOperator s : sketcher) {
-			for (RAOperator sketch : assignNamesOnBaseTables(s)) {
-				// check the timeout of itself.
-				if (Thread.currentThread().isInterrupted()) {
-					return null;
-				}
-
-				if (!isValidSketch(sketch)) {
-					continue;
-				}
-				if (Debug.isDebugMode) {
-					RAUtils.printSketch(sketch);
-				}
-				SketchFiller filler = new SketchFiller(sketch, example, option);
-				for (RAOperator program : filler.fillSketch()) {
-					if (!check(program))
-						continue;
-
-					// optimize the program returned.
-					program = RAOptimizer.optimize(program);
-					if (Debug.isDebugMode) {
-						long dur = (System.nanoTime() - startDebug) / 1000000;
-						Debug.Time.doneSynth(dur);
-					}
-					return program;
-				}
-			}
-		}
-		return null;
 	}
 
 	public List<RAOperator> synthesizeTop5() {
@@ -150,6 +113,11 @@ public class RASynthesizer implements Callable<RAOperator> {
 				break;
 
 			for (RAOperator sketch : assignNamesOnBaseTables(s)) {
+				// check the timeout of itself.
+				if (Thread.currentThread().isInterrupted()) {
+					return null;
+				}
+
 				// check the timeout of itself.
 				if (Thread.currentThread().isInterrupted()) {
 					break sketch;
@@ -283,6 +251,14 @@ public class RASynthesizer implements Callable<RAOperator> {
 	}
 
 	private List<RAOperator> resolveTop5(List<RAOperator> candidates) {
+		// delete duplicated SQL queries
+		Map<String, RAOperator> map = new HashMap<String, RAOperator>();
+		for (RAOperator c : candidates) {
+			String sql = SQLUtil.generateSQL(c);
+			map.put(sql, c);
+		}
+		candidates = new ArrayList<>(map.values());
+
 		// sort candidates based on ranking heuristics
 		Collections.sort(candidates, new Comparator<RAOperator>() {
 			@Override
@@ -307,7 +283,7 @@ public class RASynthesizer implements Callable<RAOperator> {
 		// constant coverage
 		score = score + weight1 * RAUtils.usedConstants(op).size();
 		// predicate naturalness
-		score = score - weight2 * RAUtils.buildTree(op).length();
+		score = score - weight2 * SQLUtil.generateSQL(op).length();
 		return score;
 	}
 

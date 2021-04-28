@@ -29,7 +29,7 @@ class SQLWindowFuncTest {
 		System.out.println(option);
 
 		RASynthesizer synth = new RASynthesizer(example, option);
-		RAOperator result = synth.synthesize();
+		RAOperator result = synth.synthesizeTop5().get(0);
 		assertNotNull(result);
 
 		RAUtils.printTree(result);
