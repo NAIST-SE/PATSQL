@@ -77,9 +77,26 @@ C5
 
 #solution
 
+```sql
+SELECT
+    T0.ID_key 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.ID_key = T1.ID_key 
+GROUP BY
+    T0.ID_key 
+HAVING
+    max(T0.Room) = 'R128' 
+    OR count(T0.ID_key) >= 5
+```
+
+```sql
 SELECT C.name
 FROM Class C
 WHERE C.room = ‘R128’
         OR C.name IN (SELECT E.cname
         FROM Enrolled E GROUP BY E.cname
         HAVING COUNT (*) >= 5)
+```

@@ -70,3 +70,20 @@ SN9
 
 #solution
 
+```sql
+SELECT
+    T2.sname 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.part_id = T1.part_id 
+JOIN
+    input3 AS T2 
+        ON T0.supplier_key = T2.supplier_key 
+WHERE
+    T1.color = 'red' 
+    OR T1.color = 'green' 
+ORDER BY
+    T2.sname ASC
+```

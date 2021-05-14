@@ -48,6 +48,32 @@ P9,SN3
 
 #solution
 
+```sql
+SELECT
+    T0.part_key,
+    T1.sname 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.sid = T1.sid 
+JOIN
+    (
+        SELECT
+            part_key,
+            max(cost) AS max_cost 
+        FROM
+            input1 
+        GROUP BY
+            part_key
+    ) AS T2 
+        ON T0.part_key = T2.part_key 
+        AND T0.cost = T2.max_cost 
+ORDER BY
+    T0.part_key ASC
+```
+
+```sql
 SELECT
   [T144].part_key,[T144].sname
 FROM
@@ -67,3 +93,4 @@ FROM
       input2 )) AS [T144][part_key, MAX-cost, sid, part_key1, cost, sid1, sname]
 WHERE
   [T144].sid == [T144].sid1
+```

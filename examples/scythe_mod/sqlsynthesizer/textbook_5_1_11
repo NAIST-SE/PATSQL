@@ -42,8 +42,24 @@ SN9
 
 #solution
 
+```sql
+SELECT
+    T0.S_name 
+FROM
+    input1 AS T0 
+LEFT JOIN
+    input2 AS T1 
+        ON T0.S_key = T1.S_key 
+WHERE
+    T1.S_key IS NULL 
+ORDER BY
+    T0.S_name ASC
+```
+
+```sql
 SELECT S.sname
 FROM Student S
 WHERE S.snum
 NOT IN (SELECT E.snum
         FROM Enrolled E )
+```

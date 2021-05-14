@@ -31,6 +31,44 @@ age:Str,level
 
 #solution
 
+```sql
+SELECT
+    T1.T0_age,
+    T2.level 
+FROM
+    (SELECT
+        T0.age AS T0_age,
+        max(T0.count_S_key) AS max_T0_count_S_key 
+    FROM
+        (SELECT
+            age,
+            count(S_key) AS count_S_key 
+        FROM
+            input1 
+        GROUP BY
+            age,
+            level) AS T0 
+    GROUP BY
+        T0.age) AS T1 
+    JOIN
+        (
+            SELECT
+                age,
+                level,
+                count(S_key) AS count_S_key 
+            FROM
+                input1 
+            GROUP BY
+                age,
+                level
+        ) AS T2 
+            ON T1.T0_age = T2.age 
+            AND T1.max_T0_count_S_key = T2.count_S_key 
+    ORDER BY
+        T1.T0_age ASC
+```
+
+```sql
 S.level IN (SELECT FROM
 S.age, S.level Student S
 SELECT
@@ -44,3 +82,4 @@ COUNT (*)
 Student S2
 FROM
 WHERE s1.age = S2.age GROUP BY S2.level, S2.age))
+```

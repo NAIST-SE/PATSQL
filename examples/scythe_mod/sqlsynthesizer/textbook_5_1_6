@@ -69,7 +69,28 @@ faculty4
 
 #solution
 
+```sql
+SELECT
+    max(T2.F_name) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.C_name = T1.C_name 
+JOIN
+    input3 AS T2 
+        ON T0.F_key = T2.F_key 
+GROUP BY
+    T0.F_key 
+HAVING
+    count(T0.C_name) < 5 
+ORDER BY
+    max(T2.F_name) ASC
+```
+
+```sql
 SELECT F.fname
 FROM   Faculty F
 WHERE  5 > (SELECT COUNT (E.snum)
             FROM Class C, Enrolled E WHERE C.name = E.cname AND C.fid = F.fid)
+```

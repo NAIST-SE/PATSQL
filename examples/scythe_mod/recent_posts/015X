@@ -1,0 +1,44 @@
+//http://stackoverflow.com/questions/40131799/dynamic-column-sql-pivot-table
+
+# input
+
+CriteriaID,     KSB_Requirement,        ModuleID,    Module_Title
+   1,         Understand something,       5,         Principles 1
+   1,         Understand something,       6,         Principles 2
+   1,         Understand something,       7,         Principles 3
+   2,         Learn something,            5,         Principles 1
+   2,         Learn something,            6,         Principles 2
+
+# output
+
+KSB_Requirement,       Principle 1,    Principle 2,    Principle 3
+Understand something,      1,              1,              1
+Learn something,           1,              1,              0
+
+# constraint
+{
+	"constants": ["Principles 1", "Principles 2", "Principles 3"],
+	"aggregation_functions": []
+}
+
+# solution
+
+```sql
+DECLARE 
+  @cols AS NVARCHAR(MAX),
+  @query  AS NVARCHAR(MAX)
+
+SET @cols = STUFF((SELECT distinct ',' + QUOTENAME(Module_Title) 
+            FROM Standards_Coverage_Pivot_Data
+            FOR XML PATH(''), TYPE
+            ).value('.', 'NVARCHAR(MAX)') 
+        ,1,1,'')
+
+set @query = 'SELECT * from (Select KSB_Requirement,Module_Title,CriteriaID From Standards_Coverage_Pivot_Data) s
+            pivot 
+            (
+                Count(CriteriaID)
+                for Module_Title in (' + @cols + ')
+            ) p '
+ execute(@query);
+```

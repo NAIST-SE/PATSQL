@@ -25,10 +25,25 @@
 
 #solution
 
-SELECT a.id, a.rev, a.contents
-FROM YourTable a
-INNER JOIN (
-    SELECT id, MAX(rev) rev
-    FROM YourTable
-    GROUP BY id
-) b ON a.id = b.id AND a.rev = b.rev
+```sql
+SELECT
+    T1.id,
+    T1.max_rev,
+    T0.content 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            id,
+            max(rev) AS max_rev 
+        FROM
+            input1 
+        GROUP BY
+            id
+    ) AS T1 
+        ON T1.id = T0.id 
+        AND T1.max_rev = T0.rev 
+ORDER BY
+    T1.id ASC
+```

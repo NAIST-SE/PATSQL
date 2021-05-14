@@ -38,3 +38,30 @@
 	"constants": [],
 	"aggregation_functions": ["max"]
 }
+
+# solution
+
+```sql
+SELECT
+    T2.min_T1Column1,
+    T0.T2Column3,
+    T2.min_T1Column4,
+    T1.T3Column2 
+FROM
+    input2 AS T0 
+JOIN
+    input3 AS T1 
+        ON T0.T2Column1 = T1.T2Column1 
+JOIN
+    (
+        SELECT
+            min(T1Column1) AS min_T1Column1,
+            min(T1Column2) AS min_T1Column2,
+            min(T1Column4) AS min_T1Column4 
+        FROM
+            input1
+    ) AS T2 
+        ON T0.T1Column2 = T2.min_T1Column2 
+ORDER BY
+    T0.T2Column3 ASC
+```

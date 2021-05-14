@@ -23,9 +23,25 @@
 
 #solution
 
-SELECT m.cname, m.wmname, t.mx
-FROM (
-    SELECT cname, MAX(avg) AS mx
-    FROM makerar
-    GROUP BY cname
-    ) t JOIN makerar m ON m.cname = t.cname AND t.mx = m.avg;
+```sql
+SELECT
+    T1.cname,
+    T0.wmname,
+    T1.max_avg 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            cname,
+            max(avg) AS max_avg 
+        FROM
+            input1 
+        GROUP BY
+            cname
+    ) AS T1 
+        ON T1.cname = T0.cname 
+        AND T1.max_avg = T0.avg 
+ORDER BY
+    T1.cname ASC
+```

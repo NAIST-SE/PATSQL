@@ -24,3 +24,17 @@
 	"constants": [],
 	"aggregation_functions": [ "sum"]
 }
+
+#solution
+
+```sql
+SELECT
+    project_code,
+    sum(invoice_amount) 
+FROM
+    input1 
+GROUP BY
+    project_code 
+ORDER BY
+    project_code ASC
+```

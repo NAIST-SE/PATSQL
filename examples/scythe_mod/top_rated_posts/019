@@ -23,8 +23,24 @@ id , age , count
 
 #solution
 
-SELECT S.id, S.age, C.cnt
-  FROM Students  S
-       INNER JOIN (SELECT age, count(age) as cnt
-                     FROM Students 
-                    GROUP BY age) C ON S.age = C.age
+```sql
+SELECT
+    T0.id,
+    T1.age,
+    T1.count_id 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            age,
+            count(id) AS count_id 
+        FROM
+            input1 
+        GROUP BY
+            age
+    ) AS T1 
+        ON T1.age = T0.age 
+ORDER BY
+    T0.id ASC
+```

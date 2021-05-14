@@ -29,12 +29,25 @@ id,  category,  date
 
 #solution
 
-SELECT * FROM Table1 t1
-JOIN 
-(
-   SELECT category, MAX(date) AS MAXDATE
-   FROM Table1
-   GROUP BY category
-) t2
-ON T1.category = t2.category
-AND t1.date = t2.MAXDATE
+```sql
+SELECT
+    T0.id,
+    T1.category,
+    T0.date 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            category,
+            max(date) AS max_date 
+        FROM
+            input1 
+        GROUP BY
+            category
+    ) AS T1 
+        ON T1.category = T0.category 
+        AND T1.max_date = T0.date 
+ORDER BY
+    T0.id ASC
+```

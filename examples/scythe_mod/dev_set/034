@@ -1,0 +1,36 @@
+//http://stackoverflow.com/questions/33063073/postgresql-max-value-for-every-user
+
+#input
+
+| Usr   | Phone | Value |
+|-----------------------|
+| Peter | 012   | 1     |
+| Peter | 456   | 2     |
+| Peter | 123   | 3     |
+| Paul  | 789   | 3     |
+| Paul  | 789   | 7     |
+| Paul  | 789   | 10    |
+
+#output
+
+|  c1   | c2  | c3 |
+|------------------|
+| Peter | 123 | 3  |
+| Paul  | 789 | 7  |
+
+#constraint
+{
+	"constants": ["8"],
+	"aggregation_functions": ["max"]
+}
+
+#solution
+
+select t1.*
+from your_table t1
+join (
+    select usr, max(value) as max_value
+    from your_table
+    where value < 8
+    group by usr
+) t2 on t1.usr = t2.usr and t1.value = t2.max_value

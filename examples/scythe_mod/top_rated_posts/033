@@ -33,6 +33,7 @@ CustomerID,  FirstName,   MiddleName ,         LastName   ,     Date:Str
 
 #solution
 
+```
 SELECT
 main.CustomerID,
 f.Data AS FirstName,
@@ -48,3 +49,4 @@ WHERE f.DBColumnName = 'FirstName'
 AND m.DBColumnName = 'MiddleName' 
 AND l.DBColumnName = 'LastName' 
 AND d.DBColumnName = 'Date'
+```

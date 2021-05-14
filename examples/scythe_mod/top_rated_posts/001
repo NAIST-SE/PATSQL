@@ -27,6 +27,14 @@
 
 # solution
 
-select SubjectID, concat(StudentName)
-from SubjectID
-group by SubjectID
+```sql
+SELECT
+    SubjectID,
+    string_agg(StudentName, ', ') 
+FROM
+    input1 
+GROUP BY
+    SubjectID 
+ORDER BY
+    SubjectID ASC
+```

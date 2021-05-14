@@ -31,11 +31,27 @@
 
 #solution
 
-SELECT tt.*
-FROM topten tt
-INNER JOIN
-    (SELECT home, MAX(datetime) AS MaxDateTime
-    FROM topten
-    GROUP BY home) groupedtt 
-ON tt.home = groupedtt.home 
-AND tt.datetime = groupedtt.MaxDateTime
+```sql
+SELECT
+    T0.id,
+    T1.home,
+    T0.datetime,
+    T0.player,
+    T0.resource 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            home,
+            max(datetime) AS max_datetime 
+        FROM
+            input1 
+        GROUP BY
+            home
+    ) AS T1 
+        ON T1.home = T0.home 
+        AND T1.max_datetime = T0.datetime 
+ORDER BY
+    T0.id ASC
+```

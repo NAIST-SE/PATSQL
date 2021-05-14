@@ -30,16 +30,16 @@
 
 #solution
 
-SELECT * 
-FROM   Call
-LEFT OUTER JOIN Phone_Book
-  ON (Call.phone_number = Phone_book.phone_number)
-  WHERE Phone_book.phone_number IS NULL;
-
-
-SELECT *
-FROM   Call
-WHERE  NOT EXISTS
-  (SELECT *
-   FROM   Phone_book
-   WHERE  Phone_book.phone_number = Call.phone_number)
+```sql
+SELECT
+    T0.id,
+    T0.date,
+    T0.phone_number 
+FROM
+    input2 AS T0 
+LEFT JOIN
+    input1 AS T1 
+        ON T0.id = T1.id 
+WHERE
+    T1.id IS NULL
+```

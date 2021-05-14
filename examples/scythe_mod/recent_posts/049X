@@ -1,0 +1,38 @@
+//http://stackoverflow.com/questions/39955394/sql-how-to-get-select-attribute-that-is-array-by-join
+//XXXX toJson
+
+# input
+
+|  id  | type | sum |
+|------|------|-----|
+|  1   | a    | 100 |
+|  2   | a    | 200 |
+|  3   | b    | 500 |
+
+# output
+
+|  t_sum | type | history                                              |
+|--------|------|------------------------------------------------------|
+|  300   | a    | ['id' => 1, 'sum' => 100], ['id' => 2, 'sum' => 200] |
+|  500   | b    | ['id' => 3, 'sum' => 500]                            |
+
+# constraint
+
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+# solution
+
+SELECT sum(sum) AS t_sum,
+       type,
+       array_to_json(
+          array_agg(
+             json_build_object('id', id, 'sum', sum)
+          )
+       ) history
+FROM history
+GROUP BY type
+ORDER BY type;
+

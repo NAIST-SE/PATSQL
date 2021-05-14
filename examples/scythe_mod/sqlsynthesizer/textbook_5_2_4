@@ -54,8 +54,29 @@ PN9
 
 #solution
 
-requires exists on join table
+```sql
+SELECT
+    max(T1.pname) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.part_key = T1.part_key 
+JOIN
+    input3 AS T2 
+        ON T0.sid = T2.sid 
+GROUP BY
+    T0.part_key 
+HAVING
+    max(T2.sname) = 'AWS' 
+    AND min(T2.sname) = 'AWS' 
+ORDER BY
+    max(T1.pname) ASC
+```
 
+// requires exists on join table
+
+```sql
 select t2.pname
 from t1 T1
 where not exists
@@ -65,3 +86,4 @@ where not exists
          on t1.sid = t3.sid)
 join t2
 on T1.part_key = t2.part_key
+```

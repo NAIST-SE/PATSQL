@@ -25,20 +25,28 @@
 
 #solution
 
-SELECT   `value`,
-          COUNT(`value`) AS `value_occurrence` 
-FROM     `my_table`
-GROUP BY `value`
-ORDER BY `value_occurrence` DESC
-LIMIT    1;
-
-select t2.c
-from (select max(cnt)
- from (select c, count(*) cnt
- 		   from t
-		   group by c)) t1
-join (select c, count(*) cnt
-      from t
-      group by c) t2
-on t1.maxcnt = t2.cnt
-
+```sql
+SELECT
+    T2.c 
+FROM
+    (SELECT
+        max(T0.count_c) AS max_T0_count_c 
+    FROM
+        (SELECT
+            count(c) AS count_c 
+        FROM
+            input1 
+        GROUP BY
+            c) AS T0) AS T1 
+    JOIN
+        (
+            SELECT
+                c,
+                count(c) AS count_c 
+            FROM
+                input1 
+            GROUP BY
+                c
+        ) AS T2 
+            ON T1.max_T0_count_c = T2.count_c
+```

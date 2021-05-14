@@ -31,8 +31,18 @@ KSG-0619-81,   5,          pentametric fan
 
 #solution
 
-SELECT Orders.OrderNumber, LineItems.Quantity, LineItems.Description
-FROM Orders
-    LEFT JOIN LineItems 
-    ON Orders.OrderID = LineItems.OrderID
-GROUP BY Orders.OrderNumber
+```sql
+SELECT
+    max(T0.OrderNumber),
+    max(T1.Quantity),
+    max(T1.Description) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.OrderID = T1.OrderID 
+GROUP BY
+    T0.OrderID 
+ORDER BY
+    max(T0.OrderNumber) DESC
+```

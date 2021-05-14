@@ -28,17 +28,25 @@ EEric         ,    eric@gmail.com
 
 #solution
 
-SELECT EmailAddress, CustomerName 
-FROM Customers 
-WHERE EmailAddress IN
-(SELECT EmailAddress 
- FROM Customers 
- GROUP BY EmailAddress 
- HAVING COUNT(*) > 1)
-
-
-SELECT EmailAddress, CustomerName 
-FROM Customers as a 
-Inner Join Customers as b 
-on a.CustomerName <> b.CustomerName 
-   and a.EmailAddress = b.EmailAddress
+```sql
+SELECT
+    T0.CustomerName,
+    T1.EmailAddress 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            EmailAddress,
+            count(CustomerName) AS count_CustomerName 
+        FROM
+            input1 
+        GROUP BY
+            EmailAddress
+    ) AS T1 
+        ON T1.EmailAddress = T0.EmailAddress 
+WHERE
+    T1.count_CustomerName > 1 
+ORDER BY
+    T1.EmailAddress ASC
+```

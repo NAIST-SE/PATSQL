@@ -25,7 +25,23 @@ SR,23
 
 #solution
 
+```sql
+SELECT
+    level,
+    avg(age) 
+FROM
+    input1 
+WHERE
+    level <> 'JR' 
+GROUP BY
+    level 
+ORDER BY
+    level ASC
+```
+
+```sql
 SELECT S.level, AVG(S.age)
 FROM Student S
 WHERE S.level <> ‘JR’
 GROUP BY S.level
+```

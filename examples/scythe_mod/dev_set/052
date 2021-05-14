@@ -1,0 +1,63 @@
+//http://stackoverflow.com/questions/15389091/how-to-exclude-records-with-certain-values-in-sql-select
+
+#input
+
+|StoreId:Str |ClientId:Str|
+|----------------|
+|  1     |   04  |
+|  1     |   05  |
+|  1     |   09  |
+|  2     |   05  |    
+|  2     |   06  |     
+|  2     |   07  |  
+|  3     |   08  |
+|  4     |   01  |
+|  4     |   02  |
+
+#output
+
+|StoreId:Str  |   
+|---------|
+|  3      |
+| 4       |
+| 4       |
+
+#constraint
+{
+	"constants": ["05:Str"],
+	"aggregation_functions": []
+}
+
+#solution
+
+```sql
+SELECT DISTINCT sc.StoreId
+FROM StoreClients sc
+WHERE NOT EXISTS(
+    SELECT * FROM StoreClients sc2 
+    WHERE sc2.StoreId = sc.StoreId AND sc2.ClientId = 5)
+```
+
+```sql
+SELECT
+    T0.StoreId 
+FROM
+    (SELECT
+        StoreId 
+    FROM
+        input1) AS T0 
+LEFT JOIN
+    (
+        SELECT
+            StoreId 
+        FROM
+            input1 
+        WHERE
+            ClientId = '05'
+    ) AS T1 
+        ON T0.StoreId = T1.StoreId 
+WHERE
+    T1.StoreId IS NULL 
+ORDER BY
+    T0.StoreId ASC
+```

@@ -30,3 +30,19 @@
 	"constants": ["1"],
 	"aggregation_functions": [ "count" ]
 }
+
+#solution
+
+```sql
+SELECT
+    upedonid,
+    count(idx_key) 
+FROM
+    input1 
+GROUP BY
+    upedonid 
+HAVING
+    count(upedonid) > 1 
+ORDER BY
+    upedonid ASC
+```

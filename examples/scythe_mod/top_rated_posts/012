@@ -29,16 +29,25 @@
 
 #solution
 
- SELECT * FROM DocumentStatusLogs D1 JOIN
+```sql
+SELECT
+    T1.DocumentID,
+    T0.Status,
+    T0.DateCreated 
+FROM
+    input1 AS T0 
+JOIN
     (
-      SELECT
-        DocumentID,MAX(DateCreated) AS MaxDate
-      FROM
-        DocumentStatusLogs
-      GROUP BY
-        DocumentID
-    ) D2
-    ON
-      D2.DocumentID=D1.DocumentID
-    AND
-      D2.MaxDate=D1.DateCreated
+        SELECT
+            DocumentID,
+            max(DateCreated) AS max_DateCreated 
+        FROM
+            input1 
+        GROUP BY
+            DocumentID
+    ) AS T1 
+        ON T1.DocumentID = T0.DocumentID 
+        AND T1.max_DateCreated = T0.DateCreated 
+ORDER BY
+    T1.DocumentID ASC
+```

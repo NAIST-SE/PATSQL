@@ -64,6 +64,26 @@ age
 
 #solution
 
+```sql
+SELECT
+    max(T3.age) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.C_name = T1.C_name 
+JOIN
+    input3 AS T2 
+        ON T0.F_key = T2.F_key 
+JOIN
+    input4 AS T3 
+        ON T1.S_key = T3.S_key 
+WHERE
+    T3.major = 'History' 
+    OR T2.F_name = 'faculty1'
+```
+
+```sql
 SELECT MAX(S.age)
 FROM Student S
 WHERE (S.ma jor = ‘History’)
@@ -71,3 +91,4 @@ WHERE (S.ma jor = ‘History’)
     FROM Class C, Enrolled E, Faculty F
     WHERE E.cname = C.name AND C.fid = F.fid
     AND F.fname = ‘I.Teach’ )
+```

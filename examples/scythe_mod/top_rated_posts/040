@@ -27,6 +27,22 @@ grp-B, sub-B, 2
 
 #solution
 
+```sql
+SELECT
+    grp,
+    subGroup,
+    count(grp) 
+FROM
+    input1 
+GROUP BY
+    grp,
+    subGroup 
+ORDER BY
+    grp ASC
+```
+
+```sql
 SELECT a, b, COUNT(a) 
 FROM tbl 
 GROUP BY a, b
+```

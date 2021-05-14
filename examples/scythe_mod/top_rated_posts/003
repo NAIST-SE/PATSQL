@@ -24,5 +24,9 @@
 
 # solution
 
-select concat(c)
-from t
+```sql
+SELECT
+    string_agg(c, ', ') 
+FROM
+    input1
+```

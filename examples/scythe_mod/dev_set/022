@@ -1,0 +1,42 @@
+//http://stackoverflow.com/questions/29442201/matching-multiple-attributes
+
+#input
+
+| ID | Fruit1  | Fruit2   | Fruit3   | Fruit4   |
+|-----------------------------------------------|
+| 1  | apples  | bananas  |          |          |
+| 2  | apples  | oranges  | cherries | lychees  |
+| 3  | bananas | cherries | lychees  |          |
+
+#output
+
+|  ID1 | ID2 | Fruit    |
+|-----------------------|
+|  1   | 2   | apples   |
+|  1   | 3   | bananas  |
+|  2   | 3   | cherries |
+|  2   | 3   | lychees  |
+
+#constraint
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+#solution
+
+```sql
+with All_Sales (Id, Fruit) 
+as (
+select Id, Fruit1 as Fruit from Sales where not Fruit1 is null
+union all
+select Id, Fruit2 as Fruit from Sales where not Fruit2 is null
+union all 
+select Id, Fruit3 as Fruit from Sales where not Fruit3 is null
+union all 
+select Id, Fruit4 as Fruit from Sales where not Fruit4 is null
+)
+
+select as1.Id as Id1, as2.Id as Id2, as1.Fruit 
+from All_Sales as as1 inner join All_Sales as as2 on as1.Fruit = as2.fruit And as1.Id < as2.Id
+```

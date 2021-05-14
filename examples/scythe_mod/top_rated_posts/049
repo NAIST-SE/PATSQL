@@ -18,8 +18,22 @@ UserId, Alias
 | 2 |  Abc, Xyz      |
 
 
-# constraint
+#constraint
 {
 	"constants": [ ],
 	"aggregation_functions": ["concat"]
 }
+
+#solution
+
+```sql
+SELECT
+    UserId,
+    string_agg(Alias, ', ') 
+FROM
+    input1 
+GROUP BY
+    UserId 
+ORDER BY
+    UserId ASC
+```

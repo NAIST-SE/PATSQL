@@ -42,3 +42,35 @@ SN3, 30
 	"parameter_number": 0,
 	"max_filter_length": 2
 }
+
+#solution
+
+```sql
+SELECT
+    max(T2.sname),
+    max(T0.cost) 
+FROM
+    input1 AS T0 
+LEFT JOIN
+    (
+        SELECT
+            part_id,
+            color 
+        FROM
+            input2 
+        WHERE
+            color = 'green' 
+            OR color = 'red'
+    ) AS T1 
+        ON T0.part_id = T1.part_id 
+JOIN
+    input3 AS T2 
+        ON T0.supplier_key = T2.supplier_key 
+GROUP BY
+    T0.supplier_key 
+HAVING
+    max(T1.color) = 'red' 
+    AND min(T1.color) = 'green' 
+ORDER BY
+    max(T2.sname) ASC
+```

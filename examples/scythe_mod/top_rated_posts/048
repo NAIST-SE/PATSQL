@@ -26,15 +26,23 @@ Joe Bloggs , 120, XXX
 
 #solution
 
+```sql
 SELECT
-    M.CName, M.AddressLine,
-FROM(
-    SELECT
-        CName, MIN(Inserted) AS First
-    FROM
-        MyTable
-    GROUP BY
-        CName
-    ) foo
-JOIN MyTable M 
-ON foo.CName = M.CName AND foo.First = M.Inserted
+    T1.CName,
+    T0.AddressID,
+    T0.AddressLine 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            CName,
+            min(AddressID) AS min_AddressID 
+        FROM
+            input1 
+        GROUP BY
+            CName
+    ) AS T1 
+        ON T1.CName = T0.CName 
+        AND T1.min_AddressID = T0.AddressID
+```

@@ -1,0 +1,31 @@
+//http://stackoverflow.com/questions/39981320/grouping-while-maintaining-next-record
+
+#input
+
+id,             name,        school
+1 ,             Joe ,        ODU
+3 ,             Ane ,        ODU
+4 ,             Trevor,      VT
+5 ,             Cools ,      VCU
+2 ,             Mike,        VCU
+
+#output
+
+id,             name,        school
+1 ,             Joe ,        ODU
+3 ,             Ane ,        ODU
+2 ,             Mike,        VCU
+5 ,             Cools ,      VCU
+4 ,             Trevor,      VT
+
+#constraint
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+#solution
+
+SELECT id, name
+FROM dbo.NerdsTable
+ORDER BY school ASC, id ASC

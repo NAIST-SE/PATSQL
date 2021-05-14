@@ -1,7 +1,7 @@
 //Find the names of all students who are enrolled in two classes that meet at the same time.
 //Synthesis failed: self join with <> is not supported.
 
-#input:students
+#input:student
 S_key,S_name
 S1,stu1
 S2,stu2
@@ -18,7 +18,7 @@ S12,stu12
 S13,stu13
 S14,stu14
 
-#input
+#input:class
 
 C_name,meets_at
 class1,mon
@@ -29,7 +29,7 @@ class5,fri
 class6,fri
 class7,fri
 
-#input
+#input:enrolled
 
 S_key,C_name
 S1,class1
@@ -82,11 +82,12 @@ stu14
 
 #solution
 
-SELECT S.sname
+```sql
+SELECT S.S_name
 FROM Student S
-WHERE S.snum IN (SELECT E1.snum
+WHERE S.S_key IN (SELECT E1.S_key
                    FROM Enrolled E1, Enrolled E2, Class C1, Class C2
-                  WHERE E1.snum = E2.snum AND E1.cname <> E2.cname
-                    AND E1.cname = C1.name
-                    AND E2.cname = C2.name AND c1.meets_at = C2.meets_at)
-
+                  WHERE E1.S_key = E2.S_key AND E1.C_name <> E2.C_name
+                    AND E1.C_name = C1.C_name
+                    AND E2.C_name = C2.C_name AND c1.meets_at = C2.meets_at)
+```
