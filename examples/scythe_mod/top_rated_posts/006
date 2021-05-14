@@ -28,10 +28,24 @@
 
 #solution
 
-select
-    a.*
-from messages a
-inner join (select name, max(id) as maxid 
-            from messages 
-            group by name) as b 
-on a.id = b.maxid
+```sql
+SELECT
+    T1.max_Id,
+    T1.Name,
+    T0.Other_Columns 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            Name,
+            max(Id) AS max_Id 
+        FROM
+            input1 
+        GROUP BY
+            Name
+    ) AS T1 
+        ON T1.max_Id = T0.Id 
+ORDER BY
+    T1.Name ASC
+```

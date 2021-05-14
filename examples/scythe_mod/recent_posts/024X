@@ -1,0 +1,52 @@
+//http://stackoverflow com/questions/40067193/average-of-grouped-rows-in-sql
+//XXX percentage
+
+# input:BALL
+
+Id,         Color,             Month  
+1,          blue,              October
+2,          red,               January  
+3,          green,             September  
+4,          red,               October  
+5,          red,               March  
+6,          blue,              March  
+7,          red,               March  
+8,          red,               March  
+
+# output
+
+c1,        c2
+October,   0.5
+January,   0
+September, 0
+March,     0.25
+
+# constraint
+{
+	"constants": ["blue"],
+	"aggregation_functions": []
+}
+
+# solution
+
+```sql
+-- MySQL
+SELECT BALL.Month, avg(BALL.Color='Blue') 
+FROM BALL    
+GROUP BY BALL.Month;
+```
+
+```sql
+-- PostgreSQL
+select month, coalesce(cast(i as double precision) / j, 0)
+from (select month, count(*) as i from ball where color = 'blue' group by month) x
+  right join (select month, count(*) as j from ball group by month) y
+    using (month);
+```
+
+```sql
+-- PostgreSQL syntax (not working)
+SELECT BALL.Month, avg(CAST (CASE WHEN BALL.Color='Blue' THEN 1 ELSE 0 END AS real)) 
+FROM BALL
+GROUP BY BALL.Month;
+```

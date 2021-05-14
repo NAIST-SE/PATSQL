@@ -25,7 +25,14 @@ TicketID, People
 
 #solution
 
-select TicketId, listagg(Person, ', ') People
-from table
-group by TicketId
-
+```sql
+SELECT
+    TicketID,
+    string_agg(Person, ' ') 
+FROM
+    input1 
+GROUP BY
+    TicketID 
+ORDER BY
+    TicketID ASC
+```

@@ -33,9 +33,18 @@
 
 #solution
 
-select t1.VehicleID, t1.Name, t2.concatLocations
-from (select VehicleID, concat(City) As concatLocations
-      from  t2
-      group by VehicleID)
-join t1
-on t1.VehicleID = t2.VehicleID
+```sql
+SELECT
+    T0.VehicleID,
+    max(T0.Name),
+    string_agg(T1.City, ', ') 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.VehicleID = T1.VehicleID 
+GROUP BY
+    T0.VehicleID 
+ORDER BY
+    T0.VehicleID ASC
+```

@@ -10,11 +10,11 @@ import patsql.entity.table.window.WinFunc;
 public class QWindowFuncColumn extends QColumn {
 
 	public WinFunc func;
-	public Optional<QSingleColumn> src;
+	public Optional<QColumn> src;
 	public List<QColumn> partCols;
 	public List<QSortSpec> sortSpecs;
 
-	public QWindowFuncColumn(WinFunc func, Optional<QSingleColumn> src, List<QColumn> partCols,
+	public QWindowFuncColumn(WinFunc func, Optional<QColumn> src, List<QColumn> partCols,
 			List<QSortSpec> sortSpecs) {
 		this.func = func;
 		this.src = src;
@@ -49,10 +49,6 @@ public class QWindowFuncColumn extends QColumn {
 	private String toPostgreSQL() {
 		String windowFuncType;
 		switch (func) {
-		case ROWNUM:
-			assert !src.isPresent();
-			windowFuncType = "row_number()";
-			break;
 		case RANK:
 			assert !src.isPresent();
 			windowFuncType = "rank()";
@@ -96,10 +92,6 @@ public class QWindowFuncColumn extends QColumn {
 	public Optional<String> getColAlias() {
 		String windowFuncType;
 		switch (func) {
-		case ROWNUM:
-			assert !src.isPresent();
-			windowFuncType = "row_number";
-			break;
 		case RANK:
 			assert !src.isPresent();
 			windowFuncType = "rank";

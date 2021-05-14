@@ -25,9 +25,24 @@ c1, c2, c3
 
 #solution
 
-select t1.*
-(select c2, min(c1) minc1
- from c2
- group by c2) t1
-join t2
-on t1.minc1 = t2.c1
+```sql
+SELECT
+    T0.c1,
+    T1.c2,
+    T0.c3 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            c2,
+            min(c1) AS min_c1 
+        FROM
+            input1 
+        GROUP BY
+            c2
+    ) AS T1 
+        ON T1.min_c1 = T0.c1 
+ORDER BY
+    T0.c1 ASC
+```

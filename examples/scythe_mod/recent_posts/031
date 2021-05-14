@@ -1,0 +1,69 @@
+//http://stackoverflow.com/questions/40028319/sql-check-if-value-exists-in-group
+
+#input:ChatChannelMembers
+
+channelID  , accountID  , role
+1          , Bob   , 100
+2          , Bob   , 100
+3          , Bob   , 100
+2          , Dave  , 101
+3          , Dave  , 101
+0          , Wilma , 100
+1          , Wilma , 100
+2          , Wilma , 100
+3          , Wilma , 100
+
+#input:ChatChannels
+
+channelID  , channelName     , type   
+0          , Public 0        , public
+1          , Public Channel  , public
+2          , Private Channel , private
+3          , Public 2        , public
+
+#output
+
+channelID  , channelName     , type   
+0          , Public 0        , public
+1          , Public Channel  , public
+
+
+#constraint
+{
+	"constants": ["public", "Dave"],
+	"aggregation_functions": []
+}
+
+#solution
+
+```sql
+SELECT
+    T0.channelID,
+    T0.channelName,
+    T0.type 
+FROM
+    ChatChannels AS T0 
+LEFT JOIN
+    (
+        SELECT
+            channelID 
+        FROM
+            ChatChannelMembers 
+        WHERE
+            accountID = 'Dave'
+    ) AS T1 
+        ON T0.channelID = T1.channelID 
+WHERE
+    T0.type = 'public' 
+    AND T1.channelID IS NULL 
+ORDER BY
+    T0.channelID ASC
+```
+
+```sql
+SELECT ChatChannels.channelID, channelName, type
+FROM ChatChannels CC
+WHERE CC.type = 'public'
+  AND CC.channelID NOT IN 
+  (SELECT channelID FROM ChatChannelMembers WHERE AccountID = 'Dave')
+```

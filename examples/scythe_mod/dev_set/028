@@ -1,0 +1,65 @@
+//http://stackoverflow.com/questions/29948321/sql-select-only-rows-with-minimum-value-on-a-column-with-where-condition
+
+#input
+
+| id:Str | productId:Str | orderIndex | rejected |
+|----------------------------------------|
+| 1  |  1        |   0        |   true      |
+| 2  |  1        |   1        |   false      |
+| 3  |  1        |   2        |   false      |
+| 4  |  2        |   0        |   false      |
+| 5  |  2        |   1        |   true      |
+| 6  |  3        |   1        |   false      |
+| 7  |  3        |   0        |   false      |
+
+#output
+
+| id:Str | productId:Str | orderIndex | rejected |
+|----------------------------------------|
+| 2  |  1        |   1        |   false      |
+| 4  |  2        |   0        |   false      |
+| 7  |  3        |   0        |   false      |
+
+#constraint
+{
+	"constants": ["false"],
+	"aggregation_functions": ["min"]
+}
+
+#solution
+
+```sql
+SELECT
+    T0.id,
+    T1.productId,
+    T0.orderIndex,
+    T0.rejected 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            productId,
+            min(orderIndex) AS min_orderIndex 
+        FROM
+            input1 
+        WHERE
+            rejected = 'false' 
+        GROUP BY
+            productId
+    ) AS T1 
+        ON T1.productId = T0.productId 
+        AND T1.min_orderIndex = T0.orderIndex 
+ORDER BY
+    T0.id ASC
+```
+
+```sql
+SELECT m.id, m.productId, m.orderIndex
+FROM myTable m
+JOIN(
+  SELECT productId, MIN(orderIndex) AS minOrderIndex
+  FROM myTable
+  WHERE rejected = false
+  GROUP BY productId) tmp ON tmp.productId = m.productId AND tmp.minOrderIndex = m.orderIndex;
+```

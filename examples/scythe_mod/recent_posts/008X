@@ -1,0 +1,63 @@
+//http://stackoverflow.com/questions/40170119/get-last-2-years-value-and-oldest-year-sql
+
+#input
+
+InspectYear,     Part,       Pos1,    Pos2,    Pos3,    Pos4
+2009,            001,        8,       8,       9,       7
+2009,            002,        9,       7,       8,       6
+2011,            001,        9,       9,       8,       7
+2011,            002,        7,       8,       6,       8
+2013,            001,        8,       9,       7,       9
+2013,            002,        7,       7,       8,       8
+2015,            001,        8,       8,       7,       4
+2015,            002,        7,       6,       9,       8
+
+#output
+
+Part,      Pos,      2009,    2011,    2013,    2015,    Calc1,     Calc2
+001,       Pos1,     8,       9,       8,       8,       0,         0
+001,       Pos2,     8,       9,       9,       8,       -1,        0
+001,       Pos3,     9,       8,       7,       7,       0,         -2
+001,       Pos4,     7,       7,       9,       4,       -5,        -3
+
+#constraint
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+#solution
+
+declare @inspectyear as nvarchar(max), @calc as nvarchar(max), @query as nvarchar(max);
+
+set @inspectyear = STUFF((select distinct ',' + quotename(InspectYear) from ##t2 c
+                  for XML path(''), type).value('.','NVARCHAR(MAX)'),1,1,'')
+
+select @calc = ', ' + quotename(Max(InspectYear)) + '  - ' + quotename(Max(InspectYear)-2) 
+         + ' as Calc1, ' + quotename(Max(InspectYear)) + ' - ' + quotename(min(InspectYear)) 
+         + ' as Calc2' from #t2;
+
+
+
+set @query =
+';with data as
+(
+      select      inspectyear,
+                  partno, Pos, number
+      from #t2
+      unpivot
+      (
+            number
+            for Pos in ([Pos1], [Pos2], [Pos3], [Pos4])
+      ) unpvt
+)
+select * ' + @calc + ' into ##temp
+from data
+pivot
+(
+      sum(number)
+      for inspectyear in (' + @inspectyear + ')
+) pvt
+order by partno';
+
+exec(@query);

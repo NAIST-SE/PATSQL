@@ -1,0 +1,36 @@
+//http://stackoverflow.com/questions/40058220/is-it-possible-to-retrieve-in-output-which-predicate-in-where-clause-is-evaluate
+//XXX arith
+
+# input:person
+
+name,        age,         hair_color
+Tom,         12,          Brown
+Bob,         27,          Black
+Sam,         20,          Red
+Ann,         15,          Blonde
+John,        30,          Blonde
+
+# output
+
+name,        age,         hair_color,      clause_1,        clause_2
+Bob,         27,          Black,           true,            false
+Ann,         15,          Blonde,          false,           true
+John,        30,          Blonde,          true,            true
+
+# constraint
+{
+	"constants": [25, "Blonde"],
+	"aggregation_functions": []
+}
+
+# solution
+
+select *
+from (
+  select p.*, 
+         (age >= 25) as condition_1, 
+         (hair_color = 'Blonde') as condition_2
+  from person p
+) t
+where condition_1 or condition_2
+

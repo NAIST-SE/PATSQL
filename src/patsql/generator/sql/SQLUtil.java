@@ -61,6 +61,7 @@ import patsql.ra.predicate.Predicate;
 import patsql.ra.predicate.TruePred;
 import patsql.ra.predicate.UnaryOp;
 import patsql.ra.predicate.UnaryPred;
+import patsql.ra.util.RAUtils;
 
 public class SQLUtil {
 
@@ -198,7 +199,7 @@ public class SQLUtil {
 			SQLizeState ret = generateSQLizeState(child);
 
 			for (WinColSchema wcs : win.cols) {
-				Optional<QSingleColumn> srcCol = wcs.src.map(s -> (QSingleColumn) ret.idToQColumn.get(s.id));
+				Optional<QColumn> srcCol = wcs.src.map(s -> ret.idToQColumn.get(s.id));
 				assert !srcCol.isPresent() || srcCol.get() != null;
 
 				List<QColumn> partCols = new ArrayList<>();

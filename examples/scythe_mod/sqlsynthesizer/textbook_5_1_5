@@ -47,8 +47,41 @@ teach5
 
 #solution
 
-SELECT F.fname
-FROM   Faculty F
-WHERE  NOT EXISTS ((SELECT * FROM Class C)
-                    EXCEPT
-                    (SELECT C1.room FROM Class C1 WHERE C1.fid = F.fid))
+```sql
+SELECT
+    T0.F_name 
+FROM
+    input3 AS T0 
+LEFT JOIN
+    (
+        SELECT
+            F_key,
+            count(C_name) AS count_C_name 
+        FROM
+            input1 
+        GROUP BY
+            F_key
+    ) AS T1 
+        ON T0.F_key = T1.F_key 
+JOIN
+    (
+        SELECT
+            count(c) AS count_c 
+        FROM
+            input2
+    ) AS T2 
+        ON T1.count_C_name = T2.count_c 
+ORDER BY
+    T0.F_name ASC
+```
+
+```sql
+SELECT DISTINCT F.fname
+FROM Faculty F
+WHERE NOT EXISTS (( SELECT *
+					FROM Class C )
+					EXCEPT
+					(SELECTC1.room
+					FROM Class C1
+					WHERE C1.fid = F.fid ))
+```

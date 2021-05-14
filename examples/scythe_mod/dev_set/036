@@ -1,0 +1,73 @@
+//http://www.sqlteam.com/forums/topic.asp?TOPIC_ID=201063
+
+#input
+
+| GUID  | PID  |
+|--------------| 
+| GUID1 | PID1 |
+| GUID1 | PID1 |
+| GUID1 | PID1 |
+| GUID2 | PID1 |
+| GUID3 | PID1 |
+| GUID3 | PID2 |
+| GUID3 | PID2 |
+| GUID3 | PID2 |
+| GUID3 | PID3 |
+| GUID4 | PID3 |
+
+#input
+
+| GUID  | LastName | FirstName |
+|------------------------------|
+| GUID1 | Mulder   |  Fox      |
+| GUID2 | Scully   |  Dana     |    
+| GUID3 | Skinner  |  Walter   |    
+| GUID4 | John     |  Doggett  |    
+
+#output
+
+| c1   |   c2   |  c3   |  c4  |
+|------------------------------|
+| PID1 | GUID1 | Mulder | Fox  |
+| PID1 | GUID2 | Scully | Dana |
+| PID1 | GUID3 | Skinner| Walter  |    
+| PID3 | GUID3 | Skinner| Walter  |    
+| PID3 | GUID4 | John   | Doggett |    
+
+#constraint
+{
+	"constants": ["2"],
+	"aggregation_functions": ["count"]
+}
+
+#solution
+
+```sql
+SELECT
+    T3.T0_PID,
+    T3.T0_GUID,
+    T2.LastName,
+    T2.FirstName 
+FROM
+    input2 AS T2 
+JOIN
+    (
+        SELECT
+            T0.GUID AS T0_GUID,
+            T0.PID AS T0_PID,
+            count(DISTINCT T1.GUID) AS count_distinct_T1_GUID 
+        FROM
+            input1 AS T0 
+        JOIN
+            input1 AS T1 
+                ON T0.PID = T1.PID 
+        GROUP BY
+            T0.GUID,
+            T0.PID
+    ) AS T3 
+        ON T3.T0_GUID = T2.GUID 
+WHERE
+    T3.count_distinct_T1_GUID >= 2 
+ORDER BY
+    T3.T0_PID ASC
+```

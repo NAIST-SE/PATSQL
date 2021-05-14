@@ -1,0 +1,40 @@
+//http://stackoverflow.com/questions/39982085/converting-column-headers-to-row-elements
+//pivot
+
+# input
+
+Count, Pay1Click,   PayMailCC,   PayMailCheck,   PayPhoneACH,   PayPhoneCC,   PayWuFoo
+8,      0,           0,          0,              0,             0,            1
+25,     0,           0,          0,              0,             1,            0
+8,      0,           0,          0,              1,             0,            0
+99,     0,           0,          1,              0,             0,            0
+11,     0,           1,          0,              0,             0,            0
+
+# output
+
+Count, PaymentType
+8,      PayWuFoo
+25,     PayPhoneCC
+8,      PayPhoneACH
+99,     PayMailCheck
+11,     PayMailCC
+
+# constraint
+{
+	"constants": [],
+	"aggregation_functions": []
+}
+
+# solution
+
+Select Count,
+
+CASE WHEN Pay1Click=1 THEN 'Pay1Click'
+           PayMailCC=1 THEN ' PayMailCC'
+          PayMailCheck=1 THEN 'PayMailCheck'
+          PayPhoneACH=1 THEN 'PayPhoneACH'
+          PayPhoneCC=1 THEN 'PayPhoneCC'
+          PayWuFoo=1 THEN 'PayWuFoo'
+     END as PaymentType
+
+FROM ......

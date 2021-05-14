@@ -22,7 +22,6 @@ C16,F4,R128
 C17,F5,R128
 C18,F5,R128
 C19,F9,R128
-C19,F9,R129
 
 #input
 ID_key,fname
@@ -41,6 +40,7 @@ F9,teach9
 fname,count
 teach4,2
 teach5,3
+teach9,1
 
 #constraint
 {
@@ -50,11 +50,52 @@ teach5,3
 
 #solution
 
-SELECT F.fname, COUNT(*) AS CourseCount
-FROM K
-GROUP BY K.ID_KEY
-HAVING EVERY ( room = ‘R128’ );
+```sql
+-- [No.5]
+SELECT
+    max(T1.fname),
+    count(T0.ID_class) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.ID_key = T1.ID_key 
+GROUP BY
+    T0.ID_key 
+HAVING
+    min(T0.room) = 'R128' 
+    AND max(T0.room) = 'R128' 
+ORDER BY
+    max(T1.fname) ASC
+```
 
+```sql
+SELECT
+    max(T1.fname),
+    count(T0.ID_class) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.ID_key = T1.ID_key 
+GROUP BY
+    T0.ID_key 
+HAVING
+    max(T0.room) = 'R128' 
+    AND min(T0.room) = 'R128' 
+ORDER BY
+    max(T1.fname) ASC
+```
+
+```sql
+SELECT F.fname, COUNT(*) AS CourseCount
+FROM Faculty F, Class C
+WHERE F.fid = C.fid
+GROUP BY F.fid, F.fname
+HAVING EVERY ( C.room = ‘R128’ )
+```
+
+```sql
 (SELECT fname, COUNT(*) AS cnt1
 FROM K
 GROUP BY K.ID_KEY) t1
@@ -64,3 +105,4 @@ FROM K
 WHERE K.room = 'R128'
 GROUP BY K.ID_KEY) t2
 ON t1.fname = t2.fname AND t1.cnt = t2.cnt2
+```

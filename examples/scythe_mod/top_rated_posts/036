@@ -28,10 +28,25 @@
 
 #solution
 
-select t.username, t.date, t.value
-from MyTable t
-inner join (
-    select username, max(date) as MaxDate
-    from MyTable
-    group by username
-) tm on t.username = tm.username and t.date = tm.MaxDate
+```sql
+SELECT
+    T1.username,
+    T0.date,
+    T0.value 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            username,
+            max(date) AS max_date 
+        FROM
+            input1 
+        GROUP BY
+            username
+    ) AS T1 
+        ON T1.username = T0.username 
+        AND T1.max_date = T0.date 
+ORDER BY
+    T1.username ASC
+```

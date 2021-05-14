@@ -27,11 +27,18 @@ John,asd@asd.com, 2
 
 #solution
 
+```sql
 SELECT
-    name, email, COUNT(*)
+    NAME,
+    EMAIL,
+    count(ID) 
 FROM
-    users
+    input1 
 GROUP BY
-    name, email
-HAVING 
-    COUNT(*) > 1
+    NAME,
+    EMAIL 
+HAVING
+    count(ID) > 1 
+ORDER BY
+    NAME DESC
+```

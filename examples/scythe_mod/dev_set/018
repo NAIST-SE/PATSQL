@@ -1,0 +1,61 @@
+//http://stackoverflow.com/questions/33037505/get-the-result-based-on-column-attribute-value
+
+#input
+
+|  Id  |  Plan  | Attributes  | Value  |
+|--------------------------------------|
+|  1   |   A    |   Name      |  AAA   |
+|  2   |   A    |   Class     |  P     |
+|  3   |   A    |   IsActive  |  True  |
+|  4   |   B    |   Name      |  BBB   |
+|  5   |   B    |   Class     |  Q     |
+|  6   |   B    |   IsActive  |  False |
+|  7   |   C    |   Name      |  CCC   |
+|  8   |   C    |   Class     |  R     |
+|  9   |   C    |   IsActive  |  True  |
+
+#output
+
+|  Id |  Plan | Attributes  | Value  |
+|------------------------------------|
+|  1  |   A   |   Name      |  AAA   |
+|  2  |   A   |   Class     |  P     |
+|  3  |   A   |   IsActive  |  True  |
+|  7  |   C   |   Name      |  CCC   |
+|  8  |   C   |   Class     |  R     |
+|  9  |   C   |   IsActive  |  True  |
+
+#constraint
+{
+	"constants": ["True", "IsActive"],
+	"aggregation_functions": []
+}
+
+#solution
+
+```sql
+SELECT
+    T1.Id,
+    T0.Plan,
+    T1.Attributes,
+    T1.Value 
+FROM
+    input1 AS T0 
+JOIN
+    input1 AS T1 
+        ON T0.Plan = T1.Plan 
+WHERE
+    T0.Value = 'True' 
+    AND T0.Attributes = 'IsActive' 
+ORDER BY
+    T1.Id ASC
+```
+
+```sql
+select * 
+from tbl
+where plan in (
+    select plan from tbl 
+    where Attributes = 'IsActive' and Value = 'True'
+)
+```

@@ -49,3 +49,8 @@ S8
 	"constants": [ "red" ],
 	"aggregation_functions": [ "count" ]
 }
+
+#solution
+
+```sql
+```

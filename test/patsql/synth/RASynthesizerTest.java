@@ -820,7 +820,6 @@ class RASynthesizerTest {
 	/**
 	 * Window functions: RANK, SUM
 	 */
-	@Disabled("error caused by a bug in SQL conversion")
 	@Test
 	void TestSynthesizer304() {
 		Table inTable1 = Utils.loadTableFromFile("examples/304_input.csv");

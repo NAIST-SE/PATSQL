@@ -1,0 +1,55 @@
+//http://stackoverflow.com/questions/31941909/only-joining-rows-where-the-date-is-less-than-the-max-date-in-another-field
+
+#input
+
+|  Emp_ID  |   Promo_Date |
+|-------------------------|
+|  1       |   2012/07/01 |
+|  1       |   2013/07/01 |
+|  2       |   2012/07/19 |
+|  2       |   2013/07/19 |
+|  3       |   2012/08/21 |
+|  3       |   2013/08/21 |
+
+#input
+
+| Emp_ID   |   Sale_Date  |
+|-------------------------|
+| 1        |   2013/06/12 |
+| 1        |   2013/06/30 |
+| 1        |   2013/07/15 |
+| 2        |   2013/06/15 |
+| 2        |   2013/06/17 |
+| 2        |   2013/08/01 |
+| 3        |   2013/07/31 |
+| 3        |   2013/09/01 |
+
+#output
+
+| Emp_ID  |   Sale_Date  |
+|------------------------|
+| 1       |   2013/06/12 |
+| 1       |   2013/06/30 |
+| 2       |   2013/06/15 |
+| 2       |   2013/06/17 |
+| 3       |   2013/07/31 |
+
+
+#constraint
+{
+	"constants": [],
+	"aggregation_functions": ["max"]
+}
+
+#solution
+
+```sql
+select s.*
+from sales s
+join (
+  select emp_id, max(promo_date) max_promo_date
+  from promotions p
+  group by emp_id
+) p2 on s.emp_id = p2.emp_id
+where s.sale_date < p2.max_promo_date;
+```

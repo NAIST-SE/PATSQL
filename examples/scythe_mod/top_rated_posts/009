@@ -25,14 +25,25 @@
 
 #solution
 
-Select u.[username]
-      ,u.[ip]
-      ,q.[time_stamp]
-From [users] As u
-Inner Join (
-    Select [username]
-          ,max(time_stamp) as [time_stamp]
-    From [users]
-    Group By [username]) As [q]
-On u.username = q.username
-And u.time_stamp = q.time_stamp
+```sql
+SELECT
+    T1.username,
+    T0.ip,
+    T0.time_stamp 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            username,
+            max(time_stamp) AS max_time_stamp 
+        FROM
+            input1 
+        GROUP BY
+            username
+    ) AS T1 
+        ON T1.username = T0.username 
+        AND T1.max_time_stamp = T0.time_stamp 
+ORDER BY
+    T1.username ASC
+```

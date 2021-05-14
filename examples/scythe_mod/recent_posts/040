@@ -1,0 +1,60 @@
+//http://stackoverflow.com/questions/39985550/how-to-sql-select-duplicates-by-one-field-and-differs-by-another
+
+#input:person_log
+
+id:Str, timestamp, first_name, last_name, action
+1, 012545878, homer, simpson, eating
+2, 812345222, homer, simpson, watching tv
+3, 312322578, marge, simpson, cooking
+4, 114568568, bart, simpson, skating
+5, 015345345, bart, simpson, skating
+6, 756290452, bart, bart, eating
+7, 745239857, bart, bart, watching tv
+8, 723945283, bart, bart, cooking
+9, 723945283, bart, aaaa, cooking
+
+#output
+
+c1:Str, c2, c3, c4, c5
+1, 012545878, homer, simpson, eating
+2, 812345222, homer, simpson, watching tv
+6, 756290452, bart, bart, eating
+7, 745239857, bart, bart, watching tv
+8, 723945283, bart, bart, cooking
+
+#constraint
+{
+	"constants": ["2"],
+	"aggregation_functions": []
+}
+
+#solution
+
+```sql
+SELECT
+    T0.id,
+    T0.timestamp,
+    T1.first_name,
+    T1.last_name,
+    T0.action 
+FROM
+    person_log AS T0 
+JOIN
+    (
+        SELECT
+            first_name,
+            last_name,
+            count(DISTINCT action) AS count_distinct_action 
+        FROM
+            person_log 
+        GROUP BY
+            first_name,
+            last_name
+    ) AS T1 
+        ON T1.first_name = T0.first_name 
+        AND T1.last_name = T0.last_name 
+WHERE
+    T1.count_distinct_action >= 2 
+ORDER BY
+    T0.id ASC
+```

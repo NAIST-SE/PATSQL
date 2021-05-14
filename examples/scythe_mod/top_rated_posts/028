@@ -36,6 +36,17 @@ C  ,   Yes we can do this work!
 
 #solution
 
-SELECT pid, LISTAGG(Descr, ' ') WITHIN GROUP (ORDER BY seq) AS desc
-FROM   B
-GROUP BY pid;
+```sql
+SELECT
+    T0.PID,
+    string_agg(T1.Descr, ' ') 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.PID = T1.PID 
+GROUP BY
+    T0.PID 
+ORDER BY
+    T0.PID ASC
+```

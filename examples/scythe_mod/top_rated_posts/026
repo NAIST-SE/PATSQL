@@ -29,6 +29,7 @@ date,        ABC,             DEF,             GHI
 
 #solution
 
+```sql
 create table temp
 (
     date datetime,
@@ -69,3 +70,4 @@ set @query = 'SELECT date, ' + @cols + ' from
 execute(@query)
 
 drop table temp
+```

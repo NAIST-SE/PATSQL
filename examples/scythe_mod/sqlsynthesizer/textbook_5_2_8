@@ -43,3 +43,25 @@ S9
 	"constants": ["red", "green"],
 	"aggregation_functions": [ ]
 }
+
+#solution
+
+```sql
+SELECT
+    T0.supplier_key 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.part_id = T1.part_id 
+WHERE
+    T1.color = 'red' 
+    OR T1.color = 'green' 
+GROUP BY
+    T0.supplier_key 
+HAVING
+    max(T1.color) = 'red' 
+    AND min(T1.color) = 'green' 
+ORDER BY
+    T0.supplier_key ASC
+```

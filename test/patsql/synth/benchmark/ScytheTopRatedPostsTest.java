@@ -187,7 +187,7 @@ class ScytheTopRatedPostsTest {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/top_rated_posts/025"));
 	}
 
-	@Disabled("spread")
+	@Disabled("pivot")
 	@Test
 	@Tag("synth")
 	void topRatedPosts026SynthesisTest() {
@@ -242,7 +242,7 @@ class ScytheTopRatedPostsTest {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/top_rated_posts/032"));
 	}
 
-	@Disabled("10-min timeout. spread, but join can be used instead.")
+	@Disabled("10-min timeout. pivot, but join can be used instead.")
 	@Test
 	@Tag("synth")
 	void topRatedPosts033SynthesisTest() {
@@ -255,7 +255,7 @@ class ScytheTopRatedPostsTest {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/top_rated_posts/034"));
 	}
 
-	@Disabled("spread")
+	@Disabled("pivot")
 	@Test
 	@Tag("synth")
 	void topRatedPosts035SynthesisTest() {
@@ -295,14 +295,14 @@ class ScytheTopRatedPostsTest {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/top_rated_posts/040"));
 	}
 
-	@Disabled("recursive")
+	@Disabled("RECURSIVE")
 	@Test
 	@Tag("synth")
 	void topRatedPosts041SynthesisTest() {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/top_rated_posts/041"));
 	}
 
-	@Disabled("spread")
+	@Disabled("pivot")
 	@Test
 	@Tag("synth")
 	void topRatedPosts042SynthesisTest() {
@@ -384,7 +384,7 @@ class ScytheTopRatedPostsTest {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/top_rated_posts/052"));
 	}
 
-	@Disabled("case expression")
+	@Disabled("CASE expression")
 	@Test
 	@Tag("synth")
 	void topRatedPosts053SynthesisTest() {

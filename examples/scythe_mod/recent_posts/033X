@@ -1,0 +1,58 @@
+//http://stackoverflow.com/questions/40011665/get-difference-from-an-aggregated-value-and-another-column-in-sql
+//XXXXX arithmetics
+
+# input:user_current_value_stats
+
+id,    user_id,    current_total_value
+1,       12,          175             
+2,       14,          125             
+3,       17,          170             
+4,       18,          115  
+
+# input:value_awarded_stats_history
+
+id,    user_id,    value_awarded,          date
+1,       12,          55,          2016-10-5 00:00:00+05:30
+2,       14,          50,          2016-10-5 00:00:00+05:35
+3,       17,          70,          2016-10-5 00:00:00+06:35
+4,       18,          40,          2016-10-5 00:00:00+07:34
+5,       12,          50,          2016-10-11 00:00:00+04:30
+6,       14,          65,          2016-10-11 00:00:00+04:40
+7,       17,          75,          2016-10-11 00:00:00+05:40
+8,       18,         -35,          2016-10-11 00:00:00+06:40 
+9,       12,          30,          2016-10-12 00:00:00+04:30
+10,      14,          65,          2016-10-12 00:00:00+04:40
+11,      17,          35,          2016-10-12 00:00:00+05:40
+12,      18,          65,          2016-10-12 00:00:00+06:40
+13,      12,          40,          2016-10-13 00:00:00+04:40
+14,      14,         -55,          2016-10-13 00:00:00+05:40
+15,      17,         -10,          2016-10-13 00:00:00+05:45
+16,      18,          45,          2016-10-13 00:00:00+06:40
+
+# output
+
+id,    user_id,    current_total_value,   last_week_value,  difference
+1,       12,          175,                    130,              45
+2,       14,          125,                    140,             -15
+3,       17,          170,                    180,             -10
+4,       18,          115,                     70,              45
+
+# constraint
+{
+	"constants": ["1 week"],
+	"aggregation_functions": []
+}
+
+# solution
+
+select t1.id
+, t1.user_id
+, t1.current_total_value
+, t2.last_week_value
+, (t1.current_total_value - t2.last_week_value) as difference
+from user_current_value_stats t1
+left outer join
+(select v.user_id, sum(v.value_awarded) as last_week_value
+from value_awarded_stats_history v
+where v.date > (current_date - '1 week')
+group by v.user_id) t2 on t2.user_id = t1.user_id

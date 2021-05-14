@@ -1,0 +1,41 @@
+//http://stackoverflow.com/questions/40074855/sql-query-with-max-value-from-child-table
+//MOD 17
+
+#input:Tracks
+
+TrackId, UserId, SongTitle
+1, 11, Some song title
+
+#input:Followers
+
+FolloweeId, FollowerId
+72, 11
+73, 11
+74, 11
+73, 41
+74, 21
+74, 31
+
+#output
+TrackId, UserId, MostPopularFolloweeId
+1, 11, 74
+
+#constraint
+{
+	"constants": [],
+	"aggregation_functions": ["count", "max"]
+}
+
+#solution
+
+```
+SELECT t0.TrackId, t0.UserId, t2.FolloweeId
+FROM Tracks AS t0
+CROSS JOIN (
+  SELECT count(*) AS value, FolloweeId
+  FROM Followers AS t1
+  GROUP BY FolloweeId
+  ORDER BY count(*) DESC
+  FETCH FIRST ROW ONLY
+) AS t2
+```

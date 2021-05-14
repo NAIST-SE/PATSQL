@@ -62,6 +62,7 @@ class ScytheSqlSynthesizerTest {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/sqlsynthesizer/textbook_5_1_1"));
 	}
 
+	@Disabled("timeout")
 	@Test
 	@Tag("synth")
 	void sqlsynthesizertextbook_5_1_2SynthesisTest() {
@@ -132,7 +133,7 @@ class ScytheSqlSynthesizerTest {
 	/**
 	 * find max count and join using that
 	 */
-	@Disabled("2-min timeout")
+	@Disabled("timeout")
 	@Test
 	@Tag("synth")
 	void sqlsynthesizertextbook_5_1_10SynthesisTest() {
@@ -151,6 +152,7 @@ class ScytheSqlSynthesizerTest {
 	/**
 	 * The most frequent value for each age.
 	 */
+	@Disabled("timeout")
 	@Test
 	@Tag("synth")
 	void sqlsynthesizertextbook_5_1_12SynthesisTest() {
@@ -249,6 +251,7 @@ class ScytheSqlSynthesizerTest {
 	/**
 	 * covers "red" and "green", and the maximum cost
 	 */
+	@Disabled("timeout")
 	@Test
 	@Tag("synth")
 	void sqlsynthesizertextbook_5_2_11SynthesisTest() {

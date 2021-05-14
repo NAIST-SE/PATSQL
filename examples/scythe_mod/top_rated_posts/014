@@ -24,6 +24,14 @@
 
 #solution
 
-SELECT id, GROUP_CONCAT(string SEPARATOR ' ') 
-FROM table 
-GROUP BY id;
+```sql
+SELECT
+    id,
+    string_agg(string, ', ') 
+FROM
+    input1 
+GROUP BY
+    id 
+ORDER BY
+    id ASC
+```

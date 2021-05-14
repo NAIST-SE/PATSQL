@@ -26,7 +26,19 @@ C      ,    9     ,    1
 
 #solution
 
-select t1.section, t1.cnt, t2.cnt
-from (select * from t where status = "Active") t1
-join (select * from t where status = "Inactive") t2
-on t1.section = t2.section
+```sql
+SELECT
+    T0.Section,
+    T0.Count,
+    T1.Count 
+FROM
+    input1 AS T0 
+JOIN
+    input1 AS T1 
+        ON T0.Section = T1.Section 
+WHERE
+    T0.Status = 'Active' 
+    AND T1.Status = 'Inactive' 
+ORDER BY
+    T0.Section ASC
+```

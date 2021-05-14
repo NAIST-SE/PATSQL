@@ -42,20 +42,43 @@ stu5
 
 #solution
 
+```sql
 SELECT
-  [T54].sname
+    T3.max_T1_sname 
 FROM
-  (( input2 ) JOIN (
-      SELECT
-        [T53].S_key,[T53].COUNT-S_key
-      FROM
-        (SELECT
-            [T52].S_key, COUNT([T52].S_key)
-          FROM
-            (input1) AS [T52][S_key, cname]
-          GROUP BY
-            [T52].S_key) AS [T53][S_key, COUNT-S_key]
-      WHERE
-        [T53].COUNT-S_key == 3.0 )) AS [T54][S_key, sname, S_key1, COUNT-S_key]
-WHERE
-  [T54].S_key == [T54].S_key1
+    (SELECT
+        max(T1.sname) AS max_T1_sname,
+        count(T0.S_key) AS count_T0_S_key 
+    FROM
+        input1 AS T0 
+    JOIN
+        input2 AS T1 
+            ON T0.S_key = T1.S_key 
+    GROUP BY
+        T0.S_key) AS T3 
+JOIN
+    (
+        SELECT
+            max(T2.count_S_key) AS max_T2_count_S_key 
+        FROM
+            (SELECT
+                count(S_key) AS count_S_key 
+            FROM
+                input1 
+            GROUP BY
+                S_key) AS T2) AS T4 
+                ON T3.count_T0_S_key = T4.max_T2_count_S_key 
+        ORDER BY
+            T3.max_T1_sname ASC
+```
+
+```sql
+SELECT DISTINCT S.sname
+FROM Student S
+WHERE S.snum IN (SELECT E.snum
+				FROM Enrolled E
+				GROUP BY E.snum
+				HAVING COUNT (*) >= ALL (SELECT COUNT (*)
+										FROM Enrolled E2
+										GROUP BY E2.snum ))
+```

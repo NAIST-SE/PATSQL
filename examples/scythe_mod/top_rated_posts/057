@@ -31,10 +31,23 @@ Henry Jones,     Chicago,         1957
 
 #solution
 
-SELECT Name, City, Birthyear, COUNT(*) AS ct
-FROM table
-WHERE Birthyear IN (SELECT MIN(Birthyear)
-               FROM table
-               GROUP by City)
-GROUP BY City
-ORDER BY Birthyear DESC LIMIT 3;
+```sql
+SELECT
+    T0.Name,
+    T1.City,
+    T0.Birthyear 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            City,
+            min(Birthyear) AS min_Birthyear 
+        FROM
+            input1 
+        GROUP BY
+            City
+    ) AS T1 
+        ON T1.City = T0.City 
+        AND T1.min_Birthyear = T0.Birthyear
+```

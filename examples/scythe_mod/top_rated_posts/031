@@ -24,10 +24,18 @@
 
 #solution
 
-SELECT t.id,
-       (SELECT COUNT(*)
-          FROM TABLE x
-         WHERE x.name <= t.name) AS position
-       t.name    
-  FROM TABLE t      
- WHERE t.name = 'Beta'
+```sql
+SELECT
+    T0.id,
+    T0.rank_over_order_by_name_asc,
+    T0.name 
+FROM
+    (SELECT
+        id,
+        name,
+        rank() OVER (ORDER BY name ASC) AS rank_over_order_by_name_asc 
+    FROM
+        input1) AS T0 
+WHERE
+    T0.name = 'Beta'
+```

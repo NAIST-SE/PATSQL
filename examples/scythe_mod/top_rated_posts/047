@@ -26,23 +26,26 @@ id,  user,    time,    io
 
 #solution
 
-SELECT t1.*
-FROM lms_attendance t1
-WHERE t1.time = (SELECT MAX(t2.time)
-                 FROM lms_attendance t2
-                 WHERE t2.user = t1.user);
-
-SELECT t1.*
-FROM lms_attendance t1
-join (SELECT user, MAX(time) maxTime
-      FROM lms_attendance
-      GROUP BY user) t2
-WHERE t1.time = t2.maxTime
-  AND t1.user = t2.user;
-
-SELECT t1.*
-FROM lms_attendance AS t1
-LEFT JOIN lms_attendance AS t2
-  ON t1.user = t2.user 
-        AND t1.time < t2.time
-WHERE t2.user IS NULL
+```sql
+SELECT
+    T0.id,
+    T1.user,
+    T0.time,
+    T0.io 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            user,
+            max(time) AS max_time 
+        FROM
+            input1 
+        GROUP BY
+            user
+    ) AS T1 
+        ON T1.user = T0.user 
+        AND T1.max_time = T0.time 
+ORDER BY
+    T0.time ASC
+```

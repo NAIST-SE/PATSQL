@@ -23,10 +23,24 @@ ID,  SKU,	PRODUCT
 
 #solution
 
-SELECT t.*
-FROM TestData t
-INNER JOIN (SELECT
-                MIN(ID) as MinID
-                FROM TestData
-                WHERE SKU LIKE 'FOO-%'
-           ) dt ON t.ID=dt.MinID
+```sql
+SELECT
+    T0.ID,
+    T0.SKU,
+    T1.PRODUCT 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            PRODUCT,
+            min(ID) AS min_ID 
+        FROM
+            input1 
+        GROUP BY
+            PRODUCT
+    ) AS T1 
+        ON T1.min_ID = T0.ID 
+ORDER BY
+    T0.ID ASC
+```

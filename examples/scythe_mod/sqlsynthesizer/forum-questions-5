@@ -23,3 +23,17 @@
 	"constants": [],
 	"aggregation_functions": ["count"]
 }
+
+# solution
+
+```sql
+SELECT
+    entryid,
+    count(v_key) 
+FROM
+    input1 
+GROUP BY
+    entryid 
+ORDER BY
+    entryid ASC
+```

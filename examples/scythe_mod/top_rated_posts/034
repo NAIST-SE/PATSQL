@@ -27,11 +27,25 @@
 
 #solution
 
-SELECT t.Train, t.Dest, r.MaxTime
-FROM (
-      SELECT Train, MAX(Time) as MaxTime
-      FROM TrainTable
-      GROUP BY Train
-) r
-INNER JOIN TrainTable t
-ON t.Train = r.Train AND t.Time = r.MaxTime
+```sql
+SELECT
+    T1.Train,
+    T0.Dest,
+    T0.Time 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            Train,
+            max(Time) AS max_Time 
+        FROM
+            input1 
+        GROUP BY
+            Train
+    ) AS T1 
+        ON T1.Train = T0.Train 
+        AND T1.max_Time = T0.Time 
+ORDER BY
+    T1.Train ASC
+```

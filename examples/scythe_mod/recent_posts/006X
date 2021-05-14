@@ -1,0 +1,42 @@
+//http://stackoverflow.com/questions/40183507/mysql-search-in-concated-columns
+
+#input:products_table
+
+|  ID | code | product_variants_id | product_name | variants     | variants_value   |
+|  1  |     1|  123451             | beer cake    | color        | blue             |
+|  2  |     1|  123451             | beer cake    | temperature  | hot              |
+|  3  |     1|  123451             | beer cake    | weight       | 0.5              |
+|  4  |     2|  123453             | ad wrap      | color        | green            |
+|  5  |     2|  123453             | ad wrap      | weight       | 1                |
+
+#output
+
+| code | product_variants_id   | product_name |  variants_and_values                    |
+|    1 |   123451              | beer cake    | color:blue, temperature:hot, weight:0.5 |
+
+#constraint
+{
+	"constants": ["hot"],
+	"aggregation_functions": []
+}
+
+#solution
+
+```sql
+SELECT T1.code,
+       product_variants_id,
+       product_name,
+       string_agg(variants || ':' || variants_value, ', ' ORDER BY id) as variants_and_values
+FROM products_table as T1
+JOIN (SELECT code FROM products_table WHERE variants_value = 'hot') as T2
+  ON T1.code = T2.code
+GROUP BY product_variants_id, product_name, T1.code
+```
+
+```sql
+SELECT xx.code, GROUP_CONCAT(concat(xx.variants,':',xx.variants_value), ', ') 
+AS variants_and_values, xx.product_name, xx.product_variants_id
+FROM products_table xx
+GROUP BY xx.product_variants_id, xx.product_name, xx.code
+HAVING variants LIKE '%:hot' OR variants LIKE '%:hot,%'
+```

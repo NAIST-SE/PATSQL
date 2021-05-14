@@ -1,0 +1,71 @@
+//http://stackoverflow.com/questions/30265358/several-conditions-on-the-same-table
+
+#input
+
+| Customer    | email          |   ZIP | shop |
+|---------------------------------------------|
+| John Smith  | js@mail.com    | 75016 |    1 |
+| Mary King   | mary@ymail.com | 97430 |    2 |
+| John Smith  | js@mail.com    | 75016 |    3 |
+| Ivan Turtle | ivan@mail.com  | 56266 |    5 |
+| Ivan T      | iT@mail.com    | 56266 |    5 |
+| Mary King   | mary@ymail.com | 97430 |    5 |
+| John Smith  | js@mail.com    | 75016 |    5 |
+| John Smith  | js@ymail.com   | 75016 |    5 |
+| John Smith  | js@example.com | 75016 |    5 |
+| Ivan Smith  | is@ymail.com   | 12345 |    6 |
+
+#output
+
+| Customer    | email          |   ZIP | shop |
+|---------------------------------------------|
+| John Smith  | js@mail.com    | 75016 |    1 |
+| Mary King   | mary@ymail.com | 97430 |    2 |
+| John Smith  | js@mail.com    | 75016 |    3 |
+| Mary King   | mary@ymail.com | 97430 |    5 |
+| John Smith  | js@mail.com    | 75016 |    5 |
+
+#constraint
+{
+	"constants": ["1"],
+	"aggregation_functions": ["count"]
+}
+
+#solution
+
+```sql
+SELECT
+    T0.Customer,
+    T1.email,
+    T0.ZIP,
+    T0.shop 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            email,
+            count(Customer) AS count_Customer 
+        FROM
+            input1 
+        GROUP BY
+            email
+    ) AS T1 
+        ON T1.email = T0.email 
+WHERE
+    T1.count_Customer > 1 
+ORDER BY
+    T0.shop ASC,
+    T0.Customer DESC
+```
+
+```sql
+SELECT a.*
+FROM Customers a
+INNER JOIN 
+(SELECT email
+FROM Customers
+GROUP BY email
+HAVING COUNT(shop) > 1) b
+ON a.email = b.email
+```

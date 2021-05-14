@@ -42,3 +42,18 @@
 	"constants": ["5"],
 	"aggregation_functions": [ "count" ]
 }
+
+# solution
+
+```sql
+SELECT
+    loginid 
+FROM
+    input1 
+GROUP BY
+    loginid 
+HAVING
+    count(loginid) > 5 
+ORDER BY
+    loginid ASC
+```

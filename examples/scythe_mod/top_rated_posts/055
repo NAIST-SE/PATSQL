@@ -23,6 +23,15 @@ You,   act2,      xy st
 
 # solution
 
-select User, Activity, concat(PageURL)
-from input
-group by User, Activity
+```sql
+SELECT
+    User,
+    max(Activity),
+    string_agg(PageURL, ' ') 
+FROM
+    input1 
+GROUP BY
+    User 
+ORDER BY
+    User ASC
+```

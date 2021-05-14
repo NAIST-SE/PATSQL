@@ -33,38 +33,17 @@
 
 #solution
 
-SELECT 
- user_id ,
- COUNT(*) count
-FROM 
- PAYMENT
+```sql
+SELECT
+    max(user_id),
+    count(user_id) 
+FROM
+    input1 
 GROUP BY
- account,
- user_id ,
- date
-Having
-COUNT(*) > 1
-
- SELECT 
-    user_id,
-    account_no , 
-    date,
-        COUNT(*)
- FROM
-    (SELECT DISTINCT
-            user_id,
-            account_no , 
-            zip, 
-            date
-         FROM
-            payment 
-
-        ) 
-        payment
- GROUP BY
-
-    user_id,
-    account_no , 
-
-    date
-HAVING COUNT(*) > 1
+    account_no,
+    date 
+HAVING
+    count(DISTINCT zip) > 1 
+ORDER BY
+    max(user_id) ASC
+```

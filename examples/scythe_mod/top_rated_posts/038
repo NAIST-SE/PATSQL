@@ -31,11 +31,30 @@ id,      name,  city
 
 #solution
 
-select s.id, t.* 
-from [stuff] s
-join (
-    select name, city, count(*) as qty
-    from [stuff]
-    group by name, city
-    having count(*) > 1
-) t on s.name = t.name and s.city = t.city
+```sql
+SELECT
+    T0.id,
+    T1.name,
+    T1.city 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            name,
+            city,
+            count(id) AS count_id 
+        FROM
+            input1 
+        GROUP BY
+            name,
+            city
+    ) AS T1 
+        ON T1.name = T0.name 
+        AND T1.city = T0.city 
+WHERE
+    T1.count_id > 1 
+ORDER BY
+    T1.name DESC,
+    T0.id ASC
+```

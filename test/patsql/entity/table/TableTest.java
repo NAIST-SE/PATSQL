@@ -935,44 +935,6 @@ class TableTest {
 	}
 
 	@Test
-	void testApplyWindow03() {
-		ColSchema c1 = new ColSchema("c1", Type.Int);
-		ColSchema c2 = new ColSchema("c2", Type.Str);
-		ColSchema c3 = new ColSchema("c3", Type.Str);
-		Table tbl = new Table(c1, c2, c3);
-		tbl.addRow(new Cell("10", Type.Int), new Cell("A", Type.Str), new Cell("A", Type.Str));
-		tbl.addRow(new Cell("15", Type.Int), new Cell("B", Type.Str), new Cell("A", Type.Str));
-		tbl.addRow(new Cell("11", Type.Int), new Cell("C", Type.Str), new Cell("A", Type.Str));
-		tbl.addRow(new Cell("13", Type.Int), new Cell("D", Type.Str), new Cell("A", Type.Str));
-		tbl.addRow(new Cell("12", Type.Int), new Cell("E", Type.Str), new Cell("B", Type.Str));
-		tbl.addRow(new Cell("14", Type.Int), new Cell("F", Type.Str), new Cell("B", Type.Str));
-
-		Table res = tbl.applyWindow(//
-				new WinColSchema(WinFunc.ROWNUM, null, GroupKeys.nil(), new SortKey(c1, Order.Asc))//
-				, new WinColSchema(WinFunc.ROWNUM, null, GroupKeys.nil(), new SortKey(c2, Order.Asc))//
-				, new WinColSchema(WinFunc.ROWNUM, null, new GroupKeys(c3), new SortKey(c2, Order.Asc))//
-		);
-		{
-			int col = 3;
-			String[] expected = new String[] { "1", "6", "2", "4", "3", "5" };
-			String[] actual = Arrays.stream(res.columns[col].cells()).map(e -> e.value).toArray(String[]::new);
-			assertArrayEquals(expected, actual);
-		}
-		{
-			int col = 4;
-			String[] expected = new String[] { "1", "2", "3", "4", "5", "6" };
-			String[] actual = Arrays.stream(res.columns[col].cells()).map(e -> e.value).toArray(String[]::new);
-			assertArrayEquals(expected, actual);
-		}
-		{
-			int col = 5;
-			String[] expected = new String[] { "1", "2", "3", "4", "1", "2" };
-			String[] actual = Arrays.stream(res.columns[col].cells()).map(e -> e.value).toArray(String[]::new);
-			assertArrayEquals(expected, actual);
-		}
-	}
-
-	@Test
 	void testAddColumn01() {
 		ColSchema c1 = new ColSchema("c1", Type.Int);
 		ColSchema c2 = new ColSchema("c2", Type.Str);
