@@ -53,14 +53,6 @@ public class WinColSchema extends ColSchema {
 			if (!hasOrderKey())
 				return false;
 			break;
-		case ROWNUM:
-			// TODO: the order key must assure the uniqueness, but current implementation
-			// don't when the key has duplicated values.
-			if (!hasOrderKey())
-				return false;
-			if (src.isPresent())
-				return false;
-			break;
 		}
 		return true;
 	}

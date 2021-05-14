@@ -16,6 +16,7 @@ import patsql.generator.sql.query.QColumnConstant;
 import patsql.generator.sql.query.QColumnStar;
 import patsql.generator.sql.query.QCondition;
 import patsql.generator.sql.query.QConditionBinaryOperator;
+import patsql.generator.sql.query.QConditionTrue;
 import patsql.generator.sql.query.QDateFuncColumn;
 import patsql.generator.sql.query.QJoinSpec;
 import patsql.generator.sql.query.QJoinedTables;
@@ -206,7 +207,8 @@ public class SQLPostprocessor {
 		} else if (cond instanceof QSingleColumnCondition) {
 			QSingleColumnCondition scond = (QSingleColumnCondition) cond;
 			return new HashSet<>(Arrays.asList(scond.c));
-
+		} else if (cond instanceof QConditionTrue) {
+			return Collections.emptySet();
 		} else {
 			throw new IllegalStateException(cond.getClass().toString());
 		}

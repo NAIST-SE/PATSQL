@@ -3,6 +3,7 @@ package patsql.synth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -18,17 +19,29 @@ import java.util.concurrent.TimeoutException;
 import patsql.entity.synth.Example;
 import patsql.entity.synth.NamedTable;
 import patsql.entity.synth.SynthOption;
+import patsql.entity.table.AggColSchema;
+import patsql.entity.table.BitTable;
 import patsql.entity.table.Cell;
+import patsql.entity.table.ColSchema;
 import patsql.entity.table.Column;
 import patsql.entity.table.Table;
 import patsql.entity.table.Type;
+import patsql.entity.table.agg.Agg;
 import patsql.ra.operator.BaseTable;
 import patsql.ra.operator.RA;
 import patsql.ra.operator.RAOperator;
+import patsql.ra.operator.Selection;
+import patsql.ra.predicate.BinaryOp;
+import patsql.ra.predicate.BinaryPred;
+import patsql.ra.predicate.Conjunction;
+import patsql.ra.predicate.Predicate;
+import patsql.ra.predicate.UnaryOp;
+import patsql.ra.predicate.UnaryPred;
 import patsql.ra.util.RAOptimizer;
 import patsql.ra.util.RAUtils;
 import patsql.ra.util.RAVisitor;
 import patsql.ra.util.Utils;
+import patsql.synth.filler.RowSearchCollectingPredicates;
 import patsql.synth.filler.SketchFiller;
 import patsql.synth.sketcher.Sketcher;
 
@@ -101,6 +114,201 @@ public class RASynthesizer implements Callable<RAOperator> {
 			}
 		}
 		return null;
+	}
+
+	public List<RAOperator> synthesizeTop5() {
+		long startDebug = System.nanoTime();
+
+		List<RAOperator> foundPrograms = synthesizePrograms();
+		if (foundPrograms.isEmpty()) // if no solution is found
+			return null;
+
+		List<RAOperator> candidates = enumurateEquivalentPrograms(foundPrograms);
+		List<RAOperator> ret = resolveTop5(candidates);
+
+		if (Debug.isDebugMode) {
+			long dur = (System.nanoTime() - startDebug) / 1000000;
+			Debug.Time.doneSynth(dur);
+		}
+		return ret;
+	}
+
+	private List<RAOperator> synthesizePrograms() {
+		boolean isOutputSorted = Arrays.stream(example.output.columns) //
+				.map(col -> col.schema) //
+				.anyMatch(schema -> example.output.isIncreasing(schema) || example.output.isDecreasing(schema));
+
+		Sketcher sketcher = new Sketcher(example.inputs.length, isOutputSorted);
+
+		// find candidates among sketches whose sizes are the same.
+		List<RAOperator> foundPrograms = new ArrayList<>();
+		int sizeOfSolutionSketch = -1;
+		sketch: for (RAOperator s : sketcher) {
+			// check termination
+			int sizeOfSketch = Sketcher.sizeOf(s);
+			if (sizeOfSolutionSketch > 0 && sizeOfSketch > sizeOfSolutionSketch)
+				break;
+
+			for (RAOperator sketch : assignNamesOnBaseTables(s)) {
+				// check the timeout of itself.
+				if (Thread.currentThread().isInterrupted()) {
+					break sketch;
+				}
+				if (!isValidSketch(sketch)) {
+					continue;
+				}
+				if (Debug.isDebugMode) {
+					RAUtils.printSketch(sketch);
+				}
+				SketchFiller filler = new SketchFiller(sketch, example, option);
+				for (RAOperator program : filler.fillSketch()) {
+					if (!check(program))
+						continue;
+
+					// collect the found program as a candidate
+					foundPrograms.add(program);
+					sizeOfSolutionSketch = sizeOfSketch;
+					continue sketch;
+				}
+			}
+		}
+		return foundPrograms;
+	}
+
+	private List<RAOperator> enumurateEquivalentPrograms(List<RAOperator> programs) {
+		List<RAOperator> ret = new ArrayList<>();
+		for (RAOperator p : programs) {
+			List<RAOperator> ps = enumurateEquivalentPrograms(p);
+			ret.addAll(ps);
+		}
+		return ret;
+	}
+
+	/**
+	 * resolve predicates that yield the same output as the solution.
+	 */
+	private List<RAOperator> enumurateEquivalentPrograms(RAOperator program) {
+		List<RAOperator> foundPrograms = new ArrayList<>();
+		boolean[] hasSelection = new boolean[1];
+		RAUtils.traverse(program, new RAVisitor() {
+			@Override
+			public boolean on(RAOperator op) {
+				if (op.kind != RA.SELECTION)
+					return true;
+				hasSelection[0] = true;
+
+				Selection target = (Selection) op;
+				for (Selection found : enumerateEquivalentPredicates(target)) {
+					RAOperator pgm = RAUtils.replace(program, found, target);
+					pgm = RAOptimizer.optimize(pgm);
+					foundPrograms.add(pgm);
+				}
+				return true;
+			}
+		});
+
+		// when the program has no selection
+		if (!hasSelection[0]) {
+			foundPrograms.add(program);
+		}
+		return foundPrograms;
+	}
+
+	private List<Selection> enumerateEquivalentPredicates(Selection target) {
+		Conjunction targetPred = target.condition;
+		BitTable tmpTable = new BitTable(target.child.eval(example.tableEnv()));
+		BitTable solutionTable = tmpTable.selection(targetPred);
+
+		// The following operations are similar to SelectionPrune class.
+		RowSearchCollectingPredicates search = new RowSearchCollectingPredicates(//
+				tmpTable.height(), solutionTable.rowBits, option.extCells);
+
+		for (ColSchema col : tmpTable.schema()) {
+			for (BinaryOp binop : BinaryOp.values()) {
+				for (Cell constCell : option.extCells) {
+					if (!isTried(col, binop, constCell))
+						continue;
+					BinaryPred pred = new BinaryPred(col, binop, constCell);
+					BitTable result = tmpTable.selection(pred);
+					search.addPred(pred, result.rowBits);
+				}
+			}
+		}
+
+		for (ColSchema column : tmpTable.schema()) {
+			for (UnaryOp unop : UnaryOp.values()) {
+				UnaryPred pred = new UnaryPred(column, unop);
+				BitTable result = tmpTable.selection(pred);
+				search.addPred(pred, result.rowBits);
+			}
+		}
+
+		search.generateKernel();
+
+		List<Selection> ret = new ArrayList<>();
+		for (Predicate pred : search.getPredicatesCollected()) {
+			Selection clone = target.clone();
+			clone.condition = Conjunction.from(pred);
+			ret.add(clone);
+		}
+		return ret;
+	}
+
+	/**
+	 * Order comparisons between String types are excluded.
+	 */
+	private boolean isTried(ColSchema left, BinaryOp binop, Cell right) {
+		if (left.type != right.type)
+			return false;
+
+		// skip 'x' = ConcatConmma(...)
+		if (left instanceof AggColSchema) {
+			AggColSchema ag = (AggColSchema) left;
+			if (ag.agg == Agg.ConcatComma || ag.agg == Agg.ConcatSlash || ag.agg == Agg.ConcatSpace)
+				return false;
+		}
+
+		switch (left.type) {
+		case Str:
+			switch (binop) {
+			case Eq:
+			case NotEq:
+				return true;
+			default:
+				return false;
+			}
+		default:
+			return true;
+		}
+	}
+
+	private List<RAOperator> resolveTop5(List<RAOperator> candidates) {
+		// sort candidates based on ranking heuristics
+		Collections.sort(candidates, new Comparator<RAOperator>() {
+			@Override
+			public int compare(RAOperator a, RAOperator b) {
+				return heuristic(b) - heuristic(a); // decreasing order
+			}
+		});
+
+		// slice the first five candidates
+		List<RAOperator> ret = new ArrayList<>();
+		for (int i = 0; i < 5 && i < candidates.size(); i++) {
+			ret.add(candidates.get(i));
+		}
+		return ret;
+	}
+
+	private int heuristic(RAOperator op) {
+		int weight1 = 30;
+		int weight2 = 1;
+
+		int score = 0;
+		// constant coverage
+		score = score + weight1 * RAUtils.usedConstants(op).size();
+		// predicate naturalness
+		score = score - weight2 * RAUtils.buildTree(op).length();
+		return score;
 	}
 
 	private boolean check(RAOperator program) {

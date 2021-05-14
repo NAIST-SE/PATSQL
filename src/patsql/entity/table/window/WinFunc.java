@@ -8,7 +8,6 @@ import patsql.entity.table.Type;
 import patsql.entity.table.agg.Agg;
 
 public enum WinFunc {
-	ROWNUM, //
 	RANK, //
 	//
 	MAX, //
@@ -20,7 +19,6 @@ public enum WinFunc {
 	public boolean hasColParam() {
 		switch (this) {
 		case RANK:
-		case ROWNUM:
 			return false;
 		default:
 			return true;
@@ -53,7 +51,6 @@ public enum WinFunc {
 			default:
 				return false;
 			}
-		case ROWNUM:
 		case RANK:
 			// error
 		}
@@ -68,7 +65,6 @@ public enum WinFunc {
 			return (src != null) ? src.type : Type.Null;
 		case COUNT:
 		case RANK:
-		case ROWNUM:
 			return Type.Int;
 		}
 		throw new IllegalStateException("Unknown type : " + this);
@@ -106,12 +102,6 @@ public enum WinFunc {
 					i--;
 				}
 				return new Cell(Integer.toString(i + 1), returnType(null));
-			}
-			case ROWNUM: {
-				if (!uniqueCells(orderCells))
-					return new Cell("null", Type.Null);
-				else
-					return new Cell(Integer.toString(index + 1), returnType(null));
 			}
 			default:
 				throw new IllegalStateException("unreachable");
