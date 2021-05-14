@@ -3,6 +3,8 @@ package patsql.synth;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +22,9 @@ import patsql.ra.util.Utils;
 
 class RASynthesizerTest {
 
-	private void checkNotNull(SynthOption option, Table outTable, Table... inTables) {
+	private void checkNotNullTop5(SynthOption option, Table outTable, Table... inTables) {
+		Debug.isDebugMode = false;
+
 		NamedTable[] ins = new NamedTable[inTables.length];
 		for (int i = 0; i < inTables.length; i++) {
 			ins[i] = new NamedTable("table" + i, inTables[i]);
@@ -30,13 +34,16 @@ class RASynthesizerTest {
 		System.out.println(option);
 
 		RASynthesizer synth = new RASynthesizer(example, option);
-		RAOperator result = synth.synthesize();
-		assertNotNull(result);
+		List<RAOperator> results = synth.synthesizeTop5();
+		assertNotNull(results);
 
-		// RAUtils.printTree(result);
-
-		String sql = SQLUtil.generateSQL(result);
-		System.out.println(sql);
+		for (int i = 0; i < results.size(); i++) {
+			RAOperator result = results.get(i);
+			// RAUtils.printTree(result);
+			String sql = SQLUtil.generateSQL(result);
+			System.out.print("\n[No. " + (i + 1) + "]");
+			System.out.println(sql);
+		}
 	}
 
 	@Test
@@ -107,7 +114,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("35", Type.Int)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	@Test
@@ -116,7 +123,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/input1.csv");
 		Table outTable = Utils.loadTableFromFile("examples/input1.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	@Test
@@ -127,7 +134,7 @@ class RASynthesizerTest {
 				new Cell("35", Type.Int), //
 				new Cell("75", Type.Int)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -140,7 +147,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("35", Type.Int)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -153,7 +160,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("Japan", Type.Str)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -165,7 +172,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/input3.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output4.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	/**
@@ -177,7 +184,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/input3.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output5.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	/**
@@ -188,7 +195,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/input4.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output6.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -199,7 +206,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/input4.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output7.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -210,7 +217,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/input4.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output8.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -221,7 +228,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/input4.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output9.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -232,7 +239,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/input4.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output10.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -245,7 +252,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("19900101", Type.Date)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -258,7 +265,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("20000101", Type.Date)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -269,7 +276,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/101_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/101_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -280,7 +287,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/102_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/102_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -291,7 +298,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/104_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/104_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -302,7 +309,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/120_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/120_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -313,7 +320,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/121_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/121_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -324,7 +331,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/122_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/122_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -335,7 +342,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/123_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/123_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -346,7 +353,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/124_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/124_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -357,7 +364,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/125_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/125_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -368,7 +375,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/126_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/126_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -379,7 +386,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/127_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/127_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -390,7 +397,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/128_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/128_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -401,7 +408,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/130_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/130_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -412,7 +419,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/131_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/131_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -424,7 +431,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/134_2_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/134_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	/**
@@ -435,7 +442,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/135_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/135_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -446,7 +453,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/136_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/136_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -457,7 +464,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/137_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/137_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -468,7 +475,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/138_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/138_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -480,7 +487,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/139_2_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/139_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	/**
@@ -491,7 +498,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/140_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/140_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -502,7 +509,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/141_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/141_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -513,7 +520,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/142_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/142_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -524,7 +531,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/143_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/143_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -536,7 +543,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/170_2_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/170_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	/**
@@ -549,7 +556,7 @@ class RASynthesizerTest {
 		Table inTable3 = Utils.loadTableFromFile("examples/171_3_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/171_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2, inTable3);
+		checkNotNullTop5(option, outTable, inTable1, inTable2, inTable3);
 	}
 
 	/**
@@ -566,12 +573,13 @@ class RASynthesizerTest {
 				new Cell("YY", Type.Str), //
 				new Cell("AAA", Type.Str)//
 		);
-		checkNotNull(option, outTable, inTable1, inTable2, inTable3);
+		checkNotNullTop5(option, outTable, inTable1, inTable2, inTable3);
 	}
 
 	/**
 	 * Complicated case. Join 3 tables, 5 Filters, Sort, Select
 	 */
+	@Disabled("take much time finding top5")
 	@Test
 	void TestSynthesizer201() {
 		Table inTable1 = Utils.loadTableFromFile("examples/200_1_input.csv");
@@ -585,7 +593,7 @@ class RASynthesizerTest {
 				new Cell("300", Type.Int), //
 				new Cell("AAA", Type.Str)//
 		);
-		checkNotNull(option, outTable, inTable1, inTable2, inTable3);
+		checkNotNullTop5(option, outTable, inTable1, inTable2, inTable3);
 	}
 
 	/**
@@ -608,7 +616,7 @@ class RASynthesizerTest {
 				new Cell("F9", Type.Str), //
 				new Cell("T10", Type.Str)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -622,7 +630,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("F", Type.Str) //
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -639,7 +647,7 @@ class RASynthesizerTest {
 				new Cell("12/25", Type.Date), //
 				new Cell("12/24", Type.Date)//
 		);
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	/**
@@ -653,7 +661,7 @@ class RASynthesizerTest {
 				new Cell("A", Type.Str), //
 				new Cell("B", Type.Str)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -664,7 +672,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/211_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/211_input.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -676,7 +684,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/212_2_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/212_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	/**
@@ -687,7 +695,7 @@ class RASynthesizerTest {
 		Table inTable = Utils.loadTableFromFile("examples/213_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/213_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable);
+		checkNotNullTop5(option, outTable, inTable);
 	}
 
 	/**
@@ -700,7 +708,7 @@ class RASynthesizerTest {
 		Table inTable = Utils.loadTableFromFile("examples/214_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/214_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable);
+		checkNotNullTop5(option, outTable, inTable);
 	}
 
 	/**
@@ -714,7 +722,7 @@ class RASynthesizerTest {
 				new Cell("10", Type.Int), //
 				new Cell("A", Type.Str)//
 		);
-		checkNotNull(option, outTable, inTable);
+		checkNotNullTop5(option, outTable, inTable);
 	}
 
 	/**
@@ -727,7 +735,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("10", Type.Int) //
 		);
-		checkNotNull(option, outTable, inTable);
+		checkNotNullTop5(option, outTable, inTable);
 	}
 
 	/**
@@ -753,7 +761,7 @@ class RASynthesizerTest {
 		Table inTable2 = Utils.loadTableFromFile("examples/217_2_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/217_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1, inTable2);
+		checkNotNullTop5(option, outTable, inTable1, inTable2);
 	}
 
 	@Test
@@ -763,7 +771,7 @@ class RASynthesizerTest {
 		SynthOption option = new SynthOption(//
 				new Cell("T", Type.Str)//
 		);
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	@Test
@@ -771,7 +779,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/300_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/300_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -782,7 +790,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/301_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/301_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -793,7 +801,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/302_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/302_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -804,7 +812,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/303_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/303_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -815,7 +823,7 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/304_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/304_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
 
 	/**
@@ -826,7 +834,6 @@ class RASynthesizerTest {
 		Table inTable1 = Utils.loadTableFromFile("examples/310_input.csv");
 		Table outTable = Utils.loadTableFromFile("examples/310_output.csv");
 		SynthOption option = new SynthOption();
-		checkNotNull(option, outTable, inTable1);
+		checkNotNullTop5(option, outTable, inTable1);
 	}
-
 }

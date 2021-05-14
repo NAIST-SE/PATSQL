@@ -132,7 +132,6 @@ class ScytheSqlSynthesizerTest {
 	/**
 	 * find max count and join using that
 	 */
-	@Disabled("2-min timeout")
 	@Test
 	@Tag("synth")
 	void sqlsynthesizertextbook_5_1_10SynthesisTest() {
