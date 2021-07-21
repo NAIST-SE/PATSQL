@@ -210,7 +210,6 @@ class ScytheRecentPostsTest {
 		SUtil.synthesizeFromScytheFile(new File("examples/scythe_mod/recent_posts/030X"));
 	}
 
-	@Disabled("unclear")
 	@Test
 	@Tag("synth")
 	void recentPosts031SynthesisTest() {
