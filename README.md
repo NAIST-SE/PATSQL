@@ -11,8 +11,19 @@ The code is written in Java as an Eclipse project. Maven is also required to man
 ## Contents
 - `src`  - source code.
 - `test` - test code.
+- `test/patsql/synth/benchmark/ScytheSqlSynthesizerTest.java` - test code to execute `ase13` benchmark.
+- `test/patsql/synth/benchmark/ScytheTopRatedPostsTest.java` - test code to execute `so-top` benchmark.
+- `test/patsql/synth/benchmark/ScytheDevSetTest.java` - test code to execute `so-dev` benchmark.
+- `test/patsql/synth/benchmark/ScytheRecentPostsTest.java` - test code to execute `so-rec` benchmark.
+- `test/patsql/synth/benchmark/KaggleTest.java` - test code to execute `kaggle` benchmark.
 - `examples` - input and output tables used for test and evaluation.
-- `evaluation` - the details of the evaluation result in [the arXiv paper](#paper).
+
+## Installation
+Execute the following maven command. This generates `patsql-engine-1.0.0.jar` in the `target` directory. 
+
+```
+mvn install -DskipTests
+```
 
 ## How to execute the synthesis?
 There are test cases under the `test` directory. The test cases would be helpful to understand the usage of each method in the project.
