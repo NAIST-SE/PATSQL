@@ -1,0 +1,22 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/39759769/sql-server-find-most-recent-date-range" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_066</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>tranid<span class="type">:Int</span></th><th>item<span class="type">:Str</span></th><th>startdate<span class="type">:Str</span></th><th>enddate<span class="type">:Str</span></th></tr><tr><td>1</td><td>A</td><td>1/1/2000</td><td>2/2/2005</td></tr><tr><td>2</td><td>A</td><td>5/1/2000</td><td>2/2/2005</td></tr><tr><td>3</td><td>B</td><td>7/8/2015</td><td>9/8/2015</td></tr><tr><td>4</td><td>C</td><td>4/10/2007</td><td>7/20/2008</td></tr><tr><td>5</td><td>C</td><td>4/10/2003</td><td>7/20/2005</td></tr><tr><td>6</td><td>C</td><td>4/10/2003</td><td>7/20/2008</td></tr><tr><td>7</td><td>B</td><td>5/1/2000</td><td>9/8/2015</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>tranid<span class="type">:Int</span></th><th>item<span class="type">:Str</span></th><th>startdate<span class="type">:Str</span></th><th>enddate<span class="type">:Str</span></th></tr><tr><td>2</td><td>A</td><td>5/1/2000</td><td>2/2/2005</td></tr><tr><td>3</td><td>B</td><td>7/8/2015</td><td>9/8/2015</td></tr><tr><td>4</td><td>C</td><td>4/10/2007</td><td>7/20/2008</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.tranid,
+    T1.item,
+    T0.startdate,
+    T0.enddate 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            item,
+            max(startdate) AS max_startdate 
+        FROM
+            input1 
+        GROUP BY
+            item
+    ) AS T1 
+        ON T1.item = T0.item 
+        AND T1.max_startdate = T0.startdate 
+ORDER BY
+    T0.tranid ASC</code></pre>  <h2>Synthesis Time</h2><div>23&nbsp;milliseconds</div></body></html>

@@ -1,0 +1,22 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/40028319/sql-check-if-value-exists-in-group" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_031</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: ChatChannelMembers</h3><table class="in_table mono"><tr><th>channelID<span class="type">:Int</span></th><th>accountID<span class="type">:Str</span></th><th>role<span class="type">:Int</span></th></tr><tr><td>1</td><td>Bob</td><td>100</td></tr><tr><td>2</td><td>Bob</td><td>100</td></tr><tr><td>3</td><td>Bob</td><td>100</td></tr><tr><td>2</td><td>Dave</td><td>101</td></tr><tr><td>3</td><td>Dave</td><td>101</td></tr><tr><td>0</td><td>Wilma</td><td>100</td></tr><tr><td>1</td><td>Wilma</td><td>100</td></tr><tr><td>2</td><td>Wilma</td><td>100</td></tr><tr><td>3</td><td>Wilma</td><td>100</td></tr></table><h3>INPUT: ChatChannels</h3><table class="in_table mono"><tr><th>channelID<span class="type">:Int</span></th><th>channelName<span class="type">:Str</span></th><th>type<span class="type">:Str</span></th></tr><tr><td>0</td><td>Public 0</td><td>public</td></tr><tr><td>1</td><td>Public Channel</td><td>public</td></tr><tr><td>2</td><td>Private Channel</td><td>private</td></tr><tr><td>3</td><td>Public 2</td><td>public</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>channelID<span class="type">:Int</span></th><th>channelName<span class="type">:Str</span></th><th>type<span class="type">:Str</span></th></tr><tr><td>0</td><td>Public 0</td><td>public</td></tr><tr><td>1</td><td>Public Channel</td><td>public</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>public<span class="type">:Str</span></li><li>Dave<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.channelID,
+    T0.channelName,
+    T0.type 
+FROM
+    ChatChannels AS T0 
+LEFT JOIN
+    (
+        SELECT
+            channelID 
+        FROM
+            ChatChannelMembers 
+        WHERE
+            accountID = 'Dave'
+    ) AS T1 
+        ON T0.channelID = T1.channelID 
+WHERE
+    T0.type = 'public' 
+    AND T1.channelID IS NULL 
+ORDER BY
+    T0.channelID ASC</code></pre>  <h2>Synthesis Time</h2><div>82&nbsp;milliseconds</div></body></html>

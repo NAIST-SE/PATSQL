@@ -1,0 +1,10 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/2046037/can-i-comma-delimit-multiple-rows-into-one-column" target="blank"> URL </a><br><span>Can I Comma Delimit Multiple Rows Into One Column?</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_029</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>TicketID<span class="type">:Str</span></th><th>Person<span class="type">:Str</span></th></tr><tr><td>T0001</td><td>Alice</td></tr><tr><td>T0001</td><td>Bob</td></tr><tr><td>T0002</td><td>Catherine</td></tr><tr><td>T0002</td><td>Doug</td></tr><tr><td>T0003</td><td>Elaine</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>TicketID<span class="type">:Str</span></th><th>People<span class="type">:Str</span></th></tr><tr><td>T0001</td><td>Alice Bob</td></tr><tr><td>T0002</td><td>Catherine Doug</td></tr><tr><td>T0003</td><td>Elaine</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    TicketID,
+    string_agg(Person, ' ') 
+FROM
+    input1 
+GROUP BY
+    TicketID 
+ORDER BY
+    TicketID ASC</code></pre>  <h2>Synthesis Time</h2><div>1&nbsp;milliseconds</div></body></html>

@@ -1,0 +1,22 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/37977325/how-to-join-tables-including-rows-that-doesnt-find-a-match-by-using-a-non-forei" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_050</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: tablea</h3><table class="in_table mono"><tr><th>attendee_id<span class="type">:Str</span></th><th>others1<span class="type">:Str</span></th></tr><tr><td>abcd</td><td>A</td></tr><tr><td>ghij</td><td>B</td></tr><tr><td>defg</td><td>C</td></tr></table><h3>INPUT: pps</h3><table class="in_table mono"><tr><th>attendee_id<span class="type">:Str</span></th><th>others2<span class="type">:Str</span></th><th>event_id<span class="type">:Int</span></th></tr><tr><td>wxyz</td><td>D</td><td>1</td></tr><tr><td>mlno</td><td>E</td><td>2</td></tr><tr><td>defg</td><td>F</td><td>3</td></tr><tr><td>defg</td><td>G</td><td>2</td></tr><tr><td>abcd</td><td>H</td><td>1</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>attendee_id<span class="type">:Str</span></th><th>others1<span class="type">:Str</span></th><th>others2<span class="type">:Str</span></th><th>event_id<span class="type">:Int</span></th></tr><tr><td>abcd</td><td>A</td><td><span class= "null">NULL</span></td><td><span class= "null">NULL</span></td></tr><tr><td>ghij</td><td>B</td><td><span class= "null">NULL</span></td><td><span class= "null">NULL</span></td></tr><tr><td>defg</td><td>C</td><td>F</td><td>3</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>3<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.attendee_id,
+    T0.others1,
+    T1.others2,
+    T1.event_id 
+FROM
+    tablea AS T0 
+LEFT JOIN
+    (
+        SELECT
+            attendee_id,
+            others2,
+            event_id 
+        FROM
+            pps 
+        WHERE
+            event_id = 3
+    ) AS T1 
+        ON T0.attendee_id = T1.attendee_id 
+ORDER BY
+    T0.others1 ASC</code></pre>  <h2>Synthesis Time</h2><div>3&nbsp;milliseconds</div></body></html>

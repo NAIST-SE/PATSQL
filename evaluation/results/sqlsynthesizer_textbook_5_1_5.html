@@ -1,0 +1,26 @@
+<h2>Description</h2><br><span>Find the names of faculty members who teach in every room in which some class is taught.</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sqlsynthesizer_textbook_5_1_5</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>C_name<span class="type">:Str</span></th><th>F_key<span class="type">:Str</span></th><th>Room<span class="type">:Str</span></th></tr><tr><td>C1</td><td>F1</td><td>R101</td></tr><tr><td>C2</td><td>F1</td><td>R102</td></tr><tr><td>C3</td><td>F1</td><td>R103</td></tr><tr><td>C4</td><td>F2</td><td>R103</td></tr><tr><td>C7</td><td>F2</td><td>R101</td></tr><tr><td>C5</td><td>F3</td><td>R101</td></tr><tr><td>C6</td><td>F4</td><td>R101</td></tr><tr><td>C8</td><td>F4</td><td>R102</td></tr><tr><td>C9</td><td>F4</td><td>R103</td></tr><tr><td>C10</td><td>F5</td><td>R101</td></tr><tr><td>C11</td><td>F5</td><td>R102</td></tr><tr><td>C12</td><td>F5</td><td>R103</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>c<span class="type">:Str</span></th></tr><tr><td>R101</td></tr><tr><td>R102</td></tr><tr><td>R103</td></tr></table><h3>INPUT: input3</h3><table class="in_table mono"><tr><th>F_key<span class="type">:Str</span></th><th>F_name<span class="type">:Str</span></th></tr><tr><td>F1</td><td>teach1</td></tr><tr><td>F2</td><td>teach2</td></tr><tr><td>F3</td><td>teach3</td></tr><tr><td>F4</td><td>teach4</td></tr><tr><td>F5</td><td>teach5</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>F_name<span class="type">:Str</span></th></tr><tr><td>teach1</td></tr><tr><td>teach4</td></tr><tr><td>teach5</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.F_name 
+FROM
+    input3 AS T0 
+LEFT JOIN
+    (
+        SELECT
+            F_key,
+            count(C_name) AS count_C_name 
+        FROM
+            input1 
+        GROUP BY
+            F_key
+    ) AS T1 
+        ON T0.F_key = T1.F_key 
+JOIN
+    (
+        SELECT
+            count(c) AS count_c 
+        FROM
+            input2
+    ) AS T2 
+        ON T1.count_C_name = T2.count_c 
+ORDER BY
+    T0.F_name ASC</code></pre>  <h2>Synthesis Time</h2><div>963&nbsp;milliseconds</div></body></html>

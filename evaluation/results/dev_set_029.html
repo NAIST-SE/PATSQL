@@ -1,0 +1,21 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/1305056/selecting-all-corresponding-fields-using-max-and-group-by" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_029</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>deal_id<span class="type">:Int</span></th><th>status_id<span class="type">:Str</span></th><th>timestamp<span class="type">:Date</span></th></tr><tr><td>1226</td><td>1</td><td>2009-08-17</td></tr><tr><td>1226</td><td>2</td><td>2009-08-18</td></tr><tr><td>1226</td><td>2</td><td>2009-08-18</td></tr><tr><td>1226</td><td>3</td><td>2009-08-19</td></tr><tr><td>1226</td><td>4</td><td>2009-08-16</td></tr><tr><td>1227</td><td>1</td><td>2009-08-20</td></tr><tr><td>1227</td><td>2</td><td>2009-08-19</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Int</span></th><th>c2<span class="type">:Str</span></th><th>c3<span class="type">:Date</span></th></tr><tr><td>1226</td><td>3</td><td>2009-08-19</td></tr><tr><td>1227</td><td>1</td><td>2009-08-20</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.deal_id,
+    T0.status_id,
+    T1.max_timestamp 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            deal_id,
+            max(timestamp) AS max_timestamp 
+        FROM
+            input1 
+        GROUP BY
+            deal_id
+    ) AS T1 
+        ON T1.deal_id = T0.deal_id 
+        AND T1.max_timestamp = T0.timestamp 
+ORDER BY
+    T1.deal_id ASC</code></pre>  <h2>Synthesis Time</h2><div>167&nbsp;milliseconds</div></body></html>

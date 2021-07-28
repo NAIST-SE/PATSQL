@@ -1,0 +1,26 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/39761697/three-tables-inner-join-and-only-one-row-for-from-the-tird-table" target="blank"> URL </a><br><span> MOD 7</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_065M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>id_orden<span class="type">:Int</span></th><th>date<span class="type">:Str</span></th><th>total<span class="type">:Int</span></th><th>id_usuario<span class="type">:Int</span></th></tr><tr><td>1</td><td>15-may</td><td>50</td><td>2</td></tr><tr><td>2</td><td>20-may</td><td>60</td><td>1</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>id_usuario<span class="type">:Int</span></th><th>name<span class="type">:Str</span></th><th>phone<span class="type">:Int</span></th></tr><tr><td>2</td><td>abc</td><td>999</td></tr><tr><td>1</td><td>def</td><td>888</td></tr></table><h3>INPUT: input3</h3><table class="in_table mono"><tr><th>id_orden<span class="type">:Int</span></th><th>edo<span class="type">:Int</span></th></tr><tr><td>1</td><td>23</td></tr><tr><td>1</td><td>22</td></tr><tr><td>1</td><td>21</td></tr><tr><td>2</td><td>22</td></tr><tr><td>2</td><td>21</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>id_orden<span class="type">:Int</span></th><th>date<span class="type">:Str</span></th><th>total<span class="type">:Int</span></th><th>name<span class="type">:Str</span></th><th>phone<span class="type">:Int</span></th><th>maxedo<span class="type">:Int</span></th></tr><tr><td>1</td><td>15-may</td><td>50</td><td>abc</td><td>999</td><td>23</td></tr><tr><td>2</td><td>20-may</td><td>60</td><td>def</td><td>888</td><td>22</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.id_orden,
+    T0.date,
+    T0.total,
+    T1.name,
+    T1.phone,
+    T2.max_edo 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.id_usuario = T1.id_usuario 
+JOIN
+    (
+        SELECT
+            id_orden,
+            max(edo) AS max_edo 
+        FROM
+            input3 
+        GROUP BY
+            id_orden
+    ) AS T2 
+        ON T0.id_orden = T2.id_orden 
+ORDER BY
+    T0.id_orden ASC</code></pre>  <h2>Synthesis Time</h2><div>15&nbsp;milliseconds</div></body></html>

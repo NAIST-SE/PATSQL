@@ -1,0 +1,21 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/2411559/how-do-i-query-sql-for-a-latest-record-date-for-each-user" target="blank"> URL </a><br><span>how do I query sql for a latest record date for each user</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_036</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>username<span class="type">:Str</span></th><th>date<span class="type">:Date</span></th><th>value<span class="type">:Dbl</span></th></tr><tr><td>brad</td><td>2010-05-10</td><td>1.800</td></tr><tr><td>fred</td><td>2012-03-04</td><td>1.000</td></tr><tr><td>bob</td><td>2012-03-04</td><td>1.500</td></tr><tr><td>brad</td><td>2013-02-02</td><td>1.200</td></tr><tr><td>fred</td><td>2014-11-01</td><td>1.300</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>username<span class="type">:Str</span></th><th>date<span class="type">:Date</span></th><th>value<span class="type">:Dbl</span></th></tr><tr><td>bob</td><td>2012-03-04</td><td>1.500</td></tr><tr><td>brad</td><td>2013-02-02</td><td>1.200</td></tr><tr><td>fred</td><td>2014-11-01</td><td>1.300</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.username,
+    T0.date,
+    T0.value 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            username,
+            max(date) AS max_date 
+        FROM
+            input1 
+        GROUP BY
+            username
+    ) AS T1 
+        ON T1.username = T0.username 
+        AND T1.max_date = T0.date 
+ORDER BY
+    T1.username ASC</code></pre>  <h2>Synthesis Time</h2><div>35&nbsp;milliseconds</div></body></html>

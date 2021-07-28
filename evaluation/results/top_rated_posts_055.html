@@ -1,0 +1,11 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/15154644/group-by-to-combine-concat-a-column" target="blank"> URL </a><br><span>GROUP BY to combine/concat a column</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_055</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>ID<span class="type">:Int</span></th><th>User<span class="type">:Str</span></th><th>Activity<span class="type">:Str</span></th><th>PageURL<span class="type">:Str</span></th></tr><tr><td>1</td><td>Me</td><td>act1</td><td>ab</td></tr><tr><td>2</td><td>Me</td><td>act1</td><td>cd</td></tr><tr><td>3</td><td>You</td><td>act2</td><td>xy</td></tr><tr><td>4</td><td>You</td><td>act2</td><td>st</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>User<span class="type">:Str</span></th><th>Activity<span class="type">:Str</span></th><th>PageURL<span class="type">:Str</span></th></tr><tr><td>Me</td><td>act1</td><td>ab cd</td></tr><tr><td>You</td><td>act2</td><td>xy st</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    User,
+    max(Activity),
+    string_agg(PageURL, ' ') 
+FROM
+    input1 
+GROUP BY
+    User 
+ORDER BY
+    User ASC</code></pre>  <h2>Synthesis Time</h2><div>4&nbsp;milliseconds</div></body></html>

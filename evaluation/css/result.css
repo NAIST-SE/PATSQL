@@ -1,0 +1,38 @@
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+table, td {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+h2 {
+    padding: 0.5em;
+    color: #010101;
+    background: #eaf3ff;
+    border-bottom: solid 3px #516ab6;
+}
+
+.in_table th{
+    background-color: #CCFFE5;
+}
+
+.out_table th {
+    background-color: #FFE5CC;
+}
+
+th {
+    border: 1px solid black;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.type {
+    padding-left: 3px;
+    color: grey;
+}
+
+.null {
+    color: gray;
+}

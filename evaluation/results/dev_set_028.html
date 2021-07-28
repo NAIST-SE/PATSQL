@@ -1,0 +1,24 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/29948321/sql-select-only-rows-with-minimum-value-on-a-column-with-where-condition" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_028</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>id<span class="type">:Int</span></th><th>productId<span class="type">:Int</span></th><th>orderIndex<span class="type">:Int</span></th><th>rejected<span class="type">:Str</span></th></tr><tr><td>1</td><td>1</td><td>0</td><td>true</td></tr><tr><td>2</td><td>1</td><td>1</td><td>false</td></tr><tr><td>3</td><td>1</td><td>2</td><td>false</td></tr><tr><td>4</td><td>2</td><td>0</td><td>false</td></tr><tr><td>5</td><td>2</td><td>1</td><td>true</td></tr><tr><td>6</td><td>3</td><td>1</td><td>false</td></tr><tr><td>7</td><td>3</td><td>0</td><td>false</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>id<span class="type">:Int</span></th><th>productId<span class="type">:Int</span></th><th>orderIndex<span class="type">:Int</span></th><th>rejected<span class="type">:Str</span></th></tr><tr><td>2</td><td>1</td><td>1</td><td>false</td></tr><tr><td>4</td><td>2</td><td>0</td><td>false</td></tr><tr><td>7</td><td>3</td><td>0</td><td>false</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>false<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.id,
+    T1.productId,
+    T0.orderIndex,
+    T0.rejected 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            productId,
+            min(orderIndex) AS min_orderIndex 
+        FROM
+            input1 
+        WHERE
+            rejected = 'false' 
+        GROUP BY
+            productId
+    ) AS T1 
+        ON T1.productId = T0.productId 
+        AND T1.min_orderIndex = T0.orderIndex 
+ORDER BY
+    T0.id ASC</code></pre>  <h2>Synthesis Time</h2><div>86&nbsp;milliseconds</div></body></html>

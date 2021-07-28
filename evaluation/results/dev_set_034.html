@@ -1,0 +1,23 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/33063073/postgresql-max-value-for-every-user" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_034</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>Usr<span class="type">:Str</span></th><th>Phone<span class="type">:Int</span></th><th>Value<span class="type">:Int</span></th></tr><tr><td>Peter</td><td>012</td><td>1</td></tr><tr><td>Peter</td><td>456</td><td>2</td></tr><tr><td>Peter</td><td>123</td><td>3</td></tr><tr><td>Paul</td><td>789</td><td>3</td></tr><tr><td>Paul</td><td>789</td><td>7</td></tr><tr><td>Paul</td><td>789</td><td>10</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Str</span></th><th>c2<span class="type">:Int</span></th><th>c3<span class="type">:Int</span></th></tr><tr><td>Peter</td><td>123</td><td>3</td></tr><tr><td>Paul</td><td>789</td><td>7</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>8<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.Usr,
+    T0.Phone,
+    T1.max_Value 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            Usr,
+            max(Value) AS max_Value 
+        FROM
+            input1 
+        WHERE
+            Value < 8 
+        GROUP BY
+            Usr
+    ) AS T1 
+        ON T1.Usr = T0.Usr 
+        AND T1.max_Value = T0.Value 
+ORDER BY
+    T1.Usr DESC</code></pre>  <h2>Synthesis Time</h2><div>32&nbsp;milliseconds</div></body></html>

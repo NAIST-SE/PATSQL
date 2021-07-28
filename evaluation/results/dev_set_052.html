@@ -1,0 +1,22 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/15389091/how-to-exclude-records-with-certain-values-in-sql-select" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_052</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>StoreId<span class="type">:Str</span></th><th>ClientId<span class="type">:Str</span></th></tr><tr><td>1</td><td>04</td></tr><tr><td>1</td><td>05</td></tr><tr><td>1</td><td>09</td></tr><tr><td>2</td><td>05</td></tr><tr><td>2</td><td>06</td></tr><tr><td>2</td><td>07</td></tr><tr><td>3</td><td>08</td></tr><tr><td>4</td><td>01</td></tr><tr><td>4</td><td>02</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>StoreId<span class="type">:Str</span></th></tr><tr><td>3</td></tr><tr><td>4</td></tr><tr><td>4</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>05<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.StoreId 
+FROM
+    (SELECT
+        StoreId 
+    FROM
+        input1) AS T0 
+LEFT JOIN
+    (
+        SELECT
+            StoreId 
+        FROM
+            input1 
+        WHERE
+            ClientId = '05'
+    ) AS T1 
+        ON T0.StoreId = T1.StoreId 
+WHERE
+    T1.StoreId IS NULL 
+ORDER BY
+    T0.StoreId ASC</code></pre>  <h2>Synthesis Time</h2><div>365&nbsp;milliseconds</div></body></html>

@@ -1,0 +1,28 @@
+<h2>Description</h2><a href="http://www.sqlteam.com/forums/topic.asp?TOPIC_ID=201063" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_036</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>GUID<span class="type">:Str</span></th><th>PID<span class="type">:Str</span></th></tr><tr><td>GUID1</td><td>PID1</td></tr><tr><td>GUID1</td><td>PID1</td></tr><tr><td>GUID1</td><td>PID1</td></tr><tr><td>GUID2</td><td>PID1</td></tr><tr><td>GUID3</td><td>PID1</td></tr><tr><td>GUID3</td><td>PID2</td></tr><tr><td>GUID3</td><td>PID2</td></tr><tr><td>GUID3</td><td>PID2</td></tr><tr><td>GUID3</td><td>PID3</td></tr><tr><td>GUID4</td><td>PID3</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>GUID<span class="type">:Str</span></th><th>LastName<span class="type">:Str</span></th><th>FirstName<span class="type">:Str</span></th></tr><tr><td>GUID1</td><td>Mulder</td><td>Fox</td></tr><tr><td>GUID2</td><td>Scully</td><td>Dana</td></tr><tr><td>GUID3</td><td>Skinner</td><td>Walter</td></tr><tr><td>GUID4</td><td>John</td><td>Doggett</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Str</span></th><th>c2<span class="type">:Str</span></th><th>c3<span class="type">:Str</span></th><th>c4<span class="type">:Str</span></th></tr><tr><td>PID1</td><td>GUID1</td><td>Mulder</td><td>Fox</td></tr><tr><td>PID1</td><td>GUID2</td><td>Scully</td><td>Dana</td></tr><tr><td>PID1</td><td>GUID3</td><td>Skinner</td><td>Walter</td></tr><tr><td>PID3</td><td>GUID3</td><td>Skinner</td><td>Walter</td></tr><tr><td>PID3</td><td>GUID4</td><td>John</td><td>Doggett</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>2<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T3.T0_PID,
+    T3.T0_GUID,
+    T2.LastName,
+    T2.FirstName 
+FROM
+    input2 AS T2 
+JOIN
+    (
+        SELECT
+            T0.GUID AS T0_GUID,
+            T0.PID AS T0_PID,
+            count(DISTINCT T1.GUID) AS count_distinct_T1_GUID 
+        FROM
+            input1 AS T0 
+        JOIN
+            input1 AS T1 
+                ON T0.PID = T1.PID 
+        GROUP BY
+            T0.GUID,
+            T0.PID
+    ) AS T3 
+        ON T3.T0_GUID = T2.GUID 
+WHERE
+    T3.count_distinct_T1_GUID >= 2 
+ORDER BY
+    T3.T0_PID ASC</code></pre>  <h2>Synthesis Time</h2><div>1198&nbsp;milliseconds</div></body></html>

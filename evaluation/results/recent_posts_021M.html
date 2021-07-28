@@ -1,0 +1,26 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/40075342/get-most-sold-products-with-a-specified-one" target="blank"> URL </a><br><span> MOD 16</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_021M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>id_order<span class="type">:Str</span></th><th>id_product<span class="type">:Int</span></th></tr><tr><td>a</td><td>22</td></tr><tr><td>a</td><td>32</td></tr><tr><td>b</td><td>22</td></tr><tr><td>b</td><td>42</td></tr><tr><td>b</td><td>52</td></tr><tr><td>b</td><td>32</td></tr><tr><td>c</td><td>22</td></tr><tr><td>c</td><td>12</td></tr><tr><td>d</td><td>22</td></tr><tr><td>d</td><td>32</td></tr><tr><td>d</td><td>12</td></tr><tr><td>e</td><td>12</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>product_id<span class="type">:Int</span></th><th>count-od2<span class="type">:Int</span></th></tr><tr><td>32</td><td>3</td></tr><tr><td>12</td><td>2</td></tr><tr><td>42</td><td>1</td></tr><tr><td>52</td><td>1</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>22<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.id_product,
+    count(T0.id_order) 
+FROM
+    (SELECT
+        id_order,
+        id_product 
+    FROM
+        input1) AS T0 
+LEFT JOIN
+    (
+        SELECT
+            id_order,
+            id_product 
+        FROM
+            input1
+    ) AS T1 
+        ON T0.id_order = T1.id_order 
+WHERE
+    T0.id_product = 22 
+    AND T1.id_product <> 22 
+GROUP BY
+    T1.id_product 
+ORDER BY
+    count(T0.id_order) DESC</code></pre>  <h2>Synthesis Time</h2><div>1744&nbsp;milliseconds</div></body></html>

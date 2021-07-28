@@ -1,0 +1,9 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/2112618/finding-duplicate-rows-in-sql-server" target="blank"> URL </a><br><span> Finding duplicate rows in SQL Server</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_013</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>orgName<span class="type">:Str</span></th><th>id<span class="type">:Int</span></th></tr><tr><td>ABC Corp</td><td>34</td></tr><tr><td>ABC Corp</td><td>5</td></tr><tr><td>Widget Company</td><td>10</td></tr><tr><td>Widget Company</td><td>2</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>orgName<span class="type">:Str</span></th><th>dupcount<span class="type">:Int</span></th><th>id<span class="type">:Int</span></th></tr><tr><td>ABC Corp</td><td>1</td><td>34</td></tr><tr><td>ABC Corp</td><td>2</td><td>5</td></tr><tr><td>Widget Company</td><td>1</td><td>10</td></tr><tr><td>Widget Company</td><td>2</td><td>2</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    orgName,
+    rank() OVER (PARTITION BY orgName ORDER BY id DESC),
+    id 
+FROM
+    input1 
+ORDER BY
+    orgName ASC</code></pre>  <h2>Synthesis Time</h2><div>18&nbsp;milliseconds</div></body></html>

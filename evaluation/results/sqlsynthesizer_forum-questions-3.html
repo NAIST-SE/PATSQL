@@ -1,0 +1,11 @@
+<h2>Description</h2><br><span> show IDs, the number of which is more than five.</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sqlsynthesizer_forum-questions-3</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>loginid<span class="type">:Str</span></th><th>provider<span class="type">:Str</span></th><th>city<span class="type">:Str</span></th></tr><tr><td>l1</td><td>p5</td><td>a</td></tr><tr><td>l1</td><td>p4</td><td>b</td></tr><tr><td>l1</td><td>p3</td><td>c</td></tr><tr><td>l1</td><td>p2</td><td>d</td></tr><tr><td>l1</td><td>p1</td><td>e</td></tr><tr><td>l1</td><td>p0</td><td>f</td></tr><tr><td>l2</td><td>p5</td><td>g</td></tr><tr><td>l2</td><td>p4</td><td>h</td></tr><tr><td>l2</td><td>p3</td><td>i</td></tr><tr><td>l2</td><td>p2</td><td>j</td></tr><tr><td>l2</td><td>p1</td><td>k</td></tr><tr><td>l3</td><td>p1</td><td>h</td></tr><tr><td>l3</td><td>p1</td><td>l</td></tr><tr><td>l4</td><td>p1</td><td>c</td></tr><tr><td>l4</td><td>p2</td><td>d</td></tr><tr><td>l4</td><td>p3</td><td>e</td></tr><tr><td>l4</td><td>p0</td><td>k</td></tr><tr><td>l4</td><td>p4</td><td>l</td></tr><tr><td>l6</td><td>p0</td><td>a</td></tr><tr><td>l6</td><td>p1</td><td>c</td></tr><tr><td>l6</td><td>p2</td><td>d</td></tr><tr><td>l6</td><td>p3</td><td>a</td></tr><tr><td>l6</td><td>p4</td><td>d</td></tr><tr><td>l6</td><td>p5</td><td>l</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>loginid<span class="type">:Str</span></th></tr><tr><td>l1</td></tr><tr><td>l6</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>5<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    loginid 
+FROM
+    input1 
+GROUP BY
+    loginid 
+HAVING
+    count(loginid) > 5 
+ORDER BY
+    loginid ASC</code></pre>  <h2>Synthesis Time</h2><div>13&nbsp;milliseconds</div></body></html>

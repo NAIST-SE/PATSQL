@@ -1,0 +1,22 @@
+code {
+    background-color: lightgray;
+    margin: 3px;
+    padding: 3px;
+}
+
+.serif {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.small-caps {
+    font-variant-caps: small-caps;
+}
+
+img {
+    width: 800px;
+    border-style: solid;
+    border-color: gray;
+    border-width: 2px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,22 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/20888384/select-rows-with-max-value-of-a-column" target="blank"> URL </a><br><span> MOD 4</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_026M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>acct_id<span class="type">:Int</span></th><th>Bill_Id<span class="type">:Int</span></th><th>Bill_dt<span class="type">:Date</span></th><th>alt_bill_id<span class="type">:Int</span></th></tr><tr><td>12345</td><td>123451</td><td>2014-01-02</td><td>101</td></tr><tr><td>12345</td><td>123452</td><td>2014-01-02</td><td>102</td></tr><tr><td>12346</td><td>123461</td><td>2014-01-02</td><td>103</td></tr><tr><td>12347</td><td>123470</td><td>2014-01-02</td><td>102</td></tr><tr><td>12347</td><td>123471</td><td>2014-01-02</td><td>101</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>acct_id<span class="type">:Int</span></th><th>Bill_Id<span class="type">:Int</span></th><th>Bill_dt<span class="type">:Date</span></th><th>alt_bill_id<span class="type">:Int</span></th></tr><tr><td>12345</td><td>123452</td><td>2014-01-02</td><td>102</td></tr><tr><td>12346</td><td>123461</td><td>2014-01-02</td><td>103</td></tr><tr><td>12347</td><td>123470</td><td>2014-01-02</td><td>102</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.acct_id,
+    T0.Bill_Id,
+    T0.Bill_dt,
+    T0.alt_bill_id 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            acct_id,
+            max(alt_bill_id) AS max_alt_bill_id 
+        FROM
+            input1 
+        GROUP BY
+            acct_id
+    ) AS T1 
+        ON T1.acct_id = T0.acct_id 
+        AND T1.max_alt_bill_id = T0.alt_bill_id 
+ORDER BY
+    T1.acct_id ASC</code></pre>  <h2>Synthesis Time</h2><div>26&nbsp;milliseconds</div></body></html>

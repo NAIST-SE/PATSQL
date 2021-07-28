@@ -1,0 +1,13 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/4686543/sql-query-to-concatenate-column-values-from-multiple-rows-in-oracle" target="blank"> URL </a><br><span> SQL Query to concatenate column values from multiple rows</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_028</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>PID<span class="type">:Str</span></th></tr><tr><td>A</td></tr><tr><td>B</td></tr><tr><td>C</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>PID<span class="type">:Str</span></th><th>SEQ<span class="type">:Int</span></th><th>Descr<span class="type">:Str</span></th></tr><tr><td>A</td><td>1</td><td>Have</td></tr><tr><td>A</td><td>2</td><td>a nice</td></tr><tr><td>A</td><td>3</td><td>day.</td></tr><tr><td>B</td><td>1</td><td>Nice Work.</td></tr><tr><td>C</td><td>1</td><td>Yes</td></tr><tr><td>C</td><td>2</td><td>we can</td></tr><tr><td>C</td><td>3</td><td>do</td></tr><tr><td>C</td><td>4</td><td>this work!</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>PID<span class="type">:Str</span></th><th>Descr<span class="type">:Str</span></th></tr><tr><td>A</td><td>Have a nice day.</td></tr><tr><td>B</td><td>Nice Work.</td></tr><tr><td>C</td><td>Yes we can do this work!</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.PID,
+    string_agg(T1.Descr, ' ') 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.PID = T1.PID 
+GROUP BY
+    T0.PID 
+ORDER BY
+    T0.PID ASC</code></pre>  <h2>Synthesis Time</h2><div>101&nbsp;milliseconds</div></body></html>

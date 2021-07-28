@@ -1,0 +1,14 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/33069068/sql-joining-to-two-tables-and-then-using-sum-and-count" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_016</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>school_id<span class="type">:Int</span></th><th>class_id<span class="type">:Int</span></th><th>school_location<span class="type">:Str</span></th></tr><tr><td>400</td><td>50</td><td>Arizona1</td></tr><tr><td>401</td><td>51</td><td>Arizona2</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>staff_id<span class="type">:Int</span></th><th>forename<span class="type">:Str</span></th><th>school_id<span class="type">:Int</span></th><th>wage<span class="type">:Int</span></th></tr><tr><td>11</td><td>Peter1</td><td>400</td><td>5000</td></tr><tr><td>12</td><td>Peter2</td><td>400</td><td>4000</td></tr><tr><td>21</td><td>Peter3</td><td>401</td><td>6000</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>school_id<span class="type">:Int</span></th><th>numberofstaff<span class="type">:Int</span></th><th>salary<span class="type">:Int</span></th></tr><tr><td>400</td><td>2</td><td>9000</td></tr><tr><td>401</td><td>1</td><td>6000</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.school_id,
+    count(T0.school_id),
+    sum(T1.wage) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.school_id = T1.school_id 
+GROUP BY
+    T0.school_id 
+ORDER BY
+    T0.school_id ASC</code></pre>  <h2>Synthesis Time</h2><div>16&nbsp;milliseconds</div></body></html>

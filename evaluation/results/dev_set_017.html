@@ -1,0 +1,18 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/33043326/foreign-key-in-same-table-unable-to-get-right-query" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_017</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>ID<span class="type">:Int</span></th><th>Name<span class="type">:Str</span></th><th>Age<span class="type">:Int</span></th><th>Parent<span class="type">:Int</span></th></tr><tr><td>1</td><td>Bob</td><td>50</td><td>-1</td></tr><tr><td>2</td><td>Matt</td><td>20</td><td>1</td></tr><tr><td>3</td><td>Rick</td><td>18</td><td>1</td></tr><tr><td>4</td><td>Alice</td><td>48</td><td>2</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>ID<span class="type">:Int</span></th><th>Name<span class="type">:Str</span></th></tr><tr><td>1</td><td>Bob</td></tr><tr><td>2</td><td>Matt</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.ID,
+    T0.Name 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            Parent 
+        FROM
+            input1 
+        GROUP BY
+            Parent
+    ) AS T1 
+        ON T1.Parent = T0.ID 
+ORDER BY
+    T0.ID ASC</code></pre>  <h2>Synthesis Time</h2><div>6&nbsp;milliseconds</div></body></html>

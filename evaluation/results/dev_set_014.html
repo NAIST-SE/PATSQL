@@ -1,0 +1,12 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/31848698/sql-select-counts-on-1-value" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_014</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>Id<span class="type">:Int</span></th><th>Name<span class="type">:Str</span></th><th>Status<span class="type">:Str</span></th><th>Content_type<span class="type">:Str</span></th></tr><tr><td>2960672</td><td>auto_index</td><td>Error</td><td>general_url</td></tr><tr><td>2960671</td><td>PostJob</td><td>Error</td><td>general_url</td></tr><tr><td>2960670</td><td>auto_index</td><td>Done</td><td>general_url</td></tr><tr><td>2960669</td><td>auto_index</td><td>Done</td><td>document</td></tr><tr><td>2960668</td><td>auto_index</td><td>Error</td><td>document</td></tr><tr><td>2960667</td><td>auto_index</td><td>Error</td><td>document</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Str</span></th><th>c2<span class="type">:Int</span></th></tr><tr><td>general_url</td><td>2</td></tr><tr><td>document</td><td>2</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>Error<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    Content_type,
+    count(Id) 
+FROM
+    input1 
+WHERE
+    Status = 'Error' 
+GROUP BY
+    Content_type 
+ORDER BY
+    Content_type DESC</code></pre>  <h2>Synthesis Time</h2><div>4&nbsp;milliseconds</div></body></html>

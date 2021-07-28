@@ -1,0 +1,24 @@
+<h2>Description</h2><a href="http://www.dbforums.com/showthread.php?1707382-Compare-avg-of-data-in-column-of-certain-users-against-a-another-user" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_039A</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>trans<span class="type">:Int</span></th><th>user<span class="type">:Str</span></th><th>Month<span class="type">:Int</span></th></tr><tr><td>100</td><td>1</td><td>1</td></tr><tr><td>102</td><td>2</td><td>1</td></tr><tr><td>103</td><td>3</td><td>1</td></tr><tr><td>100</td><td>1</td><td>2</td></tr><tr><td>103</td><td>2</td><td>2</td></tr><tr><td>103</td><td>3</td><td>2</td></tr><tr><td>104</td><td>1</td><td>3</td></tr><tr><td>104</td><td>2</td><td>3</td></tr><tr><td>101</td><td>3</td><td>3</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>Avgtrans<span class="type">:Dbl</span></th><th>user3Trans<span class="type">:Int</span></th><th>Month<span class="type">:Int</span></th></tr><tr><td>101.000</td><td>103</td><td>1</td></tr><tr><td>101.500</td><td>103</td><td>2</td></tr><tr><td>104.000</td><td>101</td><td>3</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>3<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.avg_trans,
+    T0.trans,
+    T1.Month 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            Month,
+            avg(trans) AS avg_trans 
+        FROM
+            input1 
+        WHERE
+            user <> '3' 
+        GROUP BY
+            Month
+    ) AS T1 
+        ON T1.Month = T0.Month 
+WHERE
+    T0.user = '3' 
+ORDER BY
+    T0.trans DESC</code></pre>  <h2>Synthesis Time</h2><div>1985&nbsp;milliseconds</div></body></html>

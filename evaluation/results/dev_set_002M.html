@@ -1,0 +1,23 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/1783932/sql-query-to-get-the-latest-value-for-each-location" target="blank"> URL </a><br><span>// MOD: 4</span><br><span> Fix1: fix a date format in some rows.</span><br><span> Fix2: add rows to the input table.</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_002M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>locId<span class="type">:Int</span></th><th>dtg<span class="type">:Date</span></th><th>temp<span class="type">:Int</span></th></tr><tr><td>100</td><td>2009-02-27</td><td>12</td></tr><tr><td>100</td><td>2009-02-26</td><td>14</td></tr><tr><td>200</td><td>2009-02-28</td><td>20</td></tr><tr><td>200</td><td>2009-02-25</td><td>19</td></tr><tr><td>300</td><td>2009-02-28</td><td>23</td></tr><tr><td>300</td><td>2009-02-25</td><td>24</td></tr><tr><td>300</td><td>2009-02-26</td><td>21</td></tr><tr><td>100</td><td>2009-02-24</td><td>13</td></tr><tr><td>300</td><td>2009-02-24</td><td>16</td></tr><tr><td>200</td><td>2009-02-24</td><td>18</td></tr><tr><td>400</td><td>2009-02-24</td><td>12</td></tr><tr><td>100</td><td>2009-02-23</td><td>11</td></tr><tr><td>300</td><td>2009-02-23</td><td>14</td></tr><tr><td>200</td><td>2009-02-23</td><td>15</td></tr><tr><td>400</td><td>2009-02-23</td><td>10</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>locID<span class="type">:Int</span></th><th>dtg<span class="type">:Date</span></th><th>tmp<span class="type">:Int</span></th></tr><tr><td>100</td><td>2009-02-27</td><td>12</td></tr><tr><td>200</td><td>2009-02-28</td><td>20</td></tr><tr><td>300</td><td>2009-02-28</td><td>23</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>2009-02-24<span class="type">:Date</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.locId,
+    T0.dtg,
+    T0.temp 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            locId,
+            max(dtg) AS max_dtg 
+        FROM
+            input1 
+        WHERE
+            dtg > DATE '2009-02-24' 
+        GROUP BY
+            locId
+    ) AS T1 
+        ON T1.locId = T0.locId 
+        AND T1.max_dtg = T0.dtg 
+ORDER BY
+    T1.locId ASC</code></pre>  <h2>Synthesis Time</h2><div>663&nbsp;milliseconds</div></body></html>

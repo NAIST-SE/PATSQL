@@ -1,0 +1,29 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/29080006/greatest-n-per-group-needed-in-compound-mysql-join-sql" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_035</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>number<span class="type">:Int</span></th><th>quantity<span class="type">:Int</span></th><th>retail_price<span class="type">:Dbl</span></th></tr><tr><td>1007</td><td>288</td><td>5.750</td></tr><tr><td>1007</td><td>48</td><td>5.510</td></tr><tr><td>1007</td><td>576</td><td>5.460</td></tr><tr><td>1007</td><td>96</td><td>5.240</td></tr><tr><td>1007</td><td>576</td><td>5.230</td></tr><tr><td>1007</td><td>144</td><td>5.120</td></tr><tr><td>1007</td><td>500</td><td>5.130</td></tr><tr><td>1006</td><td>200</td><td>5.760</td></tr><tr><td>1006</td><td>100</td><td>5.550</td></tr><tr><td>1006</td><td>200</td><td>5.040</td></tr><tr><td>1006</td><td>500</td><td>5.010</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>number<span class="type">:Int</span></th><th>quantity<span class="type">:Int</span></th><th>retail_price<span class="type">:Dbl</span></th></tr><tr><td>1006</td><td>500</td><td>5.010</td></tr><tr><td>1007</td><td>576</td><td>5.460</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.number,
+    T1.quantity,
+    T1.max_retail_price 
+FROM
+    (SELECT
+        number,
+        max(quantity) AS max_quantity 
+    FROM
+        input1 
+    GROUP BY
+        number) AS T0 
+JOIN
+    (
+        SELECT
+            number,
+            quantity,
+            max(retail_price) AS max_retail_price 
+        FROM
+            input1 
+        GROUP BY
+            number,
+            quantity
+    ) AS T1 
+        ON T0.number = T1.number 
+        AND T0.max_quantity = T1.quantity 
+ORDER BY
+    T0.number ASC</code></pre>  <h2>Synthesis Time</h2><div>644&nbsp;milliseconds</div></body></html>

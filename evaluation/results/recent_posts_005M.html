@@ -1,0 +1,23 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/40191162/sql-count-rows-where-id-x-and-other-maxid-grouped-on-the-same-table" target="blank"> URL </a><br><span> MOD 9</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_005M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: events</h3><table class="in_table mono"><tr><th>g_event_id<span class="type">:Int</span></th><th>prim_cid<span class="type">:Str</span></th><th>event_id<span class="type">:Str</span></th><th>event_time<span class="type">:Str</span></th></tr><tr><td>1</td><td>111</td><td>16</td><td>2016-10-21 16:00:00</td></tr><tr><td>2</td><td>111</td><td>17</td><td>2016-10-22 16:00:01</td></tr><tr><td>3</td><td>111</td><td>18</td><td>2016-10-23 16:00:02</td></tr><tr><td>4</td><td>222</td><td>15</td><td>2016-10-24 16:01:01</td></tr><tr><td>5</td><td>222</td><td>17</td><td>2016-10-25 16:01:02</td></tr><tr><td>6</td><td>333</td><td>16</td><td>2016-10-26 16:02:01</td></tr><tr><td>7</td><td>333</td><td>17</td><td>2016-10-27 16:02:02</td></tr><tr><td>8</td><td>333</td><td>18</td><td>2016-10-28 16:02:38</td></tr><tr><td>9</td><td>444</td><td>99</td><td>2016-11-01 16:00:00</td></tr><tr><td>10</td><td>444</td><td>16</td><td>2016-11-02 16:00:01</td></tr><tr><td>11</td><td>444</td><td>17</td><td>2016-11-03 16:00:02</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>g_event_id<span class="type">:Int</span></th><th>prim_cid<span class="type">:Str</span></th><th>event_id<span class="type">:Str</span></th><th>event_time<span class="type">:Str</span></th></tr><tr><td>5</td><td>222</td><td>17</td><td>2016-10-25 16:01:02</td></tr><tr><td>11</td><td>444</td><td>17</td><td>2016-11-03 16:00:02</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>17<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.g_event_id,
+    T1.prim_cid,
+    T0.event_id,
+    T0.event_time 
+FROM
+    events AS T0 
+JOIN
+    (
+        SELECT
+            prim_cid,
+            max(g_event_id) AS max_g_event_id 
+        FROM
+            events 
+        GROUP BY
+            prim_cid
+    ) AS T1 
+        ON T1.max_g_event_id = T0.g_event_id 
+WHERE
+    T0.event_id = '17' 
+ORDER BY
+    T0.g_event_id ASC</code></pre>  <h2>Synthesis Time</h2><div>55&nbsp;milliseconds</div></body></html>

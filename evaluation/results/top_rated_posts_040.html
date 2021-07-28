@@ -1,0 +1,12 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/10380990/using-group-by-on-two-fields-and-count-in-sql" target="blank"> URL </a><br><span>Using group by on two fields and count in SQL</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_040</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>grp<span class="type">:Str</span></th><th>subGroup<span class="type">:Str</span></th></tr><tr><td>grp-A</td><td>sub-A</td></tr><tr><td>grp-A</td><td>sub-A</td></tr><tr><td>grp-A</td><td>sub-B</td></tr><tr><td>grp-B</td><td>sub-A</td></tr><tr><td>grp-B</td><td>sub-B</td></tr><tr><td>grp-B</td><td>sub-B</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>grp<span class="type">:Str</span></th><th>subGroup<span class="type">:Str</span></th><th>count<span class="type">:Int</span></th></tr><tr><td>grp-A</td><td>sub-A</td><td>2</td></tr><tr><td>grp-A</td><td>sub-B</td><td>1</td></tr><tr><td>grp-B</td><td>sub-A</td><td>1</td></tr><tr><td>grp-B</td><td>sub-B</td><td>2</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    grp,
+    subGroup,
+    count(grp) 
+FROM
+    input1 
+GROUP BY
+    grp,
+    subGroup 
+ORDER BY
+    grp ASC</code></pre>  <h2>Synthesis Time</h2><div>2&nbsp;milliseconds</div></body></html>

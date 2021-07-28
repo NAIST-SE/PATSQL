@@ -1,0 +1,18 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/12113699/get-top-n-records-for-each-group-of-grouped-results" target="blank"> URL </a><br><span>Get top n records for each group of grouped results</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_030</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>Person<span class="type">:Str</span></th><th>Grp<span class="type">:Int</span></th><th>Age<span class="type">:Int</span></th></tr><tr><td>Bob</td><td>1</td><td>32</td></tr><tr><td>Jill</td><td>1</td><td>34</td></tr><tr><td>Shawn</td><td>1</td><td>42</td></tr><tr><td>XSWwe</td><td>1</td><td>30</td></tr><tr><td>Jake</td><td>2</td><td>29</td></tr><tr><td>Paul</td><td>2</td><td>36</td></tr><tr><td>Laura</td><td>2</td><td>39</td></tr><tr><td>YYYY</td><td>2</td><td>31</td></tr><tr><td>XXXX</td><td>2</td><td>20</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>Person<span class="type">:Str</span></th><th>Grp<span class="type">:Int</span></th><th>Age<span class="type">:Int</span></th></tr><tr><td>Shawn</td><td>1</td><td>42</td></tr><tr><td>Jill</td><td>1</td><td>34</td></tr><tr><td>Laura</td><td>2</td><td>39</td></tr><tr><td>Paul</td><td>2</td><td>36</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>2<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.Person,
+    T0.Grp,
+    T0.Age 
+FROM
+    (SELECT
+        Person,
+        Grp,
+        Age,
+        rank() OVER (PARTITION BY Grp ORDER BY Age DESC) AS rank_over_part_by_grp_order_by_age_desc 
+    FROM
+        input1) AS T0 
+WHERE
+    T0.rank_over_part_by_grp_order_by_age_desc <= 2 
+ORDER BY
+    T0.Grp ASC,
+    T0.Age DESC</code></pre>  <h2>Synthesis Time</h2><div>409&nbsp;milliseconds</div></body></html>

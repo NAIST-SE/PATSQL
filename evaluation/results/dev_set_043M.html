@@ -1,0 +1,22 @@
+<h2>Description</h2><a href="https://stackoverflow.com/questions/2893903/how-to-get-all-the-fields-of-a-row-using-the-sql-max-function" target="blank"> URL </a><br><span>//MOD 3</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_043M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>Id<span class="type">:Int</span></th><th>name<span class="type">:Str</span></th><th>type<span class="type">:Str</span></th><th>price<span class="type">:Dbl</span></th></tr><tr><td>123451</td><td>Park's Great Hits</td><td>Music</td><td>19.990</td></tr><tr><td>123453</td><td>Silly Puddy</td><td>Toy</td><td>8.730</td></tr><tr><td>123452</td><td>Playstation</td><td>Toy</td><td>89.950</td></tr><tr><td>123454</td><td>Men's T-Shirt</td><td>Clothing</td><td>32.500</td></tr><tr><td>123455</td><td>Blouse</td><td>Clothing</td><td>34.970</td></tr><tr><td>123456</td><td>Electronica 2002</td><td>Music</td><td>3.990</td></tr><tr><td>123457</td><td>Country Tunes</td><td>Music</td><td>21.550</td></tr><tr><td>123458</td><td>Watermelon</td><td>Food</td><td>8.730</td></tr><tr><td>123459</td><td>Banana</td><td>Food</td><td>1.000</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>Id<span class="type">:Int</span></th><th>name<span class="type">:Str</span></th><th>type<span class="type">:Str</span></th><th>price<span class="type">:Dbl</span></th></tr><tr><td>123455</td><td>Blouse</td><td>Clothing</td><td>34.970</td></tr><tr><td>123458</td><td>Watermelon</td><td>Food</td><td>8.730</td></tr><tr><td>123457</td><td>Country Tunes</td><td>Music</td><td>21.550</td></tr><tr><td>123452</td><td>Playstation</td><td>Toy</td><td>89.950</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.Id,
+    T0.name,
+    T1.type,
+    T0.price 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            type,
+            max(price) AS max_price 
+        FROM
+            input1 
+        GROUP BY
+            type
+    ) AS T1 
+        ON T1.type = T0.type 
+        AND T1.max_price = T0.price 
+ORDER BY
+    T1.type ASC</code></pre>  <h2>Synthesis Time</h2><div>20&nbsp;milliseconds</div></body></html>

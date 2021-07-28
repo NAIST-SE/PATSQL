@@ -1,0 +1,12 @@
+<h2>Description</h2><br><span>Find the names of students not enrolled in any class.</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sqlsynthesizer_textbook_5_1_11</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>S_key<span class="type">:Str</span></th><th>S_name<span class="type">:Str</span></th></tr><tr><td>S1</td><td>SN1</td></tr><tr><td>S2</td><td>SN2</td></tr><tr><td>S3</td><td>SN3</td></tr><tr><td>S4</td><td>SN4</td></tr><tr><td>S5</td><td>SN5</td></tr><tr><td>S6</td><td>SN6</td></tr><tr><td>S7</td><td>SN7</td></tr><tr><td>S8</td><td>SN8</td></tr><tr><td>S9</td><td>SN9</td></tr><tr><td>S10</td><td>SN10</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>S_key<span class="type">:Str</span></th><th>C_name<span class="type">:Str</span></th></tr><tr><td>S1</td><td>class2</td></tr><tr><td>S2</td><td>class1</td></tr><tr><td>S4</td><td>class2</td></tr><tr><td>S4</td><td>class4</td></tr><tr><td>S5</td><td>class4</td></tr><tr><td>S7</td><td>class5</td></tr><tr><td>S7</td><td>class1</td></tr><tr><td>S8</td><td>class4</td></tr><tr><td>S10</td><td>class5</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>S_name<span class="type">:Str</span></th></tr><tr><td>SN3</td></tr><tr><td>SN6</td></tr><tr><td>SN9</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.S_name 
+FROM
+    input1 AS T0 
+LEFT JOIN
+    input2 AS T1 
+        ON T0.S_key = T1.S_key 
+WHERE
+    T1.S_key IS NULL 
+ORDER BY
+    T0.S_name ASC</code></pre>  <h2>Synthesis Time</h2><div>5&nbsp;milliseconds</div></body></html>

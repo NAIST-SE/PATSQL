@@ -1,0 +1,12 @@
+<h2>Description</h2><br><span>Print the level and the average age of students for that level, for all levels except JR.</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sqlsynthesizer_textbook_5_1_8</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>S_key<span class="type">:Str</span></th><th>level<span class="type">:Str</span></th><th>age<span class="type">:Int</span></th></tr><tr><td>S1</td><td>JR</td><td>18</td></tr><tr><td>S2</td><td>SR</td><td>24</td></tr><tr><td>S3</td><td>JR</td><td>21</td></tr><tr><td>S4</td><td>SR</td><td>22</td></tr><tr><td>S5</td><td>JR</td><td>18</td></tr><tr><td>S6</td><td>SO</td><td>20</td></tr><tr><td>S7</td><td>SO</td><td>22</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>level<span class="type">:Str</span></th><th>aveage<span class="type">:Dbl</span></th></tr><tr><td>SO</td><td>21.000</td></tr><tr><td>SR</td><td>23.000</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>JR<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    level,
+    avg(age) 
+FROM
+    input1 
+WHERE
+    level <> 'JR' 
+GROUP BY
+    level 
+ORDER BY
+    level ASC</code></pre>  <h2>Synthesis Time</h2><div>1&nbsp;milliseconds</div></body></html>

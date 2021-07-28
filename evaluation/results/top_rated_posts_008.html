@@ -1,0 +1,14 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/2043259/sql-server-how-to-join-to-first-row" target="blank"> URL </a><br><span>How to Join to first row</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_008</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>OrderID<span class="type">:Int</span></th><th>OrderGUID<span class="type">:Str</span></th><th>OrderNumber<span class="type">:Str</span></th></tr><tr><td>1</td><td>{FFB2...}</td><td>STL-7442-1</td></tr><tr><td>2</td><td>{3EC6...}</td><td>MPT-9931-8A</td></tr><tr><td>6784329</td><td>{A1...}</td><td>KSG-0619-81</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>LineItemGUID<span class="type">:Str</span></th><th>OrderID<span class="type">:Int</span></th><th>Quantity<span class="type">:Int</span></th><th>Description<span class="type">:Str</span></th></tr><tr><td>{098FBE3...}</td><td>1</td><td>7</td><td>prefabulated amulite</td></tr><tr><td>{1609B09...}</td><td>2</td><td>32</td><td>spurving bearing</td></tr><tr><td>{A58A1...}</td><td>6784329</td><td>5</td><td>pentametric fan</td></tr><tr><td>{0E9BC...}</td><td>6784329</td><td>5</td><td>differential girdlespring</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>OrderNumber<span class="type">:Str</span></th><th>Quantity<span class="type">:Int</span></th><th>Description<span class="type">:Str</span></th></tr><tr><td>STL-7442-1</td><td>7</td><td>prefabulated amulite</td></tr><tr><td>MPT-9931-8A</td><td>32</td><td>spurving bearing</td></tr><tr><td>KSG-0619-81</td><td>5</td><td>pentametric fan</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    max(T0.OrderNumber),
+    max(T1.Quantity),
+    max(T1.Description) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.OrderID = T1.OrderID 
+GROUP BY
+    T0.OrderID 
+ORDER BY
+    max(T0.OrderNumber) DESC</code></pre>  <h2>Synthesis Time</h2><div>11&nbsp;milliseconds</div></body></html>

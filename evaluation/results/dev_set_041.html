@@ -1,0 +1,21 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/37868704/how-to-return-1-row-for-each-distinct-value-in-a-given-column-in-oracle" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_041</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>NBR<span class="type">:Int</span></th><th>ID<span class="type">:Int</span></th><th>DT<span class="type">:Date</span></th></tr><tr><td>1</td><td>1</td><td>2001-12-31</td></tr><tr><td>1</td><td>2</td><td>2001-08-07</td></tr><tr><td>2</td><td>3</td><td>2001-08-07</td></tr><tr><td>2</td><td>4</td><td>2001-09-12</td></tr><tr><td>3</td><td>5</td><td>2001-09-11</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>NBR<span class="type">:Int</span></th><th>ID<span class="type">:Int</span></th><th>DT<span class="type">:Date</span></th></tr><tr><td>1</td><td>2</td><td>2001-08-07</td></tr><tr><td>2</td><td>3</td><td>2001-08-07</td></tr><tr><td>3</td><td>5</td><td>2001-09-11</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.NBR,
+    T0.ID,
+    T0.DT 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            NBR,
+            min(DT) AS min_DT 
+        FROM
+            input1 
+        GROUP BY
+            NBR
+    ) AS T1 
+        ON T1.NBR = T0.NBR 
+        AND T1.min_DT = T0.DT 
+ORDER BY
+    T1.NBR ASC</code></pre>  <h2>Synthesis Time</h2><div>48&nbsp;milliseconds</div></body></html>

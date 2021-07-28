@@ -1,0 +1,21 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/21162812/select-rows-with-same-id-but-different-value-in-another-column" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_020</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>ARIDNR<span class="type">:Str</span></th><th>LIEFNR<span class="type">:Str</span></th></tr><tr><td>1</td><td>A</td></tr><tr><td>2</td><td>A</td></tr><tr><td>3</td><td>A</td></tr><tr><td>1</td><td>B</td></tr><tr><td>2</td><td>B</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>ARIDNR<span class="type">:Str</span></th><th>LIEFNR<span class="type">:Str</span></th></tr><tr><td>1</td><td>A</td></tr><tr><td>1</td><td>B</td></tr><tr><td>2</td><td>A</td></tr><tr><td>2</td><td>B</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>1<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.ARIDNR,
+    T0.LIEFNR 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            ARIDNR,
+            count(ARIDNR) AS count_ARIDNR 
+        FROM
+            input1 
+        GROUP BY
+            ARIDNR
+    ) AS T1 
+        ON T1.ARIDNR = T0.ARIDNR 
+WHERE
+    T1.count_ARIDNR > 1 
+ORDER BY
+    T1.ARIDNR ASC</code></pre>  <h2>Synthesis Time</h2><div>14&nbsp;milliseconds</div></body></html>

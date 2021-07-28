@@ -1,0 +1,15 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/3002499/postgresql-crosstab-query" target="blank"> URL </a><br><span> PostgreSQL Crosstab Query</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_032</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>Section<span class="type">:Str</span></th><th>Status<span class="type">:Str</span></th><th>Count<span class="type">:Int</span></th></tr><tr><td>A</td><td>Active</td><td>1</td></tr><tr><td>A</td><td>Inactive</td><td>2</td></tr><tr><td>B</td><td>Active</td><td>4</td></tr><tr><td>B</td><td>Inactive</td><td>5</td></tr><tr><td>C</td><td>Active</td><td>9</td></tr><tr><td>C</td><td>Inactive</td><td>1</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>Section<span class="type">:Str</span></th><th>Active<span class="type">:Int</span></th><th>Inactive<span class="type">:Int</span></th></tr><tr><td>A</td><td>1</td><td>2</td></tr><tr><td>B</td><td>4</td><td>5</td></tr><tr><td>C</td><td>9</td><td>1</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>Active<span class="type">:Str</span></li><li>Inactive<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.Section,
+    T0.Count,
+    T1.Count 
+FROM
+    input1 AS T0 
+JOIN
+    input1 AS T1 
+        ON T0.Section = T1.Section 
+WHERE
+    T0.Status = 'Active' 
+    AND T1.Status = 'Inactive' 
+ORDER BY
+    T0.Section ASC</code></pre>  <h2>Synthesis Time</h2><div>25&nbsp;milliseconds</div></body></html>

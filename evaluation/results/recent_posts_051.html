@@ -1,0 +1,14 @@
+<h2>Description</h2><a href="https://stackoverflow.com/questions/39954877/merge-tables-based-on-a-column" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_051</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>isbn<span class="type">:Dbl</span></th><th>title<span class="type">:Str</span></th></tr><tr><td>9780195153446.000</td><td>classical</td></tr><tr><td>9780374157067.000</td><td>flu: the stor</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>Isbn_id<span class="type">:Dbl</span></th><th>Author<span class="type">:Str</span></th></tr><tr><td>9780195153446.000</td><td>mark p. o. morford</td></tr><tr><td>9780195153446.000</td><td>robert j. lenardon</td></tr><tr><td>9780374157067.000</td><td>gina kolata</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>isbn<span class="type">:Dbl</span></th><th>title<span class="type">:Str</span></th><th>author<span class="type">:Str</span></th></tr><tr><td>9780195153446.000</td><td>classical</td><td>mark p. o. morford, robert j. lenardon</td></tr><tr><td>9780374157067.000</td><td>flu: the stor</td><td>gina kolata</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.isbn,
+    max(T0.title),
+    string_agg(T1.Author, ', ') 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.isbn = T1.Isbn_id 
+GROUP BY
+    T0.isbn 
+ORDER BY
+    T0.isbn ASC</code></pre>  <h2>Synthesis Time</h2><div>3&nbsp;milliseconds</div></body></html>

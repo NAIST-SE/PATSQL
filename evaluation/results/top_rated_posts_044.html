@@ -1,0 +1,9 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/2563918/create-a-cumulative-sum-column-in-mysql" target="blank"> URL </a><br><span>Create a Cumulative Sum Column</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_044</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>id<span class="type">:Int</span></th><th>count<span class="type">:Int</span></th></tr><tr><td>1</td><td>100</td></tr><tr><td>2</td><td>50</td></tr><tr><td>3</td><td>10</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>id<span class="type">:Int</span></th><th>count<span class="type">:Int</span></th><th>cumulative_sum<span class="type">:Int</span></th></tr><tr><td>1</td><td>100</td><td>100</td></tr><tr><td>2</td><td>50</td><td>150</td></tr><tr><td>3</td><td>10</td><td>160</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    id,
+    count,
+    sum(count) OVER (ORDER BY id ASC) 
+FROM
+    input1 
+ORDER BY
+    id ASC</code></pre>  <h2>Synthesis Time</h2><div>36&nbsp;milliseconds</div></body></html>

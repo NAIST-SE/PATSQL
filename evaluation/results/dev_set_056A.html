@@ -1,0 +1,24 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/39421932/how-to-get-a-most-people-select-between-2-table" target="blank"> URL </a><br><span>page removed</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_056A</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>suburb<span class="type">:Int</span></th><th>client<span class="type">:Str</span></th><th>fk_food<span class="type">:Str</span></th></tr><tr><td>6000</td><td>"4"</td><td>2</td></tr><tr><td>6000</td><td>"4"</td><td>2</td></tr><tr><td>6000</td><td>"4"</td><td>3</td></tr><tr><td>6000</td><td>"4"</td><td>1</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>item<span class="type">:Str</span></th></tr><tr><td>2</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T2.fk_food 
+FROM
+    (SELECT
+        max(T0.count_suburb) AS max_T0_count_suburb 
+    FROM
+        (SELECT
+            count(suburb) AS count_suburb 
+        FROM
+            input1 
+        GROUP BY
+            fk_food) AS T0) AS T1 
+    JOIN
+        (
+            SELECT
+                fk_food,
+                count(suburb) AS count_suburb 
+            FROM
+                input1 
+            GROUP BY
+                fk_food
+        ) AS T2 
+            ON T1.max_T0_count_suburb = T2.count_suburb</code></pre>  <h2>Synthesis Time</h2><div>946&nbsp;milliseconds</div></body></html>

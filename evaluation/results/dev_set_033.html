@@ -1,0 +1,13 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/31112142/sql-query-and-filtering-data/31112305#31112305" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_033</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>zone_id<span class="type">:Int</span></th><th>zone_name<span class="type">:Str</span></th><th>time_start<span class="type">:Int</span></th></tr><tr><td>391</td><td>America/Los_Angeles</td><td>2147397247</td></tr><tr><td>391</td><td>America/Los_Angeles</td><td>1425808800</td></tr><tr><td>391</td><td>America/Los_Angeles</td><td>2140678800</td></tr><tr><td>391</td><td>America/Los_Angeles</td><td>9972000</td></tr><tr><td>392</td><td>America/Metlakatla</td><td>2147397247</td></tr><tr><td>392</td><td>America/Metlakatla</td><td>436352400</td></tr><tr><td>392</td><td>America/Metlakatla</td><td>9972000</td></tr><tr><td>393</td><td>America/Anchorage</td><td>2147397247</td></tr><tr><td>393</td><td>America/Anchorage</td><td>2140682400</td></tr><tr><td>393</td><td>America/Anchorage</td><td>2120122800</td></tr><tr><td>393</td><td>America/Anchorage</td><td>1425812400</td></tr><tr><td>393</td><td>America/Anchorage</td><td>9979200</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Int</span></th><th>c2<span class="type">:Str</span></th><th>c3<span class="type">:Int</span></th></tr><tr><td>391</td><td>America/Los_Angeles</td><td>1425808800</td></tr><tr><td>392</td><td>America/Metlakatla</td><td>436352400</td></tr><tr><td>393</td><td>America/Anchorage</td><td>1425812400</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>1425812400<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    zone_id,
+    max(zone_name),
+    max(time_start) 
+FROM
+    input1 
+WHERE
+    time_start <= 1425812400 
+GROUP BY
+    zone_id 
+ORDER BY
+    zone_id ASC</code></pre>  <h2>Synthesis Time</h2><div>6&nbsp;milliseconds</div></body></html>

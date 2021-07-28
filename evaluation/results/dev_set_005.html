@@ -1,0 +1,10 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/14995024/selecting-quarters-within-a-date-range?rq=1" target="blank"> URL </a><br><span>// MOD: 11</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_005</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>yrq<span class="type">:Str</span></th><th>start_date<span class="type">:Date</span></th><th>end_date<span class="type">:Date</span></th></tr><tr><td>B234</td><td>2013-01-07</td><td>2013-02-11</td></tr><tr><td>B233</td><td>2013-01-07</td><td>2013-03-23</td></tr><tr><td>B235</td><td>2013-02-01</td><td>2013-02-15</td></tr><tr><td>B234</td><td>2013-02-07</td><td>2013-02-16</td></tr><tr><td>B232</td><td>2012-09-24</td><td>2012-12-20</td></tr><tr><td>B231</td><td>2012-06-25</td><td>2012-09-13</td></tr><tr><td>B124</td><td>2012-04-02</td><td>2012-06-21</td></tr><tr><td>B123</td><td>2012-01-09</td><td>2012-03-27</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>col1<span class="type">:Str</span></th></tr><tr><td>B233</td></tr><tr><td>B235</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>2013-02-01<span class="type">:Date</span></li><li>2013-02-15<span class="type">:Date</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    yrq 
+FROM
+    input1 
+WHERE
+    start_date <= DATE '2013-02-01' 
+    AND end_date >= DATE '2013-02-15' 
+ORDER BY
+    yrq ASC</code></pre>  <h2>Synthesis Time</h2><div>4&nbsp;milliseconds</div></body></html>

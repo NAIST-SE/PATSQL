@@ -1,0 +1,26 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/40038197/most-similar-members-in-one-table" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_028</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: t1</h3><table class="in_table mono"><tr><th>Member<span class="type">:Str</span></th><th>Element<span class="type">:Str</span></th></tr><tr><td>1</td><td>A</td></tr><tr><td>1</td><td>B</td></tr><tr><td>1</td><td>C</td></tr><tr><td>1</td><td>E</td></tr><tr><td>22</td><td>A</td></tr><tr><td>22</td><td>B</td></tr><tr><td>22</td><td>C</td></tr><tr><td>22</td><td>D</td></tr><tr><td>3</td><td>A</td></tr><tr><td>3</td><td>D</td></tr><tr><td>4</td><td>A</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>member<span class="type">:Str</span></th><th>total<span class="type">:Int</span></th></tr><tr><td>22</td><td>3</td></tr><tr><td>3</td><td>1</td></tr><tr><td>4</td><td>1</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>1<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.Member,
+    count(T0.Member) 
+FROM
+    (SELECT
+        Member,
+        Element 
+    FROM
+        t1) AS T0 
+LEFT JOIN
+    (
+        SELECT
+            Member,
+            Element 
+        FROM
+            t1
+    ) AS T1 
+        ON T0.Element = T1.Element 
+WHERE
+    T0.Member = '1' 
+    AND T1.Member <> '1' 
+GROUP BY
+    T1.Member 
+ORDER BY
+    T1.Member ASC</code></pre>  <h2>Synthesis Time</h2><div>174&nbsp;milliseconds</div></body></html>

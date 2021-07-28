@@ -1,0 +1,17 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/40086753/select-all-records-after-a-certain-column-condition-is-true-in-sql" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_019</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>CustomerID<span class="type">:Int</span></th><th>Balance<span class="type">:Dbl</span></th><th>Date<span class="type">:Date</span></th></tr><tr><td>1</td><td>100.000</td><td>2016-09-07</td></tr><tr><td>1</td><td>-50.000</td><td>2016-09-08</td></tr><tr><td>1</td><td>-60.000</td><td>2016-09-09</td></tr><tr><td>1</td><td>500.000</td><td>2016-09-10</td></tr><tr><td>1</td><td>600.000</td><td>2016-09-11</td></tr><tr><td>1</td><td>-100.000</td><td>2016-09-12</td></tr><tr><td>1</td><td>-200.000</td><td>2016-09-13</td></tr><tr><td>1</td><td>-400.000</td><td>2016-09-14</td></tr><tr><td>1</td><td>-500.000</td><td>2016-09-15</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>CustomerID<span class="type">:Int</span></th><th>Balance<span class="type">:Dbl</span></th><th>Date<span class="type">:Date</span></th></tr><tr><td>1</td><td>-100.000</td><td>2016-09-12</td></tr><tr><td>1</td><td>-200.000</td><td>2016-09-13</td></tr><tr><td>1</td><td>-400.000</td><td>2016-09-14</td></tr><tr><td>1</td><td>-500.000</td><td>2016-09-15</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>.000<span class="type">:Dbl</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.CustomerID,
+    T0.Balance,
+    T0.Date 
+FROM
+    (SELECT
+        CustomerID,
+        Balance,
+        Date,
+        max(Balance) OVER (ORDER BY Date DESC) AS max_balance_over_order_by_date_desc 
+    FROM
+        input1) AS T0 
+WHERE
+    T0.max_balance_over_order_by_date_desc < 0.0 
+ORDER BY
+    T0.Balance DESC</code></pre>  <h2>Synthesis Time</h2><div>1181&nbsp;milliseconds</div></body></html>

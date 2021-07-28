@@ -1,0 +1,10 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/122942/how-to-return-multiple-values-in-one-column-t-sql" target="blank"> URL </a><br><span> How to return multiple values in one column?</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_049</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>UserId<span class="type">:Int</span></th><th>Alias<span class="type">:Str</span></th></tr><tr><td>1</td><td>MrX</td></tr><tr><td>1</td><td>MrY</td></tr><tr><td>1</td><td>MrA</td></tr><tr><td>2</td><td>Abc</td></tr><tr><td>2</td><td>Xyz</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>UserId<span class="type">:Int</span></th><th>Alias<span class="type">:Str</span></th></tr><tr><td>1</td><td>MrX, MrY, MrA</td></tr><tr><td>2</td><td>Abc, Xyz</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    UserId,
+    string_agg(Alias, ', ') 
+FROM
+    input1 
+GROUP BY
+    UserId 
+ORDER BY
+    UserId ASC</code></pre>  <h2>Synthesis Time</h2><div>2&nbsp;milliseconds</div></body></html>

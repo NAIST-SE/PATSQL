@@ -1,0 +1,12 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/367863/sql-find-records-from-one-table-which-dont-exist-in-another" target="blank"> URL </a><br><span> find records from one table which don't exist in another</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_010</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>id<span class="type">:Str</span></th><th>name<span class="type">:Str</span></th><th>phone_number<span class="type">:Str</span></th></tr><tr><td>1a</td><td>John</td><td>"111111111111</td></tr><tr><td>2a</td><td>Jane</td><td>"222222222222</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>id<span class="type">:Str</span></th><th>date<span class="type">:Str</span></th><th>phone_number<span class="type">:Str</span></th></tr><tr><td>1a</td><td>09-45</td><td>"111111111111</td></tr><tr><td>2a</td><td>09-50</td><td>"222222222222</td></tr><tr><td>3a</td><td>10-45</td><td>"333333333333</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>id<span class="type">:Str</span></th><th>date<span class="type">:Str</span></th><th>phone_number<span class="type">:Str</span></th></tr><tr><td>3a</td><td>10-45</td><td>"333333333333</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.id,
+    T0.date,
+    T0.phone_number 
+FROM
+    input2 AS T0 
+LEFT JOIN
+    input1 AS T1 
+        ON T0.id = T1.id 
+WHERE
+    T1.id IS NULL</code></pre>  <h2>Synthesis Time</h2><div>3&nbsp;milliseconds</div></body></html>

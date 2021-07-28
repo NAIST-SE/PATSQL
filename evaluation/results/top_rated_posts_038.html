@@ -1,0 +1,26 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/8149210/how-do-i-find-duplicates-across-multiple-columns" target="blank"> URL </a><br><span> How do I find duplicates across multiple columns?</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_038</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>id<span class="type">:Int</span></th><th>name<span class="type">:Str</span></th><th>city<span class="type">:Str</span></th></tr><tr><td>904822</td><td>pete</td><td>Berlin</td></tr><tr><td>904825</td><td>pete</td><td>London</td></tr><tr><td>904829</td><td>jim</td><td>London</td></tr><tr><td>904834</td><td>jime</td><td>London</td></tr><tr><td>904835</td><td>jime</td><td>London</td></tr><tr><td>904835</td><td>jime</td><td>Paris</td></tr><tr><td>90145</td><td>Fred</td><td>Paris</td></tr><tr><td>90132</td><td>Fred</td><td>Paris</td></tr><tr><td>90133</td><td>Fred</td><td>Paris</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>id<span class="type">:Int</span></th><th>name<span class="type">:Str</span></th><th>city<span class="type">:Str</span></th></tr><tr><td>904834</td><td>jime</td><td>London</td></tr><tr><td>904835</td><td>jime</td><td>London</td></tr><tr><td>90145</td><td>Fred</td><td>Paris</td></tr><tr><td>90132</td><td>Fred</td><td>Paris</td></tr><tr><td>90133</td><td>Fred</td><td>Paris</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>1<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.id,
+    T1.name,
+    T1.city 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            name,
+            city,
+            count(id) AS count_id 
+        FROM
+            input1 
+        GROUP BY
+            name,
+            city
+    ) AS T1 
+        ON T1.name = T0.name 
+        AND T1.city = T0.city 
+WHERE
+    T1.count_id > 1 
+ORDER BY
+    T1.name DESC,
+    T0.id ASC</code></pre>  <h2>Synthesis Time</h2><div>168&nbsp;milliseconds</div></body></html>

@@ -1,0 +1,11 @@
+<h2>Description</h2><a href="http://www.sqlteam.com/forums/topic.asp?TOPIC_ID=200861" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_037</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>chapterid<span class="type">:Int</span></th><th>xmlfile<span class="type">:Str</span></th></tr><tr><td>1234</td><td>123.xml</td></tr><tr><td>1234</td><td>123.xml</td></tr><tr><td>1234</td><td>123.xml</td></tr><tr><td>1234</td><td>123.xml</td></tr><tr><td>4567</td><td>123.xml</td></tr><tr><td>4567</td><td>123.xml</td></tr><tr><td>6789</td><td>123.xml</td></tr><tr><td>6789</td><td>145.xml</td></tr><tr><td>7890</td><td>234.xml</td></tr><tr><td>7890</td><td>234.xml</td></tr><tr><td>7890</td><td>234.xml</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>chapterid<span class="type">:Int</span></th><th>xmlfile<span class="type">:Str</span></th></tr><tr><td>1234</td><td>123.xml</td></tr><tr><td>4567</td><td>123.xml</td></tr><tr><td>6789</td><td>123.xml</td></tr><tr><td>6789</td><td>145.xml</td></tr><tr><td>7890</td><td>234.xml</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    chapterid,
+    xmlfile 
+FROM
+    input1 
+GROUP BY
+    chapterid,
+    xmlfile 
+ORDER BY
+    chapterid ASC</code></pre>  <h2>Synthesis Time</h2><div>2&nbsp;milliseconds</div></body></html>

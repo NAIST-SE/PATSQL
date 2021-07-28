@@ -1,0 +1,20 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/1641718/how-to-select-unique-records-by-sql" target="blank"> URL </a><br><span>How to select unique records by SQL</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_037</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>c1<span class="type">:Int</span></th><th>c2<span class="type">:Str</span></th><th>c3<span class="type">:Str</span></th></tr><tr><td>1</td><td>item1</td><td>data2</td></tr><tr><td>2</td><td>item1</td><td>data1</td></tr><tr><td>3</td><td>item2</td><td>data3</td></tr><tr><td>4</td><td>item2</td><td>data5</td></tr><tr><td>5</td><td>item3</td><td>data4</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Int</span></th><th>c2<span class="type">:Str</span></th><th>c3<span class="type">:Str</span></th></tr><tr><td>1</td><td>item1</td><td>data2</td></tr><tr><td>3</td><td>item2</td><td>data3</td></tr><tr><td>5</td><td>item3</td><td>data4</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.c1,
+    T1.c2,
+    T0.c3 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            c2,
+            min(c1) AS min_c1 
+        FROM
+            input1 
+        GROUP BY
+            c2
+    ) AS T1 
+        ON T1.min_c1 = T0.c1 
+ORDER BY
+    T0.c1 ASC</code></pre>  <h2>Synthesis Time</h2><div>5&nbsp;milliseconds</div></body></html>

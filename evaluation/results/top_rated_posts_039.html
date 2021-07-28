@@ -1,0 +1,24 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/12235595/find-most-frequent-value-in-sql-column" target="blank"> URL </a><br><span>Find most frequent value in SQL column</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_039</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>c<span class="type">:Str</span></th></tr><tr><td>one</td></tr><tr><td>two</td></tr><tr><td>three</td></tr><tr><td>three</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c<span class="type">:Str</span></th></tr><tr><td>three</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T2.c 
+FROM
+    (SELECT
+        max(T0.count_c) AS max_T0_count_c 
+    FROM
+        (SELECT
+            count(c) AS count_c 
+        FROM
+            input1 
+        GROUP BY
+            c) AS T0) AS T1 
+    JOIN
+        (
+            SELECT
+                c,
+                count(c) AS count_c 
+            FROM
+                input1 
+            GROUP BY
+                c
+        ) AS T2 
+            ON T1.max_T0_count_c = T2.count_c</code></pre>  <h2>Synthesis Time</h2><div>138&nbsp;milliseconds</div></body></html>

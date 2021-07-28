@@ -1,0 +1,21 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/40011392/select-max-date-from-multiple-dates" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_034</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>MATERIAL<span class="type">:Str</span></th><th>DISCO_DATE<span class="type">:Str</span></th><th>DATE_UPDATE<span class="type">:Str</span></th></tr><tr><td>T6C25AW#ABC</td><td><span class= "null">NULL</span></td><td>2016-07-30</td></tr><tr><td>T6C25AW#ABC</td><td>2016-10-28</td><td>2016-09-23</td></tr><tr><td>T6C25AW#ABC</td><td>2016-10-21</td><td>2016-09-30</td></tr><tr><td>T6C25AW#DEF</td><td>2016-07-21</td><td>2016-07-30</td></tr><tr><td>T6C25AW#DEF</td><td>2016-07-10</td><td>2016-07-12</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c<span class="type">:Str</span></th><th>c<span class="type">:Str</span></th><th>c<span class="type">:Str</span></th></tr><tr><td>T6C25AW#ABC</td><td>2016-10-21</td><td>2016-09-30</td></tr><tr><td>T6C25AW#DEF</td><td>2016-07-21</td><td>2016-07-30</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.MATERIAL,
+    T0.DISCO_DATE,
+    T1.max_DATE_UPDATE 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            MATERIAL,
+            max(DATE_UPDATE) AS max_DATE_UPDATE 
+        FROM
+            input1 
+        GROUP BY
+            MATERIAL
+    ) AS T1 
+        ON T1.MATERIAL = T0.MATERIAL 
+        AND T1.max_DATE_UPDATE = T0.DATE_UPDATE 
+ORDER BY
+    T1.MATERIAL ASC</code></pre>  <h2>Synthesis Time</h2><div>8&nbsp;milliseconds</div></body></html>

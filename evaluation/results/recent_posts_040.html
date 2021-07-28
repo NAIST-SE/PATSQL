@@ -1,0 +1,27 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/39985550/how-to-sql-select-duplicates-by-one-field-and-differs-by-another" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_040</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: person_log</h3><table class="in_table mono"><tr><th>id<span class="type">:Str</span></th><th>timestamp<span class="type">:Int</span></th><th>first_name<span class="type">:Str</span></th><th>last_name<span class="type">:Str</span></th><th>action<span class="type">:Str</span></th></tr><tr><td>1</td><td>012545878</td><td>homer</td><td>simpson</td><td>eating</td></tr><tr><td>2</td><td>812345222</td><td>homer</td><td>simpson</td><td>watching tv</td></tr><tr><td>3</td><td>312322578</td><td>marge</td><td>simpson</td><td>cooking</td></tr><tr><td>4</td><td>114568568</td><td>bart</td><td>simpson</td><td>skating</td></tr><tr><td>5</td><td>015345345</td><td>bart</td><td>simpson</td><td>skating</td></tr><tr><td>6</td><td>756290452</td><td>bart</td><td>bart</td><td>eating</td></tr><tr><td>7</td><td>745239857</td><td>bart</td><td>bart</td><td>watching tv</td></tr><tr><td>8</td><td>723945283</td><td>bart</td><td>bart</td><td>cooking</td></tr><tr><td>9</td><td>723945283</td><td>bart</td><td>aaaa</td><td>cooking</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Str</span></th><th>c2<span class="type">:Int</span></th><th>c3<span class="type">:Str</span></th><th>c4<span class="type">:Str</span></th><th>c5<span class="type">:Str</span></th></tr><tr><td>1</td><td>012545878</td><td>homer</td><td>simpson</td><td>eating</td></tr><tr><td>2</td><td>812345222</td><td>homer</td><td>simpson</td><td>watching tv</td></tr><tr><td>6</td><td>756290452</td><td>bart</td><td>bart</td><td>eating</td></tr><tr><td>7</td><td>745239857</td><td>bart</td><td>bart</td><td>watching tv</td></tr><tr><td>8</td><td>723945283</td><td>bart</td><td>bart</td><td>cooking</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>2<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.id,
+    T0.timestamp,
+    T1.first_name,
+    T1.last_name,
+    T0.action 
+FROM
+    person_log AS T0 
+JOIN
+    (
+        SELECT
+            first_name,
+            last_name,
+            count(DISTINCT action) AS count_distinct_action 
+        FROM
+            person_log 
+        GROUP BY
+            first_name,
+            last_name
+    ) AS T1 
+        ON T1.first_name = T0.first_name 
+        AND T1.last_name = T0.last_name 
+WHERE
+    T1.count_distinct_action >= 2 
+ORDER BY
+    T0.id ASC</code></pre>  <h2>Synthesis Time</h2><div>1030&nbsp;milliseconds</div></body></html>

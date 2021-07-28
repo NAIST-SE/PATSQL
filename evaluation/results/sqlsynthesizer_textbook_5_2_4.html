@@ -1,0 +1,18 @@
+<h2>Description</h2><br><span> Find the pnames of parts supplied by Acme Widget Suppliers and no one else</span><br><span> requires exists on join table</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sqlsynthesizer_textbook_5_2_4</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>sid<span class="type">:Str</span></th><th>part_key<span class="type">:Str</span></th></tr><tr><td>S1</td><td>P1</td></tr><tr><td>S3</td><td>P1</td></tr><tr><td>S2</td><td>P2</td></tr><tr><td>S3</td><td>P2</td></tr><tr><td>S3</td><td>P3</td></tr><tr><td>S1</td><td>P4</td></tr><tr><td>S3</td><td>P3</td></tr><tr><td>S2</td><td>P5</td></tr><tr><td>S3</td><td>P5</td></tr><tr><td>S3</td><td>P6</td></tr><tr><td>S1</td><td>P7</td></tr><tr><td>S2</td><td>P8</td></tr><tr><td>S4</td><td>P9</td></tr><tr><td>S3</td><td>P9</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>part_key<span class="type">:Str</span></th><th>pname<span class="type">:Str</span></th></tr><tr><td>P1</td><td>PN1</td></tr><tr><td>P2</td><td>PN2</td></tr><tr><td>P3</td><td>PN3</td></tr><tr><td>P4</td><td>PN4</td></tr><tr><td>P5</td><td>PN5</td></tr><tr><td>P6</td><td>PN6</td></tr><tr><td>P7</td><td>PN7</td></tr><tr><td>P8</td><td>PN8</td></tr><tr><td>P9</td><td>PN9</td></tr></table><h3>INPUT: input3</h3><table class="in_table mono"><tr><th>sid<span class="type">:Str</span></th><th>sname<span class="type">:Str</span></th></tr><tr><td>S1</td><td>B</td></tr><tr><td>S2</td><td>A</td></tr><tr><td>S3</td><td>AWS</td></tr><tr><td>S4</td><td>AWS</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>pname<span class="type">:Str</span></th></tr><tr><td>PN3</td></tr><tr><td>PN6</td></tr><tr><td>PN9</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>AWS<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    max(T1.pname) 
+FROM
+    input1 AS T0 
+JOIN
+    input2 AS T1 
+        ON T0.part_key = T1.part_key 
+JOIN
+    input3 AS T2 
+        ON T0.sid = T2.sid 
+GROUP BY
+    T0.part_key 
+HAVING
+    max(T2.sname) = 'AWS' 
+    AND min(T2.sname) = 'AWS' 
+ORDER BY
+    max(T1.pname) ASC</code></pre>  <h2>Synthesis Time</h2><div>189&nbsp;milliseconds</div></body></html>

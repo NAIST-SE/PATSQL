@@ -1,0 +1,13 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/39962965/sql-inner-join-select-field-list" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_045</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>ID<span class="type">:Int</span></th><th>Name<span class="type">:Str</span></th></tr><tr><td>1</td><td>Menu One</td></tr><tr><td>2</td><td>Menu Two</td></tr><tr><td>3</td><td>Menu Three</td></tr></table><h3>INPUT: input2</h3><table class="in_table mono"><tr><th>ID<span class="type">:Int</span></th><th>Quantity<span class="type">:Int</span></th><th>Menu_id<span class="type">:Int</span></th></tr><tr><td>1</td><td>3</td><td>1</td></tr><tr><td>2</td><td>2</td><td>1</td></tr><tr><td>3</td><td>4</td><td>3</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>MenuName<span class="type">:Str</span></th><th>Quantity<span class="type">:Int</span></th></tr><tr><td>Menu One</td><td>5</td></tr><tr><td>Menu Three</td><td>4</td></tr><tr><td>Menu Two</td><td><span class= "null">NULL</span></td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    max(T0.Name),
+    sum(T1.Quantity) 
+FROM
+    input1 AS T0 
+LEFT JOIN
+    input2 AS T1 
+        ON T0.ID = T1.Menu_id 
+GROUP BY
+    T0.ID 
+ORDER BY
+    max(T0.Name) ASC</code></pre>  <h2>Synthesis Time</h2><div>5&nbsp;milliseconds</div></body></html>

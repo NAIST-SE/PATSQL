@@ -1,0 +1,17 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/30575622/how-to-select-where-multiple-rows-have-the-same-values-in-two-columns-respectiv" target="blank"> URL </a><br><span>//MOD 2</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_019M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>Team<span class="type">:Str</span></th><th>Player<span class="type">:Str</span></th></tr><tr><td>1</td><td>Dillan</td></tr><tr><td>1</td><td>Brady</td></tr><tr><td>1</td><td>Brady</td></tr><tr><td>1</td><td>Player1</td></tr><tr><td>2</td><td>John</td></tr><tr><td>2</td><td>Billy</td></tr><tr><td>2</td><td>Player2</td></tr><tr><td>3</td><td>Player3</td></tr><tr><td>4</td><td>Gary</td></tr><tr><td>4</td><td>Gary</td></tr><tr><td>5</td><td>Brady</td></tr><tr><td>5</td><td>Brady</td></tr><tr><td>5</td><td>Brady</td></tr><tr><td>5</td><td>Gary</td></tr><tr><td>5</td><td>Gary</td></tr><tr><td>5</td><td>Gary</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>c1<span class="type">:Str</span></th></tr><tr><td>1</td></tr><tr><td>4</td></tr><tr><td>5</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>2<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.Team 
+FROM
+    (SELECT
+        Team 
+    FROM
+        input1 
+    GROUP BY
+        Team,
+        Player 
+    HAVING
+        count(Team) >= 2) AS T0 
+GROUP BY
+    T0.Team 
+ORDER BY
+    T0.Team ASC</code></pre>  <h2>Synthesis Time</h2><div>22&nbsp;milliseconds</div></body></html>

@@ -1,0 +1,28 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/40058730/sql-group-by-coalesce-not-working-as-expected" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>recent_posts_025A</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>id<span class="type">:Int</span></th><th>gallery_id<span class="type">:Int</span></th><th>path<span class="type">:Str</span></th></tr><tr><td>58</td><td><span class= "null">NULL</span></td><td>58.jpg</td></tr><tr><td>59</td><td><span class= "null">NULL</span></td><td>59.jpg</td></tr><tr><td>66</td><td>9</td><td>9-001.jpg</td></tr><tr><td>67</td><td>9</td><td>9-002.jpg</td></tr><tr><td>68</td><td>10</td><td>10-001.jpg</td></tr><tr><td>69</td><td>10</td><td>10-002.jpg</td></tr><tr><td>70</td><td>10</td><td>10-003.jpg</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>id<span class="type">:Int</span></th><th>gallery_id<span class="type">:Int</span></th><th>path<span class="type">:Str</span></th></tr><tr><td>58</td><td><span class= "null">NULL</span></td><td>58.jpg</td></tr><tr><td>59</td><td><span class= "null">NULL</span></td><td>59.jpg</td></tr><tr><td>66</td><td>9</td><td>9-001.jpg</td></tr><tr><td>68</td><td>10</td><td>10-001.jpg</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.id,
+    T0.gallery_id,
+    T0.path 
+FROM
+    (SELECT
+        id,
+        gallery_id,
+        path 
+    FROM
+        input1) AS T0 
+LEFT JOIN
+    (
+        SELECT
+            gallery_id,
+            min(id) AS min_id 
+        FROM
+            input1 
+        GROUP BY
+            gallery_id
+    ) AS T1 
+        ON T0.id = T1.min_id 
+WHERE
+    T0.gallery_id IS NULL 
+    OR T1.gallery_id IS NOT NULL 
+ORDER BY
+    T0.id ASC</code></pre>  <h2>Synthesis Time</h2><div>1600&nbsp;milliseconds</div></body></html>

@@ -1,0 +1,14 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/2594829/finding-duplicate-values-in-a-sql-table" target="blank"> URL </a><br><span>Finding duplicate values in a SQL table</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>top_rated_posts_002</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>ID<span class="type">:Str</span></th><th>NAME<span class="type">:Str</span></th><th>EMAIL<span class="type">:Str</span></th></tr><tr><td>1</td><td>John</td><td>asd@asd.com</td></tr><tr><td>2</td><td>Sam</td><td>asd@asd.com</td></tr><tr><td>3</td><td>Tom</td><td>asd@asd.com</td></tr><tr><td>4</td><td>Bob</td><td>bob@asd.com</td></tr><tr><td>5</td><td>Tom</td><td>asd@asd.com</td></tr><tr><td>6</td><td>John</td><td>asd@asd.com</td></tr><tr><td>7</td><td>John</td><td>abc@asd.com</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>NAME<span class="type">:Str</span></th><th>EMAIL<span class="type">:Str</span></th><th>count<span class="type">:Int</span></th></tr><tr><td>Tom</td><td>asd@asd.com</td><td>2</td></tr><tr><td>John</td><td>asd@asd.com</td><td>2</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>1<span class="type">:Int</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    NAME,
+    EMAIL,
+    count(ID) 
+FROM
+    input1 
+GROUP BY
+    NAME,
+    EMAIL 
+HAVING
+    count(ID) > 1 
+ORDER BY
+    NAME DESC</code></pre>  <h2>Synthesis Time</h2><div>34&nbsp;milliseconds</div></body></html>

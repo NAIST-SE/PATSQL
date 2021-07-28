@@ -1,0 +1,16 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/33037505/get-the-result-based-on-column-attribute-value" target="blank"> URL </a><br><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_018</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>Id<span class="type">:Int</span></th><th>Plan<span class="type">:Str</span></th><th>Attributes<span class="type">:Str</span></th><th>Value<span class="type">:Str</span></th></tr><tr><td>1</td><td>A</td><td>Name</td><td>AAA</td></tr><tr><td>2</td><td>A</td><td>Class</td><td>P</td></tr><tr><td>3</td><td>A</td><td>IsActive</td><td>True</td></tr><tr><td>4</td><td>B</td><td>Name</td><td>BBB</td></tr><tr><td>5</td><td>B</td><td>Class</td><td>Q</td></tr><tr><td>6</td><td>B</td><td>IsActive</td><td>False</td></tr><tr><td>7</td><td>C</td><td>Name</td><td>CCC</td></tr><tr><td>8</td><td>C</td><td>Class</td><td>R</td></tr><tr><td>9</td><td>C</td><td>IsActive</td><td>True</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>Id<span class="type">:Int</span></th><th>Plan<span class="type">:Str</span></th><th>Attributes<span class="type">:Str</span></th><th>Value<span class="type">:Str</span></th></tr><tr><td>1</td><td>A</td><td>Name</td><td>AAA</td></tr><tr><td>2</td><td>A</td><td>Class</td><td>P</td></tr><tr><td>3</td><td>A</td><td>IsActive</td><td>True</td></tr><tr><td>7</td><td>C</td><td>Name</td><td>CCC</td></tr><tr><td>8</td><td>C</td><td>Class</td><td>R</td></tr><tr><td>9</td><td>C</td><td>IsActive</td><td>True</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>True<span class="type">:Str</span></li><li>IsActive<span class="type">:Str</span></li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T1.Id,
+    T0.Plan,
+    T1.Attributes,
+    T1.Value 
+FROM
+    input1 AS T0 
+JOIN
+    input1 AS T1 
+        ON T0.Plan = T1.Plan 
+WHERE
+    T0.Value = 'True' 
+    AND T0.Attributes = 'IsActive' 
+ORDER BY
+    T1.Id ASC</code></pre>  <h2>Synthesis Time</h2><div>13&nbsp;milliseconds</div></body></html>

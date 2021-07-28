@@ -1,0 +1,22 @@
+<h2>Description</h2><a href="http://stackoverflow.com/questions/3869571/mysql-greatest-n-per-group-trouble/39521135#39521135" target="blank"> URL </a><br><span> MOD 8</span><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>dev_set_058M</title><link rel="stylesheet" href="../css/result.css"><link rel="stylesheet" href="../css/idea.css"><script type="text/javascript" src="../js/lib/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body><h2>I/O Example</h2><h3>INPUT: input1</h3><table class="in_table mono"><tr><th>app_name<span class="type">:Str</span></th><th>app_platform<span class="type">:Str</span></th><th>post_created<span class="type">:Date</span></th><th>post_id<span class="type">:Int</span></th></tr><tr><td>Photoshop</td><td>Windows</td><td>2009-10-20</td><td>1</td></tr><tr><td>Photoshop</td><td>Windows</td><td>2009-12-01</td><td>3</td></tr><tr><td>Photoshop</td><td>Macintosh</td><td>2009-11-10</td><td>2</td></tr><tr><td>Photoshop</td><td>Linux</td><td>2009-11-10</td><td>4</td></tr><tr><td>Photoshop</td><td>Windows</td><td>2009-11-10</td><td>5</td></tr></table><h3>OUTPUT</h3><table class="out_table mono"><tr><th>app_name<span class="type">:Str</span></th><th>app_platform<span class="type">:Str</span></th><th>post_created<span class="type">:Date</span></th><th>post_id<span class="type">:Int</span></th></tr><tr><td>Photoshop</td><td>Windows</td><td>2009-12-01</td><td>3</td></tr><tr><td>Photoshop</td><td>Macintosh</td><td>2009-11-10</td><td>2</td></tr><tr><td>Photoshop</td><td>Linux</td><td>2009-11-10</td><td>4</td></tr></table>  <h3>Hints</h3><div><ul class="mono"><li>(empty)</li></ul></div><h2>Our Solution</h2><pre><code class="sql">
+SELECT
+    T0.app_name,
+    T1.app_platform,
+    T0.post_created,
+    T0.post_id 
+FROM
+    input1 AS T0 
+JOIN
+    (
+        SELECT
+            app_platform,
+            max(post_created) AS max_post_created 
+        FROM
+            input1 
+        GROUP BY
+            app_platform
+    ) AS T1 
+        ON T1.app_platform = T0.app_platform 
+        AND T1.max_post_created = T0.post_created 
+ORDER BY
+    T1.app_platform DESC</code></pre>  <h2>Synthesis Time</h2><div>42&nbsp;milliseconds</div></body></html>
