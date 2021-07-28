@@ -17,6 +17,7 @@ The code is written in Java as an Eclipse project. Maven is also required to man
 - `test/patsql/synth/benchmark/ScytheRecentPostsTest.java` - test code to execute `so-rec` benchmark.
 - `test/patsql/synth/benchmark/KaggleTest.java` - test code to execute `kaggle` benchmark.
 - `examples` - input and output tables used for test and evaluation.
+- `evaluation` - benchmark results in html. 
 
 ## Installation
 Execute the following maven command. This generates `patsql-engine-1.0.0.jar` in the `target` directory. 
