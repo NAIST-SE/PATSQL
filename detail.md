@@ -1,0 +1,182 @@
+<style>
+.column-left{
+  float: left;
+  width: 50%;
+  text-align: left;
+}
+.column-right{
+  float: right;
+  width: 50%;
+  text-align: center;
+}
+.column-one{
+  float: left;
+  width: 100%;
+  text-align: left;
+}
+</style>
+
+
+# 全体構造
+
+PATSQLは、入力テーブルと出力テーブルから自動的にSQLクエリを合成するprogramming-by-example ツールです。
+
+PBE(Programming By Example)法は専門家ではないユーザーがRDBからデータを抽出する際にとても有用である。
+
+ユーザーは入力テーブルとして、データを取り出す対象となるテーブル、出力テーブルとして抽出したいデータのみを含むテーブル、また、ヒント(クエリで使用される定数など)をPATSQLに与えることで、必要となるSQLクエリが得られる。
+
+## アルゴリズム概要
+
+PATSQLはスケッチベースのアルゴリズムを利用しています。
+
+スケッチベースのアルゴリズムによってDSLを合成し、その後DSLからSQLを生成する。
+
+ここで、DLSは拡張関係代数の演算子であるSELECT, PRJECT, LEFT JOINなどに加え、WINDOWを追加したものである。
+
+SCYTHEなど他のSQL合成ツールに対して、比較的少量なヒント（クエリで使用される定数）の量で、集約、ネストされたクエリ、ウィンドウ関数などに対応した、高い表現力のクエリ合成を行います。
+
+## sketcherの生成アルゴリズム
+
+sketherとは与えられた入出力から可能なsketchをIteratorとして扱ったものである。
+
+sketcherの生成は以下のような規則を用いた。
+
+　
+
+- **スケッチ内の演算子間の親子関係の制限について**
+
+<img src="./expand_sketch.png" alt="expand_sketch.PNG" width="350" />
+
+スケッチに現れることができる関係代数演算子は上の表のように制限されている。
+
+例えば、入力スケッチがProject(Table(□), □)の場合、Projectの次に来るのが許容されるのは、表において✔である、Select, Group, Window, Join, LeftJoin, Tableであるので、
+
+•Project(Select(Table(□), □), □)  
+•Project(Group(Table(□), □, □), □)  
+•Project(Join(Table(□), Table(□), □), □)  
+
+などが含まれる計6個のスケッチが返される
+
+上の表のように次にくるスケッチを制限できる理由としては、
+
+X1:  Order 以外の演算子はレコードの順序を保持しないため、Order で決定された順序がスケッチの先頭にある場合にのみ意味を持つから
+
+X2:  実際のクエリでは稀と考えられるので除外
+
+X3:　これらの組み合わせを含むスケッチは正規の形ではないから。正規形ではないスケッチからプログラム p を得る場合、正規形のスケッチからは必ず p と等価なプログラムを得ることができるらしい
+
+- **関係代数の変換規則**
+
+①同じ演算子を繰り返すプログラムは、必ず繰り返しのないプログラムとして表現できる
+
+•Project(Project(T , c1), c2) → Project(T , c2)  
+•Select(Select(T , p1), p2) → Select(T , p1 ∧ p2)  
+
+②Project を Select や Join の上に移動させるためのルール
+
+•Select(Project(T , c), p) → Project(Select(T , p), c)  
+•Join(Project(T1, c),T2, p) → Project(Join(T1,T2, p), c′)  
+
+同じルールがProject以外にGroup, Window,LeftJoinにも当てはまる
+
+⇒①、②のルールより、**スケッチは最大一つのProjectしか含まない**ことがわかる
+
+また、PatSQLでは②のルールを用いて、**スケッチの構成要素である Order、Distinct、Project は、この順序でスケッチの先頭に表示することとする**
+
+src.patsql.synth.RASynthesizer>synthesize()
+
+```tsx
+Sketcher sketcher = new Sketcher(example.inputs.length, isOutputSorted);
+```
+
+<p style="color: red">ここのコードの詳細がわからない</p>
+
+※UNION句をスケッチ構造にいれてしまうと、Projectの位置を上に移動させることができないので、このアルゴリズムではUNIONをサポートできなかった。
+
+## DLS生成(synthesis)の詳細
+
+生成したSktcherから以下のような探索方法で入出力に合致するDSLを決定する
+
+
+<div>
+<div class="column-left">
+<br>
+
+1. AssignTableメソッドによって各スケッチの欠けている部分であるテーブル名を割り当てる。
+<br>
+
+2. そして、CompleteSketchを呼び出してスケッチの残りの□を全て補完する。
+<br>
+
+3. 補間が成功してプログラム p が見つかると、そのpが出力テーブルと等しいかを再度チェックして、結果として p をreturnする
+<br>
+
+4. そうでなければ（補間が成功しなければ）ExpaedSketchを呼び出してスケッチ s から追加のスケッチを生成する
+<br>
+
+5. 1~4が繰り返し行われる
+<br>
+<br>
+<br>
+<br>
+</div>
+<div class="column-right">
+
+<img src="./synth_algorithm.png" alt="expand_sketch.PNG" width="350" />
+
+</div>
+</div>
+
+
+
+
+src.patsql.synth.RASynthesizer>synthesize()
+```java
+Sketcher sketcher = new Sketcher(example.inputs.length, isOutputSorted);
+
+		for (RAOperator s : sketcher) {
+			for (RAOperator sketch : assignNamesOnBaseTables(s)) {
+				// check the timeout of itself.
+				if (Thread.currentThread().isInterrupted()) {
+					return null;
+				}
+
+				if (!isValidSketch(sketch)) {
+					continue;
+				}
+				if (Debug.isDebugMode) {
+					RAUtils.printSketch(sketch);
+				}
+				SketchFiller filler = new SketchFiller(sketch, example, option);
+				for (RAOperator program : filler.fillSketch()) {
+					if (!check(program))
+						continue;
+
+					// optimize the program returned.
+					program = RAOptimizer.optimize(program);
+					if (Debug.isDebugMode) {
+						long dur = (System.nanoTime() - startDebug) / 1000000;
+						Debug.Time.doneSynth(dur);
+					}
+					return program;
+				}
+			}
+		}
+```
+
+## Sketch Completionのアルゴリズム
+
+各関係代数演算子別のsketch completionのアルゴリズムを示す。fillSketch()によって呼び出される処理である。
+
+<img src="./sketchCompletionAlgorithm.png" alt="expand_sketch.PNG" width="800" />
+
+
+関数 CompleteSketch(s,$T_{in}$, C) がエントリポイントであり、制約 φを伝播してスケッチを再帰的に補完するための Complete という補助関数を呼び出す。
+
+このアルゴリズムではテーブルの包含関係φに基づいて検索空間を剪定する。
+
+上に示す包含関係に基づいて剪定するアルゴリズムを満たした場合にプログラムpを返す
+
+src.patsql.synth.filler.strategy 以下に実装されている
+
+## DLSからSQLの合成(generation)
