@@ -1,22 +1,3 @@
-<style>
-.column-left{
-  float: left;
-  width: 50%;
-  text-align: left;
-}
-.column-right{
-  float: right;
-  width: 50%;
-  text-align: center;
-}
-.column-one{
-  float: left;
-  width: 100%;
-  text-align: left;
-}
-</style>
-
-
 # 全体構造
 
 PATSQLは、入力テーブルと出力テーブルから自動的にSQLクエリを合成するprogramming-by-example ツールです。
@@ -45,7 +26,8 @@ sketcherの生成は以下のような規則を用いた。
 
 - **スケッチ内の演算子間の親子関係の制限について**
 
-<img src="./expand_sketch.png" alt="expand_sketch.PNG" width="350" />
+<!-- <img src="./expand_sketch.png" alt="expand_sketch.PNG" width="350" /> -->
+<img width="350" alt="expand_sketch" src="https://user-images.githubusercontent.com/63132753/131973191-8cad185b-200f-4af1-a5a3-9a1c9225313f.PNG">
 
 スケッチに現れることができる関係代数演算子は上の表のように制限されている。
 
@@ -98,34 +80,20 @@ Sketcher sketcher = new Sketcher(example.inputs.length, isOutputSorted);
 生成したSktcherから以下のような探索方法で入出力に合致するDSLを決定する
 
 
-<div>
-<div class="column-left">
-<br>
-
 1. AssignTableメソッドによって各スケッチの欠けている部分であるテーブル名を割り当てる。
-<br>
 
 2. そして、CompleteSketchを呼び出してスケッチの残りの□を全て補完する。
-<br>
 
 3. 補間が成功してプログラム p が見つかると、そのpが出力テーブルと等しいかを再度チェックして、結果として p をreturnする
-<br>
 
 4. そうでなければ（補間が成功しなければ）ExpaedSketchを呼び出してスケッチ s から追加のスケッチを生成する
-<br>
 
 5. 1~4が繰り返し行われる
-<br>
-<br>
-<br>
-<br>
-</div>
-<div class="column-right">
 
-<img src="./synth_algorithm.png" alt="expand_sketch.PNG" width="350" />
+<!-- <img src="./synth_algorithm.png" alt="expand_sketch.PNG" width="350" /> -->
+<!-- <img width="350" alt="synth_algorithm" src="https://user-images.githubusercontent.com/63132753/131972806-0b3c48d5-cb19-4509-ac93-9864b3c1e391.PNG" > -->
 
-</div>
-</div>
+
 
 
 
@@ -168,8 +136,8 @@ Sketcher sketcher = new Sketcher(example.inputs.length, isOutputSorted);
 
 各関係代数演算子別のsketch completionのアルゴリズムを示す。fillSketch()によって呼び出される処理である。
 
-<img src="./sketchCompletionAlgorithm.png" alt="expand_sketch.PNG" width="800" />
-
+<!-- <img src="./sketchCompletionAlgorithm.png" alt="expand_sketch.PNG" width="800" /> -->
+<img width="800" alt="sketchCompletionAlgorithm" src="https://user-images.githubusercontent.com/63132753/131972971-e5931637-a4cc-4ef9-8b1f-9f5b991662fa.PNG">
 
 関数 CompleteSketch(s,$T_{in}$, C) がエントリポイントであり、制約 φを伝播してスケッチを再帰的に補完するための Complete という補助関数を呼び出す。
 
