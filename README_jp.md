@@ -1,7 +1,6 @@
 # PATSQL - SQL Synthesizer
-PATSQL is a programming-by-example tool that automatically synthesizes SQL queries from input and output tables.
-
-You can try PATSQL at https://naist-se.github.io/patsql/.
+PATSQL は、入力テーブルと出力テーブルから SQL クエリを自動的に合成するprogramming-by-exampleのツールです。
+以下のサイトで試すことができます。 https://naist-se.github.io/patsql/.
 
 ## Requirements
 The code is written in Java as an Eclipse project. Maven is also required to manage dependencies and build the project.
@@ -27,11 +26,11 @@ mvn install -DskipTests
 ```
 
 ## How to execute the synthesis?
-The following is an example of a basic test case that we can see in `patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`
+`patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`に示される基本的なテストケースを例に説明する。
 
-### **Creating input and output tables**
-patsql automatically synthesizes SQL queries that correspond to input and output tables.  
-The input and output tables are defined by our original classes. See `patsql.entity.synth` and `patsql.entity.table` packages for the definition. 
+#### **入出力テーブルの作成**
+patsqlは入力テーブルから出力テーブルを取り出すようなSQLクエリを自動合成する。  
+入出力テーブルはpatsqlで独自に定義したクラスを用いる。定義は`patsql.entity.synth`と`patsql.entity.table`を参照。 
 ```java
 		// Create the input table by giving the schema and rows
 		Table inTable = new Table(
@@ -70,15 +69,15 @@ The input and output tables are defined by our original classes. See `patsql.ent
 		// Give a name to the input table. The name is used in the resulting query
 		NamedTable namedInputTable = new NamedTable("input_table", inTable);
 ```
-we can also create table instance from a csv file as follows
+テーブルは以下のようにcsvファイルから読み込むことも可能
 ```java
 		Table inTable1 = Utils.loadTableFromFile("examples/input1.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output1.csv");
 ```
 
-### **Creating option(hint)**
-patsql needs to pass the constants that are expected to be included in the SQL queries as hints.
-The option (hint) needs to be passed as an instance of the Cell class as shown below.
+### **option(ヒント)の作成**
+patsqlはSQLクエリに含まれると予想される定数をヒントとして渡してあげる必要がある。
+option(ヒント)は以下のようにCellクラスのインスタンスとして渡す必要がある。
 ```java
 		// Specify used constants in the query as a hint
 		SynthOption option = new SynthOption(
@@ -86,7 +85,7 @@ The option (hint) needs to be passed as an instance of the Cell class as shown b
 		);
 ```
 
-### **Executing SQL synthesis**
+#### **SQL合成の実行例**
 ```java
 		Example example = new Example(outTable, namedInputTable);
 		RASynthesizer synth = new RASynthesizer(example, option);
@@ -95,11 +94,10 @@ The option (hint) needs to be passed as an instance of the Cell class as shown b
 		// Convert the result into a SQL query
 		String sql = SQLUtil.generateSQL(result);
 ```
-
-The input and output tables and SQL queries that synthesized by PATSQL are shown below
+上記のコードが示すテーブルと出力結果を以下に示す
 <table>
 	<tr>
-			<th>Input table</th><th>Output table</th><th>Option</th><th>Synthesis results</th>
+			<th>入力テーブル</th><th>出力テーブル</th><th>option</th><th>合成結果</th>
 	</tr>
 	<tr>
 		<td>
@@ -167,8 +165,8 @@ ORDER BY<br>
 </tr>
 </table>
 
-**DSL**
 
+**生成するDSL**  
 Root(<br>
 &emsp;&emsp;Sort(<br>
 &emsp;&emsp;&emsp;&emsp;Projection(<br>
@@ -182,29 +180,29 @@ Root(<br>
 &emsp;&emsp;)<br>
 )<br>
 
+
 ## Algorithm Summary
-PATSQL uses a sketch-based algorithm.
-The sketch-based algorithm synthesizes a DSL and then generates SQL from the DSL.
-Our DLS is the extended relational algebra operators SELECT, PRJECT, LEFT JOIN, etc. plus WINDOW.
+PATSQLは、スケッチ・ベース・アルゴリズムを採用しています。
+スケッチベースのアルゴリズムは、DSLを合成し、そのDSLからSQLを生成します。
+我々のDLSは、SELECT、PRJECT、LEFT JOINなどの拡張関係代数演算子にWINDOWを加えたものです。
 
-It performs highly expressive query synthesis for aggregates, nested queries, windowed functions, etc. with a relatively small amount of hints (constants used in queries) compared to other SQL synthesis tools such as SCYTHE.
-
-For details, please see the following file  
-[Algorithm overview](/detail_jp.md)
-
-## The role of each package
+SCYTHEなどの他のSQL合成ツールと比較して、比較的少量のヒント（クエリで使用される定数）で、集約、ネストされたクエリ、ウィンドウ関数などの表現力の高いクエリ合成を行います。
+詳しくは以下のファイルを御覧ください    
+[アルゴリズム概要](/detail_jp.md)
+## 各パッケージの役割
 | Package Name  | Description | the file you shoudl check first|
 |---|---|---|
-| `patsql.synth` | Top-level algorithms can be found here. If you want to understand patsql, you should read this package first. | `RASynthesizer.java` |
-| `patsql.synth.sketcher` | Handle sketche generations. The expandSketch method has been implemented according to the rules of relational algebra given in the paper. | `Sketcher.java` |
-| `patsql.synth.filler` | Handle sketch completion. The sketchCompletion method is implemented according to the rules of relational algebra shown in the paper. | `SketchFiller.java` |
-| `patsql.synth.filler.strategy` | A search space pruning algorithm for each relational algebra operator is implemented. | `FillingStrategy.java` |
-| `patsql.entity.synth` | Define the Example class, SynthOption class, NamedTable class. used for PATSQL input. | all |
-| `patsql.entity.table` | Define the Table class to be used by PATSQL | `Table.java` |
-| `patsql.ra.operator` | Define relational algebra operators | `RAOperator.java` |
-| `patsql.ra.predicate` | Define predicate  | `Predicate.java` |
-| `patsql.ra.util` | A collection of utils for relational algebra operations. | `RAUtils.java` |
-| `patsql.generator.sql` | Handle the process of synthesizing SQL from DSL. | `SQLUtil` |
+| `patsql.synth` | トップレベルのアルゴリズムが実装されている。 | `RASynthesizer.java` |
+| `patsql.synth.sketcher` | sketcheを扱う。論文に示されている関係代数のルールに従ったexpandSketchメソッドが実装されている | `Sketcher.java` |
+| `patsql.synth.filler` | sketchを補完に関する処理を扱う。論文に示されている関係代数のルールに従ったsketchCompletionメソッドが実装されている | `SketchFiller.java` |
+| `patsql.synth.filler.strategy` | 関係代数演算子ごとの検索空間剪定アルゴリズムが実装さてれいる | `FillingStrategy.java` |
+| `patsql.entity.synth` | PATSQLの入力であるExampleクラス、SynthOptionクラスなどを定義する | 全て重要 |
+| `patsql.entity.table` | PATSQLで扱うTableを定義する | `Table.java` |
+| `patsql.ra.operator` | 関係代数演算子を定義する | `RAOperator.java` |
+| `patsql.ra.predicate` | predicate(論理演算の結果を返す、SQL文の述語部分のこと)を定義する | `Predicate.java` |
+| `patsql.ra.util` | 関係代数演算のためのutilsをまとめた | `RAUtils.java` |
+| `patsql.generator.sql` | DSLからSQLを合成するための処理を扱う | `SQLUtil` |
+
 
 ## Paper
 "PATSQL: Efficient Synthesis of SQL Queries from Example Tables with Quick Inference of Projected Columns", submitted to [arXiv](https://arxiv.org/abs/2010.05807).
