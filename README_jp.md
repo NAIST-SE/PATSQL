@@ -26,11 +26,35 @@ mvn install -DskipTests
 ```
 
 ## How to execute the synthesis?
-`patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`に示される基本的なテストケースを例に説明する。
+PATSQLにはmainメソッドがありません。  
+基本的なテストケースは`patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`に含まれています。  
+このテストケースに沿ってツールを使うことができます。
+
+このテストケースは以下の3ステップから構成されます
+1. 入力データの準備
+2. 合成の実行
+3. 結果の出力
+
+SQL合成は以下のように実行します。  
+合成の本体を実装しているRASynthesizerをインスタンス化し、synthesizeメソッドを呼ぶことで合成が実行できます。
+```java
+		RASynthesizer synth = new RASynthesizer(example, option);
+		RAOperator result = synth.synthesize();
+
+		// Convert the result into a SQL query
+		String sql = SQLUtil.generateSQL(result);
+```
+
+続いて、実行に必要な`example`と`option`について説明します。  
+PATSQLの入力に必要なデータは入出力テーブルとヒント(生成するSQLに含まれる定数)である。  
+入出力テーブルが`example`、ヒントが`option`に該当します。  
+
+
+exampleを作成するために、まず入出力テーブルの作成方法から説明します。
 
 #### **入出力テーブルの作成**
-patsqlは入力テーブルから出力テーブルを取り出すようなSQLクエリを自動合成する。  
-入出力テーブルはpatsqlで独自に定義したクラスを用いる。定義は`patsql.entity.synth`と`patsql.entity.table`を参照。 
+入出力テーブルはpatsqlで独自に実装したクラスを用います。定義は`patsql.entity.synth`と`patsql.entity.table`を参照。 
+以下のようにカラム名としてColSchema、データとしてCellをのインスタンスを用いて列ごとにデータを追加していきます。  
 ```java
 		// Create the input table by giving the schema and rows
 		Table inTable = new Table(
@@ -75,9 +99,15 @@ patsqlは入力テーブルから出力テーブルを取り出すようなSQL�
 		Table outTable = Utils.loadTableFromFile("examples/output1.csv");
 ```
 
-### **option(ヒント)の作成**
-patsqlはSQLクエリに含まれると予想される定数をヒントとして渡してあげる必要がある。
-option(ヒント)は以下のようにCellクラスのインスタンスとして渡す必要がある。
+#### **exampleの作成**
+exampleは上で作った入力テーブルと出力テーブルを引数に受けとって以下のように作成します   
+```java
+		Example example = new Example(outTable, namedInputTable);
+```
+
+
+#### **option(ヒント)の作成**
+optionはPATSQLに与えるヒントです。SQLクエリに含まれると予想される定数のヒントをCellインスタンスとして指定します。
 ```java
 		// Specify used constants in the query as a hint
 		SynthOption option = new SynthOption(
@@ -85,7 +115,8 @@ option(ヒント)は以下のようにCellクラスのインスタンスとし�
 		);
 ```
 
-#### **SQL合成の実行例**
+
+#### **SQL合成の実行**
 ```java
 		Example example = new Example(outTable, namedInputTable);
 		RASynthesizer synth = new RASynthesizer(example, option);
@@ -166,25 +197,11 @@ ORDER BY<br>
 </table>
 
 
-**生成するDSL**  
-Root(<br>
-&emsp;&emsp;Sort(<br>
-&emsp;&emsp;&emsp;&emsp;Projection(<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Selection(<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;BaseTable(input_table, [[9] col1:Str, [10] col2:Str, [11] col3:Int, [12] col4:Date, [13] EXTRACT(YEAR _FROM col4):Int, [14] EXTRACT(MONTH _FROM col4):Int, [15] EXTRACT(DAY _FROM col4):Int])<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;, ([[9] col1:Str] <> A2)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;, [[9] col1:Str, [11] col3:Int]<br>
-&emsp;&emsp;&emsp;&emsp;)<br>
-&emsp;&emsp;&emsp;&emsp;, [9] Asc<br>
-&emsp;&emsp;)<br>
-)<br>
-
 
 ## Algorithm Summary
 PATSQLは、スケッチ・ベース・アルゴリズムを採用しています。
 スケッチベースのアルゴリズムは、DSLを合成し、そのDSLからSQLを生成します。
-我々のDLSは、SELECT、PRJECT、LEFT JOINなどの拡張関係代数演算子にWINDOWを加えたものです。
+我々のDSLは、SELECT、PRJECT、LEFT JOINなどの拡張関係代数演算子にWINDOWを加えたものです。
 
 SCYTHEなどの他のSQL合成ツールと比較して、比較的少量のヒント（クエリで使用される定数）で、集約、ネストされたクエリ、ウィンドウ関数などの表現力の高いクエリ合成を行います。
 詳しくは以下のファイルを御覧ください    
@@ -193,7 +210,7 @@ SCYTHEなどの他のSQL合成ツールと比較して、比較的少量のヒ�
 | Package Name  | Description | the file you shoudl check first|
 |---|---|---|
 | `patsql.synth` | トップレベルのアルゴリズムが実装されている。 | `RASynthesizer.java` |
-| `patsql.synth.sketcher` | sketcheを扱う。論文に示されている関係代数のルールに従ったexpandSketchメソッドが実装されている | `Sketcher.java` |
+| `patsql.synth.sketcher` | sketcheの生成などを管理するIteratorであるsketcherが実装さている。論文に示されている関係代数のルールに従ったexpandSketchメソッドはsketcherに実装されている | `Sketcher.java` |
 | `patsql.synth.filler` | sketchを補完に関する処理を扱う。論文に示されている関係代数のルールに従ったsketchCompletionメソッドが実装されている | `SketchFiller.java` |
 | `patsql.synth.filler.strategy` | 関係代数演算子ごとの検索空間剪定アルゴリズムが実装さてれいる | `FillingStrategy.java` |
 | `patsql.entity.synth` | PATSQLの入力であるExampleクラス、SynthOptionクラスなどを定義する | 全て重要 |

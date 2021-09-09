@@ -1,21 +1,55 @@
 ここで使用している画像は全て論文から引用したものである。詳しくは論文を御覧ください。
-## アルゴリズム概要
+## 前提知識
 
-後に説明する方法で生成したSktcherを用いて、以下のような探索方法で入出力に合致するDSLを決定する
+### **DLSとは**
+DLSとは特定の作業や問題の解決に特化して設計されたコンピュータ言語です。  
+PATSQLではSelecction, Projectionなど、リレーショナルデータベースを操作するための関係代数演算子とWindowなどを用いて定義された、以下のようなDSLを用いる。
+
+```
+Root(
+	Sort(
+		(
+			Selection(
+				BaseTable(input_table, [[9] col1:Str, [10] col2:Str, [11] col3:Int, [12] col4:Date, [13] EXTRACT(YEAR _FROM col4):Int, [14] EXTRACT(MONTH _FROM col4):Int, [15] EXTRACT(DAY _FROM col4):Int])
+					, ([[9] col1:Str] <> A2)
+				)
+			, [[9] col1:Str, [11] col3:Int]
+			)
+		, [9] Asc
+	)
+)
+```
+
+DSLから対応する表現に変換することで容易にSQLクエリを合成することができる。
+
+### **Sketchとは**
+Sketchとは実体化されていない部分を持つプログラムのこと。
+PATSQLでは、関係代数演算子を先に決めて、テーブルが決定していない状態のSketchを繰り返し探索するアルゴリズムを採用している。
+
+以下に実体化されていない部分を□で表現した例を示す。 この□に定数を割り当てながら適切なDSLを生成する。
+```
+Project(Select(Table(□), □), □)
+```
+
+## アルゴリズム概要
+sketcherとは与えられた入出力から可能なsketchをIteratorとして扱ったものである。
+適切なDSLが見つからなかった場合に次の関係代数演算子を用いてスケッチを拡張するexpandSketchメソッドはsketcherに実装されている。
+
+後に説明する方法で生成したSktcherを用いて、以下のような探索方法で入出力に合致するDSLを決定する。
 
 1. AssignTableメソッドによって各スケッチにテーブル名を割り当てる。
 
-2. CompleteSketch(SKetchFIller)を呼び出してスケッチの残りの□を全て補完する。
+2. CompleteSketch(SketchFIller)を呼び出してスケッチの残りの□を全て補完する。
 
 3. 補間が成功してプログラム p が見つかると、そのpが出力テーブルと等しいかを再度チェックして、結果として p をreturnする
 
-4. そうでなければ（補間が成功しなければ）ExpaedSketchを呼び出して 1 に戻る
+4. そうでなければ（補間が成功しなければ）ExpandSketchを呼び出して 1 に戻る
 
 5. pが見つかるまで1~4が繰り返し行われる
 
 <table>
 	<tr>
-		<th>実装</th><th>アルゴリズム</th>
+		<th style="width: 60%;">実装</th><th style="width: 40%;">アルゴリズム</th>
 	</tr>
 	<tr>
 		<td>
@@ -61,8 +95,6 @@
 
 ## sketcherの生成アルゴリズム
 
-sketcherとは与えられた入出力から可能なsketchをIteratorとして扱ったものである。
-
 sketcherの生成は以下のような規則を用いた。
 
 **スケッチ内の演算子間の親子関係の制限について**
@@ -99,7 +131,7 @@ sketcherの生成は以下のような規則を用いた。
 •Select(Project(T , c), p) → Project(Select(T , p), c)  
 •Join(Project(T1, c),T2, p) → Project(Join(T1,T2, p), c′)  
 
-同じルールがProject以外にGroup, Window,LeftJoinにも当てはまる
+同じルールがProject以外にGroup, Window,LeftJoinにも当てはまる。 
 
 ⇒①、②のルールより、**スケッチは最大一つのProjectしか含まない**ことがわかる 
 
@@ -108,7 +140,7 @@ sketcherの生成は以下のような規則を用いた。
 
 ※UNION句をスケッチ構造にいれてしまうと、Projectの位置を上に移動させることができないので、このアルゴリズムではUNIONをサポートできなかった。
 
-実装は`patsql.synth.sketcher.Sketcher.java`を御覧ください
+実装は`patsql.synth.sketcher.Sketcher.java`を御覧ください。 
 
 ## Sketch Completion(sketcheFiller)のアルゴリズム
 
@@ -120,8 +152,8 @@ sketcherの生成は以下のような規則を用いた。
 
 このアルゴリズムではテーブルの包含関係φに基づいて検索空間を剪定する。
 
-上に示す包含関係に基づいて剪定するアルゴリズムを満たした場合にプログラムpを返す
-それぞれの演算子に対する実装は`patsql.synth.filler.strategy` を御覧ください
-また、SketchFillerの実装は`patsql.synth.filler.SketchFiller.java`
+上に示す包含関係に基づいて剪定するアルゴリズムを満たした場合にプログラムpを返す。
+それぞれの演算子に対する実装は`patsql.synth.filler.strategy` を御覧ください。
+また、SketchFillerの実装は`patsql.synth.filler.SketchFiller.java`を御覧ください。  
 
 

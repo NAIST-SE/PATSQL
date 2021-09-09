@@ -27,11 +27,38 @@ mvn install -DskipTests
 ```
 
 ## How to execute the synthesis?
-The following is an example of a basic test case that we can see in `patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`
+PATSQL does not prepare a main method.  
+A basic test case is included in `patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`.   
+You can follow this test case to use the tool.  
+
+This test case consists of the following three steps: 1.
+1. prepare the input data
+2. run the synthesis
+3. output the results
+
+SQL synthesis is executed as follows.  
+The synthesis can be executed by instantiating the RASynthesizer and calling the synthesize method. RASynthesizer calss implements the core of the synthesis
+
+```java
+		RASynthesizer synth = new RASynthesizer(example, option);
+		RAOperator result = synth.synthesize();
+
+		// Convert the result into a SQL query
+		String sql = SQLUtil.generateSQL(result);
+```
+
+Then, we will explain the `example` and `option` required for execution.  
+The data required for PATSQL input are input/output tables and hints (constants included in the SQL to be generated).  
+The input/output table corresponds to `example` and the hint corresponds to `option`.  
+
+
 
 ### **Creating input and output tables**
-patsql automatically synthesizes SQL queries that correspond to input and output tables.  
 The input and output tables are defined by our original classes. See `patsql.entity.synth` and `patsql.entity.table` packages for the definition. 
+
+Input/output tables use classes implemented independently by patsql. See `patsql.entity.synth` and `patsql.entity.table` for definitions.   
+We will add data to each column using ColSchema instance as column name and Cell instance as data as follows.  
+
 ```java
 		// Create the input table by giving the schema and rows
 		Table inTable = new Table(
@@ -76,9 +103,16 @@ we can also create table instance from a csv file as follows
 		Table outTable = Utils.loadTableFromFile("examples/output1.csv");
 ```
 
+#### **Creating example**
+The example takes the input and output tables created above as arguments
+```java
+		Example example = new Example(outTable, namedInputTable);
+```
+
+
 ### **Creating option(hint)**
 patsql needs to pass the constants that are expected to be included in the SQL queries as hints.
-The option (hint) needs to be passed as an instance of the Cell class as shown below.
+option is a hint to give to PATSQL, specifying a constant hint as a Cell instance that is expected to be included in the SQL query.
 ```java
 		// Specify used constants in the query as a hint
 		SynthOption option = new SynthOption(
@@ -167,36 +201,22 @@ ORDER BY<br>
 </tr>
 </table>
 
-**DSL**
-
-Root(<br>
-&emsp;&emsp;Sort(<br>
-&emsp;&emsp;&emsp;&emsp;Projection(<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Selection(<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;BaseTable(input_table, [[9] col1:Str, [10] col2:Str, [11] col3:Int, [12] col4:Date, [13] EXTRACT(YEAR _FROM col4):Int, [14] EXTRACT(MONTH _FROM col4):Int, [15] EXTRACT(DAY _FROM col4):Int])<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;, ([[9] col1:Str] <> A2)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;)<br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;, [[9] col1:Str, [11] col3:Int]<br>
-&emsp;&emsp;&emsp;&emsp;)<br>
-&emsp;&emsp;&emsp;&emsp;, [9] Asc<br>
-&emsp;&emsp;)<br>
-)<br>
 
 ## Algorithm Summary
 PATSQL uses a sketch-based algorithm.
 The sketch-based algorithm synthesizes a DSL and then generates SQL from the DSL.
-Our DLS is the extended relational algebra operators SELECT, PRJECT, LEFT JOIN, etc. plus WINDOW.
+Our DSL is the extended relational algebra operators SELECT, PRJECT, LEFT JOIN, etc. plus WINDOW.
 
 It performs highly expressive query synthesis for aggregates, nested queries, windowed functions, etc. with a relatively small amount of hints (constants used in queries) compared to other SQL synthesis tools such as SCYTHE.
 
 For details, please see the following file  
-[Algorithm overview](/detail_jp.md)
+[Algorithm overview](/detail.md)
 
 ## The role of each package
 | Package Name  | Description | the file you shoudl check first|
 |---|---|---|
 | `patsql.synth` | Top-level algorithms can be found here. If you want to understand patsql, you should read this package first. | `RASynthesizer.java` |
-| `patsql.synth.sketcher` | Handle sketche generations. The expandSketch method has been implemented according to the rules of relational algebra given in the paper. | `Sketcher.java` |
+| `patsql.synth.sketcher` | Sketcher is iterator to handle sketche generating. The expandSketch method has been implemented according to the rules of relational algebra given in the paper. | `Sketcher.java` |
 | `patsql.synth.filler` | Handle sketch completion. The sketchCompletion method is implemented according to the rules of relational algebra shown in the paper. | `SketchFiller.java` |
 | `patsql.synth.filler.strategy` | A search space pruning algorithm for each relational algebra operator is implemented. | `FillingStrategy.java` |
 | `patsql.entity.synth` | Define the Example class, SynthOption class, NamedTable class. used for PATSQL input. | all |
