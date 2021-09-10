@@ -1,4 +1,5 @@
-The images used here are all taken from the paper. Please refer to the paper for details.
+All the images used in this document are cited from the PATSQL paper.  Please refer to the paper for further details.
+
 ## Prerequisite
 
 ### **What is DSL?**
@@ -135,9 +136,9 @@ The reason we can limit the number of sketches that come next, as shown in the t
 •Select(Project(T , c), p) → Project(Select(T , p), c)  
 •Join(Project(T1, c),T2, p) → Project(Join(T1,T2, p), c′)  
 
- => From rules ① and ②, we know that **a sketch can only contain at most one Project**. 
+ => From rules 1  and 2, we know that **a sketch can only contain at most one Project**. 
 
-In addition, PatSQL uses the rule ② to display the sketch components Order, Distinct, and Project at the top of the sketch in this order
+In addition, PatSQL uses the rule 2 to display the sketch components Order, Distinct, and Project at the top of the sketch in this order
 
  See `patsql.synth.sketcher.Sketchers.java` for implementation.
 
