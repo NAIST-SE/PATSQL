@@ -139,79 +139,79 @@ public class Sketcher implements Iterator<RAOperator>, Iterable<RAOperator> {
 
 	public static List<RAOperator> serialize(RAOperator op) {
 		switch (op.kind) {
-		case ROOT: {
-			Root p = (Root) op;
-			List<RAOperator> ret = serialize(p.child);
-			ret.add(0, p);
-			return ret;
-		}
-		case SORT: {
-			Sort p = (Sort) op;
-			List<RAOperator> ret = serialize(p.child);
-			ret.add(0, p);
-			return ret;
-		}
-		case DISTINCT: {
-			Distinct p = (Distinct) op;
-			List<RAOperator> ret = serialize(p.child);
-			ret.add(0, p);
-			return ret;
-		}
-		case PROJECTION: {
-			Projection p = (Projection) op;
-			List<RAOperator> ret = serialize(p.child);
-			ret.add(0, p);
-			return ret;
-		}
-		case SELECTION: {
-			Selection p = (Selection) op;
-			List<RAOperator> ret = serialize(p.child);
-			ret.add(0, p);
-			return ret;
-		}
-		case GROUPBY: {
-			GroupBy p = (GroupBy) op;
-			List<RAOperator> ret = serialize(p.child);
-			ret.add(0, p);
-			return ret;
-		}
-		case WINDOWFUNC: {
-			Window p = (Window) op;
-			List<RAOperator> ret = serialize(p.child);
-			ret.add(0, p);
-			return ret;
-		}
-		case JOIN: {
-			Join p = (Join) op;
-			List<RAOperator> l = serialize(p.childL);
-			List<RAOperator> r = serialize(p.childR);
-			List<RAOperator> ret = new LinkedList<>();
-			if (compare(p.childL, p.childR) > 0) {
-				ret.addAll(l);
-				ret.addAll(r);
-			} else {
-				ret.addAll(r);
-				ret.addAll(l);
+			case ROOT: {
+				Root p = (Root) op;
+				List<RAOperator> ret = serialize(p.child);
+				ret.add(0, p);
+				return ret;
 			}
-			ret.add(p);
-			return ret;
-		}
-		case LEFTJOIN: {
-			LeftJoin p = (LeftJoin) op;
-			List<RAOperator> l = serialize(p.childL);
-			List<RAOperator> r = serialize(p.childR);
-			List<RAOperator> ret = new LinkedList<>();
-			ret.addAll(l);
-			ret.addAll(r);
-			ret.add(p);
-			return ret;
-		}
-		case BASETABLE: {
-			BaseTable p = (BaseTable) op;
-			List<RAOperator> ret = new LinkedList<>();
-			ret.add(p);
-			return ret;
-		}
+			case SORT: {
+				Sort p = (Sort) op;
+				List<RAOperator> ret = serialize(p.child);
+				ret.add(0, p);
+				return ret;
+			}
+			case DISTINCT: {
+				Distinct p = (Distinct) op;
+				List<RAOperator> ret = serialize(p.child);
+				ret.add(0, p);
+				return ret;
+			}
+			case PROJECTION: {
+				Projection p = (Projection) op;
+				List<RAOperator> ret = serialize(p.child);
+				ret.add(0, p);
+				return ret;
+			}
+			case SELECTION: {
+				Selection p = (Selection) op;
+				List<RAOperator> ret = serialize(p.child);
+				ret.add(0, p);
+				return ret;
+			}
+			case GROUPBY: {
+				GroupBy p = (GroupBy) op;
+				List<RAOperator> ret = serialize(p.child);
+				ret.add(0, p);
+				return ret;
+			}
+			case WINDOWFUNC: {
+				Window p = (Window) op;
+				List<RAOperator> ret = serialize(p.child);
+				ret.add(0, p);
+				return ret;
+			}
+			case JOIN: {
+				Join p = (Join) op;
+				List<RAOperator> l = serialize(p.childL);
+				List<RAOperator> r = serialize(p.childR);
+				List<RAOperator> ret = new LinkedList<>();
+				if (compare(p.childL, p.childR) > 0) {
+					ret.addAll(l);
+					ret.addAll(r);
+				} else {
+					ret.addAll(r);
+					ret.addAll(l);
+				}
+				ret.add(p);
+				return ret;
+			}
+			case LEFTJOIN: {
+				LeftJoin p = (LeftJoin) op;
+				List<RAOperator> l = serialize(p.childL);
+				List<RAOperator> r = serialize(p.childR);
+				List<RAOperator> ret = new LinkedList<>();
+				ret.addAll(l);
+				ret.addAll(r);
+				ret.add(p);
+				return ret;
+			}
+			case BASETABLE: {
+				BaseTable p = (BaseTable) op;
+				List<RAOperator> ret = new LinkedList<>();
+				ret.add(p);
+				return ret;
+			}
 		}
 		throw new IllegalStateException("unknown operator type : " + op);
 	}
@@ -223,40 +223,40 @@ public class Sketcher implements Iterator<RAOperator>, Iterable<RAOperator> {
 	 */
 	public static RAOperator defaultOp(RA ra) {
 		switch (ra) {
-		case ROOT: {
-			return Root.empty();
-		}
-		case SORT: {
-			return Sort.empty();
-		}
-		case DISTINCT: {
-			return Distinct.empty();
-		}
-		case PROJECTION: {
-			return Projection.empty();
-		}
-		case SELECTION: {
-			return Selection.empty();
-		}
-		case GROUPBY: {
-			return GroupBy.empty();
-		}
-		case WINDOWFUNC: {
-			return Window.empty();
-		}
-		case JOIN: {
-			Join ret = Join.empty();
-			ret.childR = BaseTable.empty();
-			return ret;
-		}
-		case LEFTJOIN: {
-			LeftJoin ret = LeftJoin.empty();
-			ret.childR = BaseTable.empty();
-			return ret;
-		}
-		case BASETABLE: {
-			return BaseTable.empty();
-		}
+			case ROOT: {
+				return Root.empty();
+			}
+			case SORT: {
+				return Sort.empty();
+			}
+			case DISTINCT: {
+				return Distinct.empty();
+			}
+			case PROJECTION: {
+				return Projection.empty();
+			}
+			case SELECTION: {
+				return Selection.empty();
+			}
+			case GROUPBY: {
+				return GroupBy.empty();
+			}
+			case WINDOWFUNC: {
+				return Window.empty();
+			}
+			case JOIN: {
+				Join ret = Join.empty();
+				ret.childR = BaseTable.empty();
+				return ret;
+			}
+			case LEFTJOIN: {
+				LeftJoin ret = LeftJoin.empty();
+				ret.childR = BaseTable.empty();
+				return ret;
+			}
+			case BASETABLE: {
+				return BaseTable.empty();
+			}
 		}
 		throw new IllegalStateException("unknown operator type : " + ra);
 	}
