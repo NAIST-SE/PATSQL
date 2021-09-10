@@ -2,10 +2,11 @@
 PATSQL is a programming-by-example tool that automatically synthesizes SQL queries from input and output tables.
 
 The algorithm is described in the paper:
-Keita Takenouchi, Takashi Ishio, Joji Okada, Yuji Sakata: PATSQL: Efficient Synthesis of SQL Queries from Example Tables with Quick Inference of Projected Columns. PVLDB, vol.14, no.11, pp.1937-1949, 2021. 
-- [PVLDB](https://vldb.org/pvldb/vol14/p1937-takenouchi.pdf)
-- [arXiv](https://arxiv.org/abs/2010.05807).
-- [Demonstration page](https://naist-se.github.io/patsql/)
+Keita Takenouchi, Takashi Ishio, Joji Okada, Yuji Sakata: PATSQL: Efficient Synthesis of SQL Queries from Example Tables with Quick Inference of Projected Columns. PVLDB, vol.14, no.11, pp.1937-1949, 2021. [PVLDB](https://vldb.org/pvldb/vol14/p1937-takenouchi.pdf)　[arXiv](https://arxiv.org/abs/2010.05807)
+
+You can try a synthesis on [our demonstration page](https://naist-se.github.io/patsql/).
+
+[Japanese version of this README is here./ 日本語版はこちら。](README_ja.md)
 
 ## Requirements
 The code is written in Java as an Eclipse project. Maven is also required to manage dependencies and build the project.
