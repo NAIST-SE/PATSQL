@@ -199,13 +199,15 @@ ORDER BY<br>
 
 
 ## Algorithm Summary
-PATSQLは、スケッチ・ベース・アルゴリズムを採用しています。
+PATSQLは、スケッチ・ベースのアルゴリズムを採用しています。
 スケッチベースのアルゴリズムは、DSLを合成し、そのDSLからSQLを生成します。
 我々のDSLは、SELECT、PRJECT、LEFT JOINなどの拡張関係代数演算子にWINDOWを加えたものです。
+`RQSynthesizer` のように、クラス名やパッケージ名に登場する `RA` は、関係代数（Relational Algebra) に由来します。
 
 SCYTHEなどの他のSQL合成ツールと比較して、比較的少量のヒント（クエリで使用される定数）で、集約、ネストされたクエリ、ウィンドウ関数などの表現力の高いクエリ合成を行います。
 詳しくは以下のファイルを御覧ください。
 [アルゴリズム概要](/Algorithm_jp.md)
+
 ## 各パッケージの役割
 | Package Name  | Description | the file you shoudl check first|
 |---|---|---|

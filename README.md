@@ -207,6 +207,7 @@ ORDER BY<br>
 PATSQL uses a sketch-based algorithm.
 The sketch-based algorithm synthesizes a DSL and then generates SQL from the DSL.
 Our DSL is the extended relational algebra operators SELECT, PRJECT, LEFT JOIN, etc. plus WINDOW.
+`RA` in class names and package names comes from Relational Algebra.
 
 It performs highly expressive query synthesis for aggregates, nested queries, windowed functions, etc. with a relatively small amount of hints (constants used in queries) compared to other SQL synthesis tools such as SCYTHE.
 
