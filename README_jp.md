@@ -1,6 +1,11 @@
 # PATSQL - SQL Synthesizer
 PATSQL は、入力テーブルと出力テーブルから SQL クエリを自動的に合成するprogramming-by-exampleのツールです。
-以下のサイトで試すことができます。 https://naist-se.github.io/patsql/.
+
+アルゴリズムの詳細は以下の論文に説明されています。
+Keita Takenouchi, Takashi Ishio, Joji Okada, Yuji Sakata: PATSQL: Efficient Synthesis of SQL Queries from Example Tables with Quick Inference of Projected Columns. PVLDB, vol.14, no.11, pp.1937-1949, 2021. 
+- [PVLDB](https://vldb.org/pvldb/vol14/p1937-takenouchi.pdf)
+- [arXiv](https://arxiv.org/abs/2010.05807).
+- [デモ用ページ](https://naist-se.github.io/patsql/)
 
 ## Requirements
 The code is written in Java as an Eclipse project. Maven is also required to manage dependencies and build the project.
@@ -222,9 +227,6 @@ SCYTHEなどの他のSQL合成ツールと比較して、比較的少量のヒ�
 | `patsql.ra.util` | 関係代数演算のためのutilsをまとめた | `RAUtils.java` |
 | `patsql.generator.sql` | DSLからSQLを合成するための処理を扱う | `SQLUtil` |
 
-
-## Paper
-"PATSQL: Efficient Synthesis of SQL Queries from Example Tables with Quick Inference of Projected Columns", submitted to [arXiv](https://arxiv.org/abs/2010.05807).
 
 ## Third-party libraries used in this project
 See the transitive dependencies from each link below.  
