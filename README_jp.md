@@ -205,7 +205,7 @@ PATSQLは、スケッチ・ベース・アルゴリズムを採用していま�
 
 SCYTHEなどの他のSQL合成ツールと比較して、比較的少量のヒント（クエリで使用される定数）で、集約、ネストされたクエリ、ウィンドウ関数などの表現力の高いクエリ合成を行います。
 詳しくは以下のファイルを御覧ください。
-[アルゴリズム概要](/detail_jp.md)
+[アルゴリズム概要](/Algorithm_jp.md)
 ## 各パッケージの役割
 | Package Name  | Description | the file you shoudl check first|
 |---|---|---|

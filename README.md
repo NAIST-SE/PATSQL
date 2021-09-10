@@ -211,7 +211,7 @@ Our DSL is the extended relational algebra operators SELECT, PRJECT, LEFT JOIN, 
 It performs highly expressive query synthesis for aggregates, nested queries, windowed functions, etc. with a relatively small amount of hints (constants used in queries) compared to other SQL synthesis tools such as SCYTHE.
 
 For details, please see the following file  
-[Algorithm overview](/detail.md)
+[Algorithm overview](/Algorithm.md)
 
 ## The role of each package
 | Package Name  | Description | the file you shoudl check first|
