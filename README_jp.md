@@ -26,7 +26,7 @@ mvn install -DskipTests
 ```
 
 ## How to execute the synthesis?
-PATSQLにはmainメソッドがありません。  
+PATSQLには `main` メソッドがありません。合成の実行例はそれぞれ JUnit のテストケースとして記述されています。
 基本的なテストケースは`patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`に含まれています。  
 このテストケースに沿ってツールを使うことができます。
 
@@ -53,7 +53,7 @@ PATSQLの入力に必要なデータは入出力テーブルとヒント(生成�
 exampleを作成するために、まず入出力テーブルの作成方法から説明します。
 
 #### **入出力テーブルの作成**
-入出力テーブルはpatsqlで独自に実装したクラスを用います。定義は`patsql.entity.synth`と`patsql.entity.table`を参照。 
+入出力テーブルはpatsqlで独自に実装したクラスを用います。定義は`patsql.entity.synth`と`patsql.entity.table`パッケージにあります。 
 以下のようにカラム名としてColSchema、データとしてCellをのインスタンスを用いて列ごとにデータを追加していきます。  
 ```java
 		// Create the input table by giving the schema and rows
@@ -93,21 +93,21 @@ exampleを作成するために、まず入出力テーブルの作成方法か�
 		// Give a name to the input table. The name is used in the resulting query
 		NamedTable namedInputTable = new NamedTable("input_table", inTable);
 ```
-テーブルは以下のようにcsvファイルから読み込むことも可能
+テーブルは以下のようにcsvファイルから読み込むことも可能です。
 ```java
 		Table inTable1 = Utils.loadTableFromFile("examples/input1.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output1.csv");
 ```
 
 #### **exampleの作成**
-exampleは上で作った入力テーブルと出力テーブルを引数に受けとって以下のように作成します   
+exampleは上で作った入力テーブルと出力テーブルを引数に受けとって以下のように作成します。
 ```java
 		Example example = new Example(outTable, namedInputTable);
 ```
 
 
 #### **option(ヒント)の作成**
-optionはPATSQLに与えるヒントです。SQLクエリに含まれると予想される定数のヒントをCellインスタンスとして指定します。
+`SynthOption` オブジェクトはPATSQLに与えるヒントです。SQLクエリに含まれると予想される定数のヒントをCellインスタンスとして指定します。
 ```java
 		// Specify used constants in the query as a hint
 		SynthOption option = new SynthOption(
@@ -125,7 +125,7 @@ optionはPATSQLに与えるヒントです。SQLクエリに含まれると予�
 		// Convert the result into a SQL query
 		String sql = SQLUtil.generateSQL(result);
 ```
-上記のコードが示すテーブルと出力結果を以下に示す
+上記のコードが示すテーブルと出力結果を以下に示します。
 <table>
 	<tr>
 			<th>入力テーブル</th><th>出力テーブル</th><th>option</th><th>合成結果</th>
@@ -204,7 +204,7 @@ PATSQLは、スケッチ・ベース・アルゴリズムを採用していま�
 我々のDSLは、SELECT、PRJECT、LEFT JOINなどの拡張関係代数演算子にWINDOWを加えたものです。
 
 SCYTHEなどの他のSQL合成ツールと比較して、比較的少量のヒント（クエリで使用される定数）で、集約、ネストされたクエリ、ウィンドウ関数などの表現力の高いクエリ合成を行います。
-詳しくは以下のファイルを御覧ください    
+詳しくは以下のファイルを御覧ください。
 [アルゴリズム概要](/detail_jp.md)
 ## 各パッケージの役割
 | Package Name  | Description | the file you shoudl check first|

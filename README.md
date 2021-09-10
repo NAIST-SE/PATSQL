@@ -27,7 +27,7 @@ mvn install -DskipTests
 ```
 
 ## How to execute the synthesis?
-PATSQL does not prepare a main method.  
+PATSQL does not have a main method.  SQL synthesis examples are provided as JUnit test cases.  
 A basic test case is included in `patsql.synth.RASynthesizerTest.ExampleForSQLSynthesis`.   
 You can follow this test case to use the tool.  
 
@@ -97,22 +97,23 @@ We will add data to each column using ColSchema instance as column name and Cell
 		// Give a name to the input table. The name is used in the resulting query
 		NamedTable namedInputTable = new NamedTable("input_table", inTable);
 ```
-we can also create table instance from a csv file as follows
+
+We can also create table instance from a csv file as follows:
 ```java
 		Table inTable1 = Utils.loadTableFromFile("examples/input1.csv");
 		Table outTable = Utils.loadTableFromFile("examples/output1.csv");
 ```
 
 #### **Creating example**
-The example takes the input and output tables created above as arguments
+The example takes the input and output tables created above as arguments.
 ```java
 		Example example = new Example(outTable, namedInputTable);
 ```
 
 
 ### **Creating option(hint)**
-patsql needs to pass the constants that are expected to be included in the SQL queries as hints.
-option is a hint to give to PATSQL, specifying a constant hint as a Cell instance that is expected to be included in the SQL query.
+PATSQL needs constants that are expected to be included in the SQL queries as hints.
+A `SynthOption` object is a hint to give to PATSQL, specifying a constant hint as a Cell instance that is expected to be included in the SQL query.
 ```java
 		// Specify used constants in the query as a hint
 		SynthOption option = new SynthOption(
