@@ -137,6 +137,8 @@ public class Util {
 	}
 
 	/**
+	 * Execute the generated statement using h2 on-memory database and 
+	 * compare the actual result with expected.    
 	 * @throws RuntimeException when check failed
 	 */
 	public static void checkSQL(String generatedStm, Table outTbl, NamedTable... ins) {
